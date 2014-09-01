@@ -221,9 +221,10 @@
           });
         };
 
-        NgSpotify.prototype.addPlaylistTracks = function(userId, playlistId, tracks) {
+        NgSpotify.prototype.addPlaylistTracks = function(userId, playlistId, tracks, options) {
           return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'POST', {
-            uris: tracks.toString()
+            uris: tracks.toString(),
+            position: options.position || null
           }, null, {
             'Authorization': 'Bearer ' + settings.authToken,
             'Content-Type': 'application/json'

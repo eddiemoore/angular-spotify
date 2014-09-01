@@ -1,6 +1,6 @@
 # angular-spotify
 
-angular service to connect to the Spotify Web API
+angular service to connect to the [Spotify Web API](https://developer.spotify.com/web-api/)
 
 angular-spotify makes heavy use of promises throughout the service
 
@@ -40,6 +40,21 @@ app.controller('MainCtrl', function (Spotify) {
 
 });
 ```
+
+
+###Search
+####Search for an Item
+Get Spotify catalog information about artists, albums, or tracks that match a keyword string.
+```javascript
+Spotify.search('Search Query', 'type', options);
+```
+type - Required. A comma-separated list of item types to search across. Valid types are: album, artist, and track.
+
+#####Options Object (Optional)
+ - limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50. 
+ - offset - Optional. The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects. 
+
+
 
 
 ###Albums
@@ -195,5 +210,214 @@ Spotify.getTracks('0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G').then(function
 
 
 
+###Playlists
+User needs to be logged in to gain access to playlists
 
-# More documentation coming soon.
+####Get a List of a User’s Playlists
+Get a list of the playlists owned by a Spotify user.
+```javascript
+Spotify.getUserPlaylists('user_id', options);
+```
+#####Options Object (Optional)
+ - limit - Optional. The maximum number of playlists to return. Default: 20. Minimum: 1. Maximum: 50. 
+ - offset - Optional. The index of the first playlist to return. Default: 0 (the first object). Use with limit to get the next set of playlists.
+
+Example:
+```javascript
+Spotify.getUserPlaylists('wizzler').then(function (data) {
+  console.log(data);
+});
+```
+
+####Get a Playlist
+Get a playlist owned by a Spotify user.
+```javascript
+Spotify.getPlaylist('user_id', 'playlist_id', options);
+```
+#####Options Object (Optional)
+ - fields - Optional. Filters for the query: a comma-separated list of the fields to return. If omitted, all fields are returned. Sub-fields can be excluded by prefixing them with an exclamation mark. [More Info](https://developer.spotify.com/web-api/get-playlist/)
+
+```javascript
+Spotify.getPlaylist('1176458919', '6Df19VKaShrdWrAnHinwVO').then(function (data) {
+  console.log(data);
+});
+```
+
+
+####Get a Playlist’s Tracks
+Get full details of the tracks of a playlist owned by a Spotify user.
+```javascript
+Spotify.getPlaylistTracks('user_id', 'playlist_id', options);
+```
+Example:
+```javascript
+Spotify.getPlaylistTracks('1176458919', '6Df19VKaShrdWrAnHinwVO').then(function (data) {
+  console.log(data);
+});
+```
+
+####Create a Playlist
+Create a playlist for a Spotify user. (The playlist will be empty until you add tracks.)
+```javascript
+Spotify.createPlaylist('user_id', options);
+```
+#####Options Object
+ - name - string - Required. The name for the new playlist, for example "Your Coolest Playlist". This name does not need to be unique; a user may have several playlists with the same name.
+ - public - boolean - Optional, default true. If true the playlist will be public, if false it will be private. To be able to create private playlists, the user must have granted the playlist-modify-private scope.
+
+Example:
+```javascript
+Spotify.createPlaylist('1176458919', { name: 'Awesome Mix Vol. 1' }).then(function (data) {
+  console.log('playlist created');
+});
+```
+
+
+####Add Tracks to a Playlist
+Add one or more tracks to a user’s playlist.
+```javascript
+Spotify.addPlaylistTracks('user_id', 'playlist_id', 'comma separated string or array of spotify track uris');
+```
+#####Options Object (Optional)
+ - position - integer - Optional. The position to insert the tracks, a zero-based index. For example, to insert the tracks in the first position: position=0; to insert the tracks in the third position: position=2. If omitted, the tracks will be appended to the playlist. Tracks are added in the order they are listed in the query string or request body.
+
+Example:
+```javascript
+Spotify
+  .addPlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M')
+  .then(function (data) {
+    console.log('tracks added to playlist');
+  });
+```
+
+
+####Remove Tracks from a Playlist
+Remove one or more tracks from a user’s playlist.
+```javascript
+Spotify.removePlaylistTracks('user_id', 'playlist_id', 'comma separated string or array of spotify track ids or uris');
+```
+Example:
+```
+Spotify
+  .removePlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M')
+  .then(function (data) {
+    console.log('tracks removed from playlist');
+  });
+```
+
+####Replace a Playlist’s Tracks
+Replace all the tracks in a playlist, overwriting its existing tracks. This powerful request can be useful for replacing tracks, re-ordering existing tracks, or clearing the playlist.
+```javascript
+Spotify.replacePlaylistTracks('user_id', 'playlist_id', 'comma separated string or array of spotify track ids or uris');
+```
+Example:
+```
+Spotify
+  .replacePlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M')
+  .then(function (data) {
+    console.log('tracks removed from playlist');
+  });
+```
+
+
+####Change a Playlist’s Details
+Change a playlist’s name and public/private state. (The user must, of course, own the playlist.)
+```javascript
+Spotify.updatePlaylistDetails('user_id', 'playlist_id', options);
+```
+#####Options Object (Optional)
+ - name - string - Optional. The new name for the playlist, for example "My New Playlist Title".
+ - public - Boolean - Optional. If true the playlist will be public, if false it will be private.
+
+Example:
+```javascript
+Spotify
+  .updatePlaylistDetails('1176458919', '2TkWjGCu8jurholsfdWtG4', { name: 'Updated Playlist Title' })
+  .then(function (data) {
+    console.log('Updated playlist details');
+  });
+```
+
+
+###User Profiles
+User needs to be logged in to gain access to user profiles
+
+####Get a User’s Profile
+Get public profile information about a Spotify user.
+```javascript
+Spotify.getUser('user_id');
+```
+Example:
+```javascript
+Spotify.getUser('wizzler').then(function (data) {
+  console.log(data);
+});
+```
+
+
+####Get Current User’s Profile
+Get detailed profile information about the current user (including the current user’s username).
+```javascript
+Spotify.getCurrentUser();
+```
+Example:
+```javascript
+Spotify.getCurrentUser().then(function (data) {
+  console.log(data);
+});
+```
+
+
+###User Library *(may have name changes in next version)*
+####Get Current User’s Saved Tracks
+Get a list of the songs saved in the current Spotify user’s “Your Music” library.
+```javascript
+Spotify.getSavedUserTracks(options);
+```
+#####Options Object (Optional)
+ - limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50. 
+ - offset - Optional. The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects. 
+
+```javascript
+Spotify.getSavedUserTracks().then(function (data) {
+  console.log(data);
+});
+```
+
+####Check Current User’s Saved Tracks
+Check if one or more tracks is already saved in the current Spotify user’s “Your Music” library.
+```javascript
+Spotify.userTracksContains('comma separated string or array of spotify track ids');
+```
+Example:
+```javascript
+Spotify.userTracksContains('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9').then(function (data) {
+  console.log(data);
+});
+```
+
+
+####Save Tracks for Current User
+Save one or more tracks to the current user’s “Your Music” library.
+```javascript
+Spotify.saveUserTracks('comma separated string or array of spotify track ids');
+```
+Example:
+```javascript
+Spotify.saveUserTracks('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9').then(function (data) {
+  console.log(data);
+});
+```
+
+
+####Remove Tracks for Current User
+Remove one or more tracks from the current user’s “Your Music” library.
+```javascript
+Spotify.removeUserTracks('comma separated string or array of spotify track ids');
+```
+Example:
+```javascript
+Spotify.removeUserTracks('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9').then(function (data) {
+  console.log(data);
+});
+```
