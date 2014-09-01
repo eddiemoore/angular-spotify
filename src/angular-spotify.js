@@ -118,7 +118,7 @@
          */
         NgSpotify.prototype.getAlbums = function(albums) {
           return this.api('/albums', 'GET', {
-            ids: albums
+            ids: albums.toString()
           });
         };
 
