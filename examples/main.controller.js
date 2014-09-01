@@ -76,7 +76,7 @@ angular
       console.log(data);
     });
 
-    Spotify.getArtistRelated('0LcJLqbBmaGUft1e9Mm8HV').then(function (data) {
+    Spotify.getRelatedArtists('0LcJLqbBmaGUft1e9Mm8HV').then(function (data) {
       console.log('=================== Get Releated Artists ===================');
       console.log(data);
     });
