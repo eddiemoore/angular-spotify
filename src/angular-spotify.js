@@ -145,7 +145,10 @@
 
           return this.api('/artists/' + artist);
         };
-
+        
+        /**
+         * Get multiple artists
+         */
         NgSpotify.prototype.getArtists = function(artists) {
           return this.api('/artists/', 'GET', {
             ids: artists.toString()
