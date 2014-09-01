@@ -263,6 +263,12 @@
           });
         };
 
+        NgSpotify.prototype.updatePlaylistDetails = function(userId, playlistId, options) {
+          return this.api('/users/' + userId + '/playlists/' + playlistId, 'PUT', null, options, {
+            'Authorization': 'Bearer ' + settings.authToken,
+            'Content-Type': 'application/json'
+          });
+        };
 
         /**
           ====================== Login =====================
