@@ -130,6 +130,26 @@
           return deferred.promise;
         };
 
+        /**
+         * Get Album Tracks
+         * Pass in album id or spotify uri
+         */
+        NgSpotify.prototype.getAlbumTracks = function(album, options) {
+          var deferred = $q.defer();
+
+          album = album.indexOf('spotify:') === -1 ? album : album.split(':')[2];
+
+          this
+            .api('/albums/' + album + '/tracks', 'GET', options)
+            .then(function(data) {
+              deferred.resolve(data);
+            }, function(data) {
+              deferred.reject(data);
+            });
+
+          return deferred.promise;
+        };
+
         return new NgSpotify();
       };
 

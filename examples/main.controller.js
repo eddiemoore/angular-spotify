@@ -30,4 +30,14 @@ angular
       console.log(data);
     });
 
+
+    Spotify.getAlbumTracks('41MnTivkwTO3UUJ8DrqEJJ').then(function (data) {
+      console.log('**** Album Tracks - ID ****');
+      console.log(data);
+    });
+    Spotify.getAlbumTracks('spotify:album:41MnTivkwTO3UUJ8DrqEJJ').then(function (data) {
+      console.log('**** Album Tracks - Spotify URI ****');
+      console.log(data);
+    });
+
   }]);
