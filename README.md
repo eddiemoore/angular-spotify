@@ -1,4 +1,4 @@
-# angular-spotify [![Build Status](https://travis-ci.org/eddiemoore/angular-spotify.svg?branch=master)](https://travis-ci.org/eddiemoore/angular-spotify)
+# angular-spotify [![Build Status](https://travis-ci.org/eddiemoore/angular-spotify.svg?branch=master)](https://travis-ci.org/eddiemoore/angular-spotify) [![Coverage Status](https://img.shields.io/coveralls/eddiemoore/angular-spotify.svg)](https://coveralls.io/r/eddiemoore/angular-spotify)
 
 angular service to connect to the [Spotify Web API](https://developer.spotify.com/web-api/)
 
