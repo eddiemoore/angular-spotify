@@ -16,6 +16,7 @@
        */
       settings.clientId = null;
       settings.redirectUri = null;
+      settings.scope = null;
 
       this.setClientId = function (clientId) {
         console.log('set clientId');
@@ -34,6 +35,20 @@
         return settings.redirectUri;
       };
 
+      this.setScope = function (scope) {
+        settings.scope = scope;
+      };
+
+      var toQueryString = function (obj) {
+        var parts = [];
+        for (var i in obj) {
+          if (obj.hasOwnProperty(i)) {
+            parts.push(encodeURIComponent(i) + '=' + encodeURIComponent(obj[i]));
+          }
+        }
+        return parts.join('&');
+      };
+
       /**
        * SDK version
        */
@@ -41,11 +56,13 @@
 
       settings.apiBase = 'https://api.spotify.com/' + settings.version;
 
-      this.$get = function ($q, $http) {
+      this.$get = function ($q, $http, $window) {
 
         function NgSpotify () {
           this.clientId = settings.clientId;
+          this.redirectUri = settings.redirectUri;
           this.apiBase = settings.apiBase;
+          this.accessToken = null;
         }
 
         NgSpotify.prototype.api = function(endpoint, method, params, headers) {
@@ -172,6 +189,45 @@
           return this.api('/tracks/', 'GET', {
             ids: tracks.toString()
           });
+        };
+
+
+        /**
+          ====================== Login =====================
+         */
+        NgSpotify.prototype.login = function() {
+          var deferred = $q.defer();
+
+          var w = 400,
+              h = 500,
+              left = (screen.width / 2) - (w / 2),
+              top = (screen.height / 2) - (h / 2);
+
+          var params = {
+            client_id: this.clientId,
+            redirect_uri: this.redirectUri,
+            scope: this.scope || '',
+            response_type: 'token'
+          };
+
+          var authWindow = window.open(
+            'https://accounts.spotify.com/authorize?' + toQueryString(params),
+            'Spotify',
+            'menubar=no,location=no,resizable=no,scrollbars=no,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left
+          );
+
+          function receiveMessage(event) {
+            if (authWindow) {
+              authWindow.close();
+            }
+
+            settings.accessToken = event.data;
+            deferred.resolve(event.data);
+          }
+
+          $window.addEventListener('message', receiveMessage, false);
+
+          return deferred.promise;
         };
 
         return new NgSpotify();

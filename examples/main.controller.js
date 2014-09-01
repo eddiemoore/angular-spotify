@@ -4,6 +4,7 @@ angular
     console.log(SpotifyProvider);
     SpotifyProvider.setClientId('123456789');
     SpotifyProvider.setRedirectUri('http://www.example.com/callback.html');
+    SpotifyProvider.setScope('playlist-read-private');
   })
   .controller('MainController', ['$scope', 'Spotify', function ($scope, Spotify) {
 
@@ -11,6 +12,10 @@ angular
       Spotify.search($scope.searchartist, 'artist').then(function (data) {
         $scope.artists = data.artists.items;
       });
+    };
+
+    $scope.login = function () {
+      Spotify.login();
     };
 
     // Gets an album

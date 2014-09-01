@@ -24,6 +24,8 @@
 </head>
 <body ng-controller="MainController">
 
+  <button ng-click="login()">Login with Spotify</button>
+
   <input type="text" ng-model="searchartist" ng-change="searchArtist()" placeholder="Search for an artist">
   <ul>
     <li ng-repeat="artist in artists">
