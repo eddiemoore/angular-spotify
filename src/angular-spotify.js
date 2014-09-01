@@ -206,6 +206,28 @@
           return deferred.promise;
         };
 
+        /**
+         * Get Artist Top Tracks
+         * The country: an ISO 3166-1 alpha-2 country code.
+         */
+        NgSpotify.prototype.getArtistTopTracks = function(artist, country) {
+          var deferred = $q.defer();
+
+          artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
+
+          this
+            .api('/artists/' + artist + '/top-tracks', 'GET', {
+              country: country
+            })
+            .then(function(data) {
+              deferred.resolve(data);
+            }, function(data) {
+              deferred.reject(data);
+            });
+
+          return deferred.promise;
+        };
+
         return new NgSpotify();
       };
 

@@ -62,4 +62,9 @@ angular
       console.log(data);
     });
 
+    Spotify.getArtistTopTracks('0LcJLqbBmaGUft1e9Mm8HV', 'AU').then(function (data) {
+      console.log('=================== Artist Top Tracks Australia ===================');
+      console.log(data);
+    });
+
   }]);
