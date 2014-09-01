@@ -421,3 +421,50 @@ Spotify.removeUserTracks('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9').then(f
   console.log(data);
 });
 ```
+
+
+
+
+
+###Authentication
+####Login
+Will open login window. Requires user to initiate as it will open a pop up window.
+Requires client id, callback uri and scope to be set in config.
+```javascript
+Spotify.login();
+```
+
+Example:
+```javascript
+$scope.login = function () {
+  Spotify.login();
+};
+```
+
+#### Example callback html
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <script type='text/javascript'>//<![CDATA[ 
+  window.onload=function(){
+    var target = window.self === window.top ? window.opener : window.parent;
+
+    var hash = window.location.hash;
+    if (hash) {
+        var token = window.location.hash.split('&')[0].split('=')[1];
+        target.postMessage(token, 'http://example.com/');
+    }
+
+  }//]]>  
+
+  </script>
+</head>
+<body>
+  
+</body>
+</html>
+```
