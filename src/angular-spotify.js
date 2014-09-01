@@ -63,6 +63,7 @@
           this.clientId = settings.clientId;
           this.redirectUri = settings.redirectUri;
           this.apiBase = settings.apiBase;
+          this.accessToken = null;
         }
 
         NgSpotify.prototype.api = function(endpoint, method, params, data, headers) {
