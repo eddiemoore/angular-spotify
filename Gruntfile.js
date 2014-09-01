@@ -59,8 +59,20 @@ module.exports = function (grunt) {
           ]
         }]
       }
+    },
+
+    // Test settings
+    karma: {
+      unit: {
+        configFile: 'test/karma.conf.js',
+        singleRun: true
+      }
     }
   });
+
+  grunt.registerTask('test', [
+    'karma'
+  ]);
 
   // Default task(s).
   grunt.registerTask('default', [
