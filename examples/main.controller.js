@@ -13,4 +13,13 @@ angular
       });
     };
 
+    // Gets an album
+    Spotify.getAlbum('0sNOF9WDwhWunNAHPD3Baj').then(function (data){
+      console.log(data);
+    });
+    // Works with Spotify uri too
+    Spotify.getAlbum('spotify:album:0sNOF9WDwhWunNAHPD3Baj').then(function (data){
+      console.log(data);
+    });
+
   }]);
