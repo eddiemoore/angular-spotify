@@ -271,6 +271,20 @@
         };
 
         /**
+          ====================== User =====================
+         */
+
+        NgSpotify.prototype.getUser = function(userId) {
+          return this.api('/users/' + userId);
+        };
+
+        NgSpotify.prototype.getCurrentUser = function() {
+          return this.api('/me', 'GET', null, null, {
+            'Authorization': 'Bearer ' + settings.authToken
+          });
+        };
+
+        /**
           ====================== Login =====================
          */
         NgSpotify.prototype.login = function() {
