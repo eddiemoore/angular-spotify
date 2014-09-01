@@ -280,6 +280,7 @@
         };
 
         NgSpotify.prototype.getCurrentUser = function() {
+          console.log('accessToken:', this.authToken);
           return this.api('/me', 'GET', null, null, {
             'Authorization': 'Bearer ' + this.authToken
           });
