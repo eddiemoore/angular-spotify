@@ -285,6 +285,23 @@
         };
 
         /**
+          ====================== User Library =====================
+         */
+        NgSpotify.prototype.getSavedUserTracks = function(options) {
+          return this.api('/me/tracks', 'GET', options, null, {
+            'Authorization': 'Bearer ' + settings.authToken
+          });
+        };
+
+        NgSpotify.prototype.userTracksContains = function(tracks) {
+          return this.api('/me/tracks', 'GET', {
+            ids: tracks.toString()
+          }, null, {
+            'Authorization': 'Bearer ' + settings.authToken
+          })
+        };
+
+        /**
           ====================== Login =====================
          */
         NgSpotify.prototype.login = function() {
