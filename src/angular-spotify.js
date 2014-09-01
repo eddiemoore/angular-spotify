@@ -298,7 +298,15 @@
             ids: tracks.toString()
           }, null, {
             'Authorization': 'Bearer ' + settings.authToken
-          })
+          });
+        };
+
+        NgSpotify.prototype.saveTracks = function(tracks) {
+          return this.api('/me/tracks', 'PUT', {
+            ids: tracks.toString()
+          }, null, {
+            'Authorization': 'Bearer ' + settings.authToken
+          });
         };
 
         /**
