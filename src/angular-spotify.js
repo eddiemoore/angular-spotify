@@ -228,6 +228,22 @@
           return deferred.promise;
         };
 
+        NgSpotify.prototype.getArtistRelated = function(artist) {
+          var deferred = $q.defer();
+
+          artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
+
+          this
+            .api('/artists/' + artist + '/related-artists')
+            .then(function(data) {
+              deferred.resolve(data);
+            }, function(data) {
+              deferred.reject(data);
+            });
+
+          return deferred.promise;
+        };
+
         return new NgSpotify();
       };
 
