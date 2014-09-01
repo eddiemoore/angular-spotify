@@ -150,6 +150,45 @@
           return deferred.promise;
         };
 
+        /**
+          ====================== Artists =====================
+         */
+
+        /**
+         * Get an Artist
+         */
+        NgSpotify.prototype.getArtist = function(artist) {
+          var deferred = $q.defer();
+
+          artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
+
+          this
+            .api('/artists/' + artist)
+            .then(function(data) {
+              deferred.resolve(data);
+            }, function(data) {
+              deferred.reject(data);
+            });
+
+          return deferred.promise;
+        };
+
+        NgSpotify.prototype.getArtists = function(artists) {
+          var deferred = $q.defer();
+
+          this
+            .api('/artists/', 'GET', {
+              ids: artists
+            })
+            .then(function(data) {
+              deferred.resolve(data);
+            }, function(data) {
+              deferred.reject(data);
+            });
+
+          return deferred.promise;
+        };
+
         return new NgSpotify();
       };
 

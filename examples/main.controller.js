@@ -40,4 +40,14 @@ angular
       console.log(data);
     });
 
+
+
+    //Artist
+    Spotify.getArtist('0LcJLqbBmaGUft1e9Mm8HV').then(function (data) {
+      console.log(data);
+    });
+    Spotify.getArtist('spotify:artist:0LcJLqbBmaGUft1e9Mm8HV').then(function (data) {
+      console.log(data);
+    });
+
   }]);
