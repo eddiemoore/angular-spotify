@@ -110,6 +110,26 @@
           return deferred.promise;
         };
 
+        /**
+         * Gets an album
+         * Pass in comma separated string or array of album ids
+         */
+        NgSpotify.prototype.getAlbums = function(albums) {
+          var deferred = $q.defer();
+
+          this
+            .api('/albums', 'GET', {
+              ids: albums
+            })
+            .then(function(data) {
+              deferred.resolve(data);
+            }, function(data) {
+              deferred.reject(data);
+            });
+
+          return deferred.promise;
+        };
+
         return new NgSpotify();
       };
 
