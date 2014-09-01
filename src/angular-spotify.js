@@ -91,6 +91,10 @@
         };
 
         /**
+          ====================== Albums =====================
+         */
+
+        /**
          * Gets an album
          * Pass in album id or spotify uri
          */
@@ -178,7 +182,7 @@
 
           this
             .api('/artists/', 'GET', {
-              ids: artists
+              ids: artists.toString()
             })
             .then(function(data) {
               deferred.resolve(data);
@@ -235,6 +239,42 @@
 
           this
             .api('/artists/' + artist + '/related-artists')
+            .then(function(data) {
+              deferred.resolve(data);
+            }, function(data) {
+              deferred.reject(data);
+            });
+
+          return deferred.promise;
+        };
+
+
+        /**
+          ====================== Tracks =====================
+         */
+        NgSpotify.prototype.getTrack = function(track) {
+          var deferred = $q.defer();
+
+          track = track.indexOf('spotify:') === -1 ? track : track.split(':')[2];
+
+          this
+            .api('/tracks/' + track)
+            .then(function(data) {
+              deferred.resolve(data);
+            }, function(data) {
+              deferred.reject(data);
+            });
+
+          return deferred.promise;
+        };
+
+        NgSpotify.prototype.getTracks = function(tracks) {
+          var deferred = $q.defer();
+
+          this
+            .api('/tracks/', 'GET', {
+              ids: tracks.toString()
+            })
             .then(function(data) {
               deferred.resolve(data);
             }, function(data) {
