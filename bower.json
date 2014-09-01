@@ -19,7 +19,7 @@
     "test",
     "tests"
   ],
-  "main": "./dist/angular-spotify.js",
+  "main": "./dist/angular-spotify.min.js",
   "dependencies": {
     "angular": "latest"
   }
