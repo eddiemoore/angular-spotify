@@ -57,7 +57,7 @@
 
       settings.apiBase = 'https://api.spotify.com/' + settings.version;
 
-      this.$get = function ($q, $http, $window) {
+      this.$get = ['$q', '$http', '$window', function ($q, $http, $window) {
 
         function NgSpotify () {
           this.clientId = settings.clientId;
@@ -358,7 +358,7 @@
         };
 
         return new NgSpotify();
-      };
+      }];
 
     });
 
