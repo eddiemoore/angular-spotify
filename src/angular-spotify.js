@@ -20,7 +20,6 @@
       settings.accessToken = null;
 
       this.setClientId = function (clientId) {
-        console.log('set clientId');
         settings.clientId = clientId;
       };
 
@@ -281,7 +280,6 @@
         };
 
         NgSpotify.prototype.getCurrentUser = function() {
-          console.log('accessToken:', this.authToken);
           return this.api('/me', 'GET', null, null, {
             'Authorization': 'Bearer ' + this.authToken
           });
@@ -324,6 +322,10 @@
         /**
           ====================== Login =====================
          */
+        NgSpotify.prototype.setAuthToken = function(authToken) {
+          this.authToken = authToken;
+        };
+
         NgSpotify.prototype.login = function() {
           var deferred = $q.defer();
           var that = this;
@@ -351,9 +353,8 @@
               authWindow.close();
             }
 
-            console.log(event.data);
+            that.setAuthToken(event.data);
 
-            that.accessToken = event.data;
             deferred.resolve(event.data);
           }
 
