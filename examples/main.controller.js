@@ -44,9 +44,21 @@ angular
 
     //Artist
     Spotify.getArtist('0LcJLqbBmaGUft1e9Mm8HV').then(function (data) {
+      console.log('=================== Artist - Id ===================');
       console.log(data);
     });
     Spotify.getArtist('spotify:artist:0LcJLqbBmaGUft1e9Mm8HV').then(function (data) {
+      console.log('=================== Artist - Spotify URI ===================');
+      console.log(data);
+    });
+
+    Spotify.getArtistAlbums('0LcJLqbBmaGUft1e9Mm8HV').then(function (data) {
+      console.log('=================== Artist Albums - Id ===================');
+      console.log(data);
+    });
+
+    Spotify.getArtistAlbums('spotify:artist:0LcJLqbBmaGUft1e9Mm8HV').then(function (data) {
+      console.log('=================== Artist Albums - Spotify URI ===================');
       console.log(data);
     });
 

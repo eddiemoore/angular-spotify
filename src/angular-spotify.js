@@ -189,6 +189,23 @@
           return deferred.promise;
         };
 
+        //Artist Albums
+        NgSpotify.prototype.getArtistAlbums = function(artist, options) {
+          var deferred = $q.defer();
+
+          artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
+
+          this
+            .api('/artists/' + artist + '/albums', 'GET', options)
+            .then(function(data) {
+              deferred.resolve(data);
+            }, function(data) {
+              deferred.reject(data);
+            });
+
+          return deferred.promise;
+        };
+
         return new NgSpotify();
       };
 
