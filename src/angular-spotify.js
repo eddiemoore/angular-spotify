@@ -198,25 +198,25 @@
          */
         NgSpotify.prototype.getUserPlaylists = function(userId, options) {
           return this.api('/users/' + userId + '/playlists', 'GET', options, null, {
-            'Authorization': 'Bearer ' + settings.authToken
+            'Authorization': 'Bearer ' + this.authToken
           });
         };
 
         NgSpotify.prototype.getPlaylist = function(userId, playlistId, options) {
           return this.api('/users/' + userId + '/playlists/' + playlistId, 'GET', options, null, {
-            'Authorization': 'Bearer ' + settings.authToken
+            'Authorization': 'Bearer ' + this.authToken
           });
         };
 
         NgSpotify.prototype.getPlaylistTracks = function(userId, playlistId, options) {
           return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'GET', options, null, {
-            'Authorization': 'Bearer ' + settings.authToken
+            'Authorization': 'Bearer ' + this.authToken
           });
         };
 
         NgSpotify.prototype.createPlaylist = function(userId, options) {
           return this.api('/users/' + userId + '/playlists', 'POST', null, options, {
-            'Authorization': 'Bearer ' + settings.authToken,
+            'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
           });
         };
@@ -226,7 +226,7 @@
             uris: tracks.toString(),
             position: options.position || null
           }, null, {
-            'Authorization': 'Bearer ' + settings.authToken,
+            'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
           });
         };
@@ -244,7 +244,7 @@
           return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'DELETE', null, {
             tracks: t
           }, {
-            'Authorization': 'Bearer ' + settings.authToken,
+            'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
           });
         };
@@ -259,14 +259,14 @@
           return this.api('/users/' + userId + '/playlistId' + playlistId + '/tracks', 'PUT', {
             uris: tracks.toString()
           }, null, {
-            'Authorization': 'Bearer ' + settings.authToken,
+            'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
           });
         };
 
         NgSpotify.prototype.updatePlaylistDetails = function(userId, playlistId, options) {
           return this.api('/users/' + userId + '/playlists/' + playlistId, 'PUT', null, options, {
-            'Authorization': 'Bearer ' + settings.authToken,
+            'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
           });
         };
@@ -281,7 +281,7 @@
 
         NgSpotify.prototype.getCurrentUser = function() {
           return this.api('/me', 'GET', null, null, {
-            'Authorization': 'Bearer ' + settings.authToken
+            'Authorization': 'Bearer ' + this.authToken
           });
         };
 
@@ -290,7 +290,7 @@
          */
         NgSpotify.prototype.getSavedUserTracks = function(options) {
           return this.api('/me/tracks', 'GET', options, null, {
-            'Authorization': 'Bearer ' + settings.authToken
+            'Authorization': 'Bearer ' + this.authToken
           });
         };
 
@@ -298,7 +298,7 @@
           return this.api('/me/tracks', 'GET', {
             ids: tracks.toString()
           }, null, {
-            'Authorization': 'Bearer ' + settings.authToken
+            'Authorization': 'Bearer ' + this.authToken
           });
         };
 
@@ -306,7 +306,7 @@
           return this.api('/me/tracks', 'PUT', {
             ids: tracks.toString()
           }, null, {
-            'Authorization': 'Bearer ' + settings.authToken
+            'Authorization': 'Bearer ' + this.authToken
           });
         };
 
@@ -314,7 +314,7 @@
           return this.api('/me/tracks', 'DELETE', {
             ids: tracks.toString()
           }, null, {
-            'Authorization': 'Bearer ' + settings.authToken,
+            'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
           });
         };
@@ -324,6 +324,7 @@
          */
         NgSpotify.prototype.login = function() {
           var deferred = $q.defer();
+          var that = this;
 
           var w = 400,
               h = 500,
@@ -348,7 +349,9 @@
               authWindow.close();
             }
 
-            settings.accessToken = event.data;
+            console.log(event.data);
+
+            that.accessToken = event.data;
             deferred.resolve(event.data);
           }
 
