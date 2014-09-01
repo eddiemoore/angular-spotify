@@ -301,11 +301,20 @@
           });
         };
 
-        NgSpotify.prototype.saveTracks = function(tracks) {
+        NgSpotify.prototype.saveUserTracks = function(tracks) {
           return this.api('/me/tracks', 'PUT', {
             ids: tracks.toString()
           }, null, {
             'Authorization': 'Bearer ' + settings.authToken
+          });
+        };
+
+        NgSpotify.prototype.removeUserTracks = function(tracks) {
+          return this.api('/me/tracks', 'DELETE', {
+            ids: tracks.toString()
+          }, null, {
+            'Authorization': 'Bearer ' + settings.authToken,
+            'Content-Type': 'application/json'
           });
         };
 
