@@ -73,21 +73,11 @@
          * type = artist, album or track
          */
         NgSpotify.prototype.search = function(q, type, options) {
-          var deferred = $q.defer();
-
           options = options || {};
           options.q = q;
           options.type = type;
 
-          this
-            .api('/search', 'GET', options)
-            .then(function(data) {
-              deferred.resolve(data);
-            }, function(data) {
-              deferred.reject(data);
-            });
-
-          return deferred.promise;
+          return this.api('/search', 'GET', options);
         };
 
         /**
@@ -99,19 +89,9 @@
          * Pass in album id or spotify uri
          */
         NgSpotify.prototype.getAlbum = function(album) {
-          var deferred = $q.defer();
-
           album = album.indexOf('spotify:') === -1 ? album : album.split(':')[2];
 
-          this
-            .api('/albums/' + album)
-            .then(function(data) {
-              deferred.resolve(data);
-            }, function(data) {
-              deferred.reject(data);
-            });
-
-          return deferred.promise;
+          return this.api('/albums/' + album);
         };
 
         /**
@@ -119,19 +99,9 @@
          * Pass in comma separated string or array of album ids
          */
         NgSpotify.prototype.getAlbums = function(albums) {
-          var deferred = $q.defer();
-
-          this
-            .api('/albums', 'GET', {
-              ids: albums
-            })
-            .then(function(data) {
-              deferred.resolve(data);
-            }, function(data) {
-              deferred.reject(data);
-            });
-
-          return deferred.promise;
+          return this.api('/albums', 'GET', {
+            ids: albums
+          });
         };
 
         /**
@@ -139,19 +109,9 @@
          * Pass in album id or spotify uri
          */
         NgSpotify.prototype.getAlbumTracks = function(album, options) {
-          var deferred = $q.defer();
-
           album = album.indexOf('spotify:') === -1 ? album : album.split(':')[2];
 
-          this
-            .api('/albums/' + album + '/tracks', 'GET', options)
-            .then(function(data) {
-              deferred.resolve(data);
-            }, function(data) {
-              deferred.reject(data);
-            });
-
-          return deferred.promise;
+          return this.api('/albums/' + album + '/tracks', 'GET', options);
         };
 
         /**
@@ -162,52 +122,22 @@
          * Get an Artist
          */
         NgSpotify.prototype.getArtist = function(artist) {
-          var deferred = $q.defer();
-
           artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
 
-          this
-            .api('/artists/' + artist)
-            .then(function(data) {
-              deferred.resolve(data);
-            }, function(data) {
-              deferred.reject(data);
-            });
-
-          return deferred.promise;
+          return this.api('/artists/' + artist);
         };
 
         NgSpotify.prototype.getArtists = function(artists) {
-          var deferred = $q.defer();
-
-          this
-            .api('/artists/', 'GET', {
-              ids: artists.toString()
-            })
-            .then(function(data) {
-              deferred.resolve(data);
-            }, function(data) {
-              deferred.reject(data);
-            });
-
-          return deferred.promise;
+          return this.api('/artists/', 'GET', {
+            ids: artists.toString()
+          });
         };
 
         //Artist Albums
         NgSpotify.prototype.getArtistAlbums = function(artist, options) {
-          var deferred = $q.defer();
-
           artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
 
-          this
-            .api('/artists/' + artist + '/albums', 'GET', options)
-            .then(function(data) {
-              deferred.resolve(data);
-            }, function(data) {
-              deferred.reject(data);
-            });
-
-          return deferred.promise;
+          return this.api('/artists/' + artist + '/albums', 'GET', options);
         };
 
         /**
@@ -215,37 +145,17 @@
          * The country: an ISO 3166-1 alpha-2 country code.
          */
         NgSpotify.prototype.getArtistTopTracks = function(artist, country) {
-          var deferred = $q.defer();
-
           artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
 
-          this
-            .api('/artists/' + artist + '/top-tracks', 'GET', {
-              country: country
-            })
-            .then(function(data) {
-              deferred.resolve(data);
-            }, function(data) {
-              deferred.reject(data);
-            });
-
-          return deferred.promise;
+          return this.api('/artists/' + artist + '/top-tracks', 'GET', {
+            country: country
+          });
         };
 
         NgSpotify.prototype.getArtistRelated = function(artist) {
-          var deferred = $q.defer();
-
           artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
 
-          this
-            .api('/artists/' + artist + '/related-artists')
-            .then(function(data) {
-              deferred.resolve(data);
-            }, function(data) {
-              deferred.reject(data);
-            });
-
-          return deferred.promise;
+          return this.api('/artists/' + artist + '/related-artists');
         };
 
 
@@ -253,35 +163,15 @@
           ====================== Tracks =====================
          */
         NgSpotify.prototype.getTrack = function(track) {
-          var deferred = $q.defer();
-
           track = track.indexOf('spotify:') === -1 ? track : track.split(':')[2];
 
-          this
-            .api('/tracks/' + track)
-            .then(function(data) {
-              deferred.resolve(data);
-            }, function(data) {
-              deferred.reject(data);
-            });
-
-          return deferred.promise;
+          return this.api('/tracks/' + track);
         };
 
         NgSpotify.prototype.getTracks = function(tracks) {
-          var deferred = $q.defer();
-
-          this
-            .api('/tracks/', 'GET', {
-              ids: tracks.toString()
-            })
-            .then(function(data) {
-              deferred.resolve(data);
-            }, function(data) {
-              deferred.reject(data);
-            });
-
-          return deferred.promise;
+          return this.api('/tracks/', 'GET', {
+            ids: tracks.toString()
+          });
         };
 
         return new NgSpotify();
