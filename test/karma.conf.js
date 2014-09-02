@@ -43,10 +43,19 @@ module.exports = function(config) {
       'PhantomJS'
     ],
 
+    reporters: ['coverage', 'coveralls'],
+
+    coverageReporter: {
+      type: 'lcov', // lcov or lcovonly are required for generating lcov.info files
+      dir: 'test/coverage/'
+    },
+
     // Which plugins to enable
     plugins: [
       'karma-phantomjs-launcher',
-      'karma-jasmine'
+      'karma-jasmine',
+      'karma-coverage',
+      'karma-coveralls'
     ],
 
     // Continuous Integration mode
