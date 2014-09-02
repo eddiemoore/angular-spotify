@@ -16,7 +16,7 @@ describe('angular-spotify', function () {
       expect(Spotify).toBeDefined();
     });
 
-    it('should be a function object', function () {
+    it('should be an object', function () {
       expect(typeof Spotify).toBe('object');
     });
 
