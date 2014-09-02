@@ -2,6 +2,77 @@
 
 describe('angular-spotify', function () {
 
+  //For the config
+  describe('SpotifyProvider', function () {
+    
+    var spotifyProvider;
+
+    beforeEach(function () {
+      // Initialize the service provider by injecting it to a fake module's config block
+      angular.module('testApp', function () {})
+        .config(function (SpotifyProvider) {
+        spotifyProvider = SpotifyProvider;
+      });
+      // Initialize angular-spotify injector
+      module('spotify', 'testApp');
+
+      // Kickstart the injectors previously registered with calls to angular.mock.module
+      inject(function () {});
+    });
+
+    it('should be defined', function () {
+      expect(spotifyProvider).toBeDefined();
+    });
+
+    it('should have a method setClientId()', function () {
+      expect(spotifyProvider.setClientId).toBeDefined();
+    });
+
+    it('should have a method getClientId()', function () {
+      expect(spotifyProvider.getClientId).toBeDefined();
+    });
+
+    it('should have a method setRedirectUri()', function () {
+      expect(spotifyProvider.setRedirectUri).toBeDefined();
+    });
+
+    it('should have a method getRedirectUri()', function () {
+      expect(spotifyProvider.getRedirectUri).toBeDefined();
+    });
+
+    it('should have a method setScope()', function () {
+      expect(spotifyProvider.setScope).toBeDefined();
+    });
+
+    it('should have a method setScope()', function () {
+      expect(spotifyProvider.setScope).toBeDefined();
+    });
+
+    it('should set the client id', function () {
+      expect(spotifyProvider.setClientId('ABCDEFGHIJKLMNOP')).toBe('ABCDEFGHIJKLMNOP');
+    });
+
+    it('should get the client id', function () {
+      spotifyProvider.setClientId('ABCDEFGHIJKLMNOP');
+      expect(spotifyProvider.getClientId()).toBe('ABCDEFGHIJKLMNOP');
+    });
+
+    it('should set the Redirect Uri', function () {
+      expect(spotifyProvider.setRedirectUri('http://example.com/callback.html')).toBe('http://example.com/callback.html');
+    });
+
+    it('should get the Redirect Uri', function () {
+      spotifyProvider.setRedirectUri('http://example.com/callback.html');
+      expect(spotifyProvider.getRedirectUri()).toBe('http://example.com/callback.html');
+    });
+
+    it('should set the scope', function () {
+      expect(spotifyProvider.setScope('user-read-private playlist-read-private')).toBe('user-read-private playlist-read-private');
+    });
+
+  });
+
+  //For injecting into controllers
   describe('Spotify', function () {
 
     beforeEach(module('spotify'));

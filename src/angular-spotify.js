@@ -21,6 +21,7 @@
 
       this.setClientId = function (clientId) {
         settings.clientId = clientId;
+        return settings.clientId;
       };
 
       this.getClientId = function () {
@@ -29,6 +30,7 @@
 
       this.setRedirectUri = function (redirectUri) {
         settings.redirectUri = redirectUri;
+        return settings.redirectUri;
       };
 
       this.getRedirectUri = function () {
@@ -37,6 +39,7 @@
 
       this.setScope = function (scope) {
         settings.scope = scope;
+        return settings.scope;
       };
 
       var toQueryString = function (obj) {
