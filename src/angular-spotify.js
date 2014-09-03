@@ -148,7 +148,7 @@
 
           return this.api('/artists/' + artist);
         };
-        
+
         /**
          * Get multiple artists
          */
@@ -331,6 +331,7 @@
          */
         NgSpotify.prototype.setAuthToken = function(authToken) {
           this.authToken = authToken;
+          return this.authToken;
         };
 
         NgSpotify.prototype.login = function() {

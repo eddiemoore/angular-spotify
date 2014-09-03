@@ -4,7 +4,7 @@ describe('angular-spotify', function () {
 
   //For the config
   describe('SpotifyProvider', function () {
-    
+
     var spotifyProvider;
 
     beforeEach(function () {
@@ -201,6 +201,10 @@ describe('angular-spotify', function () {
 
     it('should have a method login()', function () {
       expect(Spotify.login).toBeDefined();
+    });
+
+    it('should set the AuthToken', function () {
+      expect(Spotify.setAuthToken('ABCDEFGHIJKLMNOP')).toBe('ABCDEFGHIJKLMNOP');
     });
 
   });
