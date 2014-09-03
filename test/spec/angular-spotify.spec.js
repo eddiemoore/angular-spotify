@@ -286,6 +286,22 @@ describe('angular-spotify', function () {
         expect(Spotify.getAlbum('0sNOF9WDwhWunNAHPD3Baj')).toBeDefined();
       });
 
+      it('should convert spotify uri to just an id', function () {
+
+        $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond({});
+
+        var promise = Spotify.getAlbum('spotify:album:0sNOF9WDwhWunNAHPD3Baj'),
+            result;
+
+        promise.then(function (data) {
+          result = data;
+        });
+
+        $httpBackend.flush();
+        expect(result).toBeDefined();
+        expect(result instanceof Object).toBeTruthy();
+      });
+
       it('should resolve to an object of an album', function () {
         $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond(200, { 'album_type': { } });
 
