@@ -414,6 +414,78 @@ describe('angular-spotify', function () {
           expect(result.data.error.status).toBe(400);
         });
       });
+
+      describe('Spotify.getAlbumTracks', function () {
+        var $httpBackend;
+        var Spotify;
+        var api = 'https://api.spotify.com/v1';
+
+        beforeEach(inject(function(_Spotify_, _$httpBackend_) {
+          Spotify = _Spotify_;
+          $httpBackend = _$httpBackend_;
+        }));
+
+        it('should make an ajax call to https://api.spotify.com/v1/albums', function () {
+
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj/tracks').respond({});
+
+          expect(Spotify.getAlbumTracks('0sNOF9WDwhWunNAHPD3Baj')).toBeDefined();
+        });
+
+        it('should convert spotify uri to just an id', function () {
+
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj/tracks').respond({});
+
+          var promise = Spotify.getAlbumTracks('spotify:album:0sNOF9WDwhWunNAHPD3Baj'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should resolve to an object of album tracks', function () {
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj/tracks').respond(200, { 'items': [] });
+
+          var promise = Spotify.getAlbumTracks('0sNOF9WDwhWunNAHPD3Baj'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should reject the promise and respond with error', function () {
+          $httpBackend.when('GET', api + '/albums/ABCDEFGHIJKLMNOP/tracks').respond(404, {
+            'error': {
+              'status': 404,
+              'message': 'non existing id'
+            }
+          });
+
+          var promise = Spotify.getAlbumTracks('ABCDEFGHIJKLMNOP'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          }, function (reason) {
+            result = reason;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+          expect(result.data.error.status).toBe(404);
+        });
+      });
     });
 
   });
