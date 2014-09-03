@@ -71,7 +71,7 @@
           this.toQueryString = utils.toQueryString;
         }
 
-        NgSpotify.prototype.api = function(endpoint, method, params, data, headers) {
+        NgSpotify.prototype.api = function (endpoint, method, params, data, headers) {
           var deferred = $q.defer();
 
           $http({
@@ -96,7 +96,7 @@
          * q = search query
          * type = artist, album or track
          */
-        NgSpotify.prototype.search = function(q, type, options) {
+        NgSpotify.prototype.search = function (q, type, options) {
           options = options || {};
           options.q = q;
           options.type = type;
@@ -112,7 +112,7 @@
          * Gets an album
          * Pass in album id or spotify uri
          */
-        NgSpotify.prototype.getAlbum = function(album) {
+        NgSpotify.prototype.getAlbum = function (album) {
           album = album.indexOf('spotify:') === -1 ? album : album.split(':')[2];
 
           return this.api('/albums/' + album);
@@ -122,7 +122,7 @@
          * Gets an album
          * Pass in comma separated string or array of album ids
          */
-        NgSpotify.prototype.getAlbums = function(albums) {
+        NgSpotify.prototype.getAlbums = function (albums) {
           return this.api('/albums', 'GET', {
             ids: albums ? albums.toString() : ''
           });
@@ -132,7 +132,7 @@
          * Get Album Tracks
          * Pass in album id or spotify uri
          */
-        NgSpotify.prototype.getAlbumTracks = function(album, options) {
+        NgSpotify.prototype.getAlbumTracks = function (album, options) {
           album = album.indexOf('spotify:') === -1 ? album : album.split(':')[2];
 
           return this.api('/albums/' + album + '/tracks', 'GET', options);
@@ -145,7 +145,7 @@
         /**
          * Get an Artist
          */
-        NgSpotify.prototype.getArtist = function(artist) {
+        NgSpotify.prototype.getArtist = function (artist) {
           artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
 
           return this.api('/artists/' + artist);
@@ -154,14 +154,14 @@
         /**
          * Get multiple artists
          */
-        NgSpotify.prototype.getArtists = function(artists) {
+        NgSpotify.prototype.getArtists = function (artists) {
           return this.api('/artists/', 'GET', {
             ids: artists ? artists.toString() : ''
           });
         };
 
         //Artist Albums
-        NgSpotify.prototype.getArtistAlbums = function(artist, options) {
+        NgSpotify.prototype.getArtistAlbums = function (artist, options) {
           artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
 
           return this.api('/artists/' + artist + '/albums', 'GET', options);
@@ -171,7 +171,7 @@
          * Get Artist Top Tracks
          * The country: an ISO 3166-1 alpha-2 country code.
          */
-        NgSpotify.prototype.getArtistTopTracks = function(artist, country) {
+        NgSpotify.prototype.getArtistTopTracks = function (artist, country) {
           artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
 
           return this.api('/artists/' + artist + '/top-tracks', 'GET', {
@@ -179,7 +179,7 @@
           });
         };
 
-        NgSpotify.prototype.getRelatedArtists = function(artist) {
+        NgSpotify.prototype.getRelatedArtists = function (artist) {
           artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
 
           return this.api('/artists/' + artist + '/related-artists');
@@ -189,13 +189,13 @@
         /**
           ====================== Tracks =====================
          */
-        NgSpotify.prototype.getTrack = function(track) {
+        NgSpotify.prototype.getTrack = function (track) {
           track = track.indexOf('spotify:') === -1 ? track : track.split(':')[2];
 
           return this.api('/tracks/' + track);
         };
 
-        NgSpotify.prototype.getTracks = function(tracks) {
+        NgSpotify.prototype.getTracks = function (tracks) {
           return this.api('/tracks/', 'GET', {
             ids: tracks.toString()
           });
@@ -205,32 +205,32 @@
         /**
           ====================== Playlists =====================
          */
-        NgSpotify.prototype.getUserPlaylists = function(userId, options) {
+        NgSpotify.prototype.getUserPlaylists = function (userId, options) {
           return this.api('/users/' + userId + '/playlists', 'GET', options, null, {
             'Authorization': 'Bearer ' + this.authToken
           });
         };
 
-        NgSpotify.prototype.getPlaylist = function(userId, playlistId, options) {
+        NgSpotify.prototype.getPlaylist = function (userId, playlistId, options) {
           return this.api('/users/' + userId + '/playlists/' + playlistId, 'GET', options, null, {
             'Authorization': 'Bearer ' + this.authToken
           });
         };
 
-        NgSpotify.prototype.getPlaylistTracks = function(userId, playlistId, options) {
+        NgSpotify.prototype.getPlaylistTracks = function (userId, playlistId, options) {
           return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'GET', options, null, {
             'Authorization': 'Bearer ' + this.authToken
           });
         };
 
-        NgSpotify.prototype.createPlaylist = function(userId, options) {
+        NgSpotify.prototype.createPlaylist = function (userId, options) {
           return this.api('/users/' + userId + '/playlists', 'POST', null, options, {
             'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
           });
         };
 
-        NgSpotify.prototype.addPlaylistTracks = function(userId, playlistId, tracks, options) {
+        NgSpotify.prototype.addPlaylistTracks = function (userId, playlistId, tracks, options) {
           return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'POST', {
             uris: tracks.toString(),
             position: options.position || null
@@ -240,7 +240,7 @@
           });
         };
 
-        NgSpotify.prototype.removePlaylistTracks = function(userId, playlistId, tracks) {
+        NgSpotify.prototype.removePlaylistTracks = function (userId, playlistId, tracks) {
           var t = [];
           tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
           var track;
@@ -258,7 +258,7 @@
           });
         };
 
-        NgSpotify.prototype.replacePlaylistTracks = function(userId, playlistId, tracks) {
+        NgSpotify.prototype.replacePlaylistTracks = function (userId, playlistId, tracks) {
           tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
           var track;
           for (var i = 0; i < tracks.length; i++) {
@@ -273,7 +273,7 @@
           });
         };
 
-        NgSpotify.prototype.updatePlaylistDetails = function(userId, playlistId, options) {
+        NgSpotify.prototype.updatePlaylistDetails = function (userId, playlistId, options) {
           return this.api('/users/' + userId + '/playlists/' + playlistId, 'PUT', null, options, {
             'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
@@ -284,11 +284,11 @@
           ====================== User =====================
          */
 
-        NgSpotify.prototype.getUser = function(userId) {
+        NgSpotify.prototype.getUser = function (userId) {
           return this.api('/users/' + userId);
         };
 
-        NgSpotify.prototype.getCurrentUser = function() {
+        NgSpotify.prototype.getCurrentUser = function () {
           return this.api('/me', 'GET', null, null, {
             'Authorization': 'Bearer ' + this.authToken
           });
@@ -297,13 +297,13 @@
         /**
           ====================== User Library =====================
          */
-        NgSpotify.prototype.getSavedUserTracks = function(options) {
+        NgSpotify.prototype.getSavedUserTracks = function (options) {
           return this.api('/me/tracks', 'GET', options, null, {
             'Authorization': 'Bearer ' + this.authToken
           });
         };
 
-        NgSpotify.prototype.userTracksContains = function(tracks) {
+        NgSpotify.prototype.userTracksContains = function (tracks) {
           return this.api('/me/tracks', 'GET', {
             ids: tracks.toString()
           }, null, {
@@ -311,7 +311,7 @@
           });
         };
 
-        NgSpotify.prototype.saveUserTracks = function(tracks) {
+        NgSpotify.prototype.saveUserTracks = function (tracks) {
           return this.api('/me/tracks', 'PUT', {
             ids: tracks.toString()
           }, null, {
@@ -319,7 +319,7 @@
           });
         };
 
-        NgSpotify.prototype.removeUserTracks = function(tracks) {
+        NgSpotify.prototype.removeUserTracks = function (tracks) {
           return this.api('/me/tracks', 'DELETE', {
             ids: tracks.toString()
           }, null, {
@@ -331,12 +331,12 @@
         /**
           ====================== Login =====================
          */
-        NgSpotify.prototype.setAuthToken = function(authToken) {
+        NgSpotify.prototype.setAuthToken = function (authToken) {
           this.authToken = authToken;
           return this.authToken;
         };
 
-        NgSpotify.prototype.login = function() {
+        NgSpotify.prototype.login = function () {
           var deferred = $q.defer();
           var that = this;
 
@@ -358,7 +358,7 @@
             'menubar=no,location=no,resizable=no,scrollbars=no,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left
           );
 
-          function receiveMessage(event) {
+          function receiveMessage (event) {
             if (authWindow) {
               authWindow.close();
             }
