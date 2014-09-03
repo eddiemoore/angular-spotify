@@ -70,23 +70,13 @@
         }
 
         NgSpotify.prototype.api = function(endpoint, method, params, data, headers) {
-          var deferred = $q.defer();
-
-          $http({
+          return $http({
             url: this.apiBase + endpoint,
             method: method ? method : 'GET',
             params: params,
             data: data,
             headers: headers
-          })
-          .success(function (data) {
-            deferred.resolve(data);
-          })
-          .error(function (data) {
-            deferred.reject(data);
           });
-
-          return deferred.promise;
         };
 
         /**

@@ -43,7 +43,7 @@ module.exports = function(config) {
       'PhantomJS'
     ],
 
-    reporters: ['coverage'],
+    reporters: ['coverage', 'spec'],
 
     preprocessors: {
       // source files, that you wanna generate coverage for
@@ -64,7 +64,8 @@ module.exports = function(config) {
     plugins: [
       'karma-phantomjs-launcher',
       'karma-jasmine',
-      'karma-coverage'
+      'karma-coverage',
+      'karma-spec-reporter'
     ],
 
     // Continuous Integration mode

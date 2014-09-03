@@ -207,6 +207,67 @@ describe('angular-spotify', function () {
       expect(Spotify.setAuthToken('ABCDEFGHIJKLMNOP')).toBe('ABCDEFGHIJKLMNOP');
     });
 
+    describe('Spotify.search', function () {
+
+      var $httpBackend;
+      var Spotify;
+      var api = 'https://api.spotify.com/v1';
+
+      beforeEach(inject(function(_Spotify_, _$httpBackend_) {
+        Spotify = _Spotify_;
+        $httpBackend = _$httpBackend_;
+      }));
+
+      it('should make an ajax call to https://api.spotify.com/v1/search', function () {
+
+        $httpBackend.when('GET', api + '/search', {
+          q: 'Nirvana',
+          type: 'artist'
+        }).respond({});
+
+        expect(Spotify.search('Nirvana', 'artist')).toBeDefined();
+      });
+
+      it('should resolve to an object of artists', function () {
+        $httpBackend.when('GET', api + '/search?q=Nirvana&type=artist').respond(200, { 'artists': { } });
+
+        var promise = Spotify.search('Nirvana', 'artist'),
+            result;
+
+        promise.then(function (data) {
+          result = data;
+        });
+
+        $httpBackend.flush();
+        expect(result).toBeDefined();
+        expect(result instanceof Object).toBeTruthy();
+      });
+
+      it('should reject the promise and respond with error', function () {
+        $httpBackend.when('GET', api + '/search?q=Nirvana').respond(400, {
+          'error': {
+            'status': 400,
+            'message': 'Missing parameter type'
+          }
+        });
+
+        var promise = Spotify.search('Nirvana'),
+            result;
+
+        promise.then(function (data) {
+          result = data;
+        }, function (reason) {
+          result = reason;
+        });
+
+        $httpBackend.flush();
+        expect(result).toBeDefined();
+        expect(result instanceof Object).toBeTruthy();
+        expect(result.data.error.status).toBe(400);
+      });
+
+    });
+
   });
 
 });
