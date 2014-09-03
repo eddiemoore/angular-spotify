@@ -916,6 +916,64 @@ describe('angular-spotify', function () {
 
     });
 
+    describe('User Profiles', function() {
+      var $httpBackend;
+      var Spotify;
+      var api = 'https://api.spotify.com/v1';
+
+      beforeEach(inject(function(_Spotify_, _$httpBackend_) {
+        Spotify = _Spotify_;
+        $httpBackend = _$httpBackend_;
+      }));
+
+      describe('Spotify.getUser', function() {
+        it('should make an ajax call to https://api.spotify.com/v1/users/{id}', function () {
+
+          $httpBackend.when('GET', api + '/users/wizzler').respond({});
+
+          expect(Spotify.getUser('wizzler')).toBeDefined();
+        });
+
+        it('should resolve to an object of a user', function () {
+          $httpBackend.when('GET', api + '/users/wizzler').respond(200, { });
+
+          var promise = Spotify.getUser('wizzler'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should reject the promise and respond with error', function () {
+          $httpBackend.when('GET', api + '/users/:":ADSAD').respond(404, {
+            'error': {
+              'status': 404,
+              'message': 'No such user'
+            }
+          });
+
+          var promise = Spotify.getUser(':":ADSAD'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          }, function (reason) {
+            result = reason;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+          expect(result.error.status).toBe(404);
+        });
+      });
+    });
+
   });
 
 });
