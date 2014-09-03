@@ -269,77 +269,79 @@ describe('angular-spotify', function () {
     });
 
     //Albums
-    describe('Spotify.getAlbum', function () {
-      var $httpBackend;
-      var Spotify;
-      var api = 'https://api.spotify.com/v1';
+    describe('Albums', function () {
+      describe('Spotify.getAlbum', function () {
+        var $httpBackend;
+        var Spotify;
+        var api = 'https://api.spotify.com/v1';
 
-      beforeEach(inject(function(_Spotify_, _$httpBackend_) {
-        Spotify = _Spotify_;
-        $httpBackend = _$httpBackend_;
-      }));
+        beforeEach(inject(function(_Spotify_, _$httpBackend_) {
+          Spotify = _Spotify_;
+          $httpBackend = _$httpBackend_;
+        }));
 
-      it('should make an ajax call to https://api.spotify.com/v1/albums', function () {
+        it('should make an ajax call to https://api.spotify.com/v1/albums', function () {
 
-        $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond({});
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond({});
 
-        expect(Spotify.getAlbum('0sNOF9WDwhWunNAHPD3Baj')).toBeDefined();
-      });
-
-      it('should convert spotify uri to just an id', function () {
-
-        $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond({});
-
-        var promise = Spotify.getAlbum('spotify:album:0sNOF9WDwhWunNAHPD3Baj'),
-            result;
-
-        promise.then(function (data) {
-          result = data;
+          expect(Spotify.getAlbum('0sNOF9WDwhWunNAHPD3Baj')).toBeDefined();
         });
 
-        $httpBackend.flush();
-        expect(result).toBeDefined();
-        expect(result instanceof Object).toBeTruthy();
-      });
+        it('should convert spotify uri to just an id', function () {
 
-      it('should resolve to an object of an album', function () {
-        $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond(200, { 'album_type': { } });
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond({});
 
-        var promise = Spotify.getAlbum('0sNOF9WDwhWunNAHPD3Baj'),
-            result;
+          var promise = Spotify.getAlbum('spotify:album:0sNOF9WDwhWunNAHPD3Baj'),
+              result;
 
-        promise.then(function (data) {
-          result = data;
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
         });
 
-        $httpBackend.flush();
-        expect(result).toBeDefined();
-        expect(result instanceof Object).toBeTruthy();
-      });
+        it('should resolve to an object of an album', function () {
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond(200, { 'album_type': { } });
 
-      it('should reject the promise and respond with error', function () {
-        $httpBackend.when('GET', api + '/albums/ABCDEFGHIJKLMNOP').respond(404, {
-          'error': {
-            'status': 404,
-            'message': 'non existing id'
-          }
+          var promise = Spotify.getAlbum('0sNOF9WDwhWunNAHPD3Baj'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
         });
 
-        var promise = Spotify.getAlbum('ABCDEFGHIJKLMNOP'),
-            result;
+        it('should reject the promise and respond with error', function () {
+          $httpBackend.when('GET', api + '/albums/ABCDEFGHIJKLMNOP').respond(404, {
+            'error': {
+              'status': 404,
+              'message': 'non existing id'
+            }
+          });
 
-        promise.then(function (data) {
-          result = data;
-        }, function (reason) {
-          result = reason;
+          var promise = Spotify.getAlbum('ABCDEFGHIJKLMNOP'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          }, function (reason) {
+            result = reason;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+          expect(result.data.error.status).toBe(404);
         });
-
-        $httpBackend.flush();
-        expect(result).toBeDefined();
-        expect(result instanceof Object).toBeTruthy();
-        expect(result.data.error.status).toBe(404);
       });
-    });
+    })
 
   });
 
