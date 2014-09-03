@@ -662,6 +662,69 @@ describe('angular-spotify', function () {
         });
       });
 
+      describe('Spotify.getArtistTopTracks', function() {
+        it('should make an ajax call to https://api.spotify.com/v1/artists/{id}/top-tracks', function () {
+
+          $httpBackend.when('GET', api + '/artists/0LcJLqbBmaGUft1e9Mm8HV/top-tracks').respond({});
+
+          expect(Spotify.getArtistTopTracks('0LcJLqbBmaGUft1e9Mm8HV')).toBeDefined();
+        });
+
+        it('should convert spotify uri to just an id', function () {
+
+          $httpBackend.when('GET', api + '/artists/0LcJLqbBmaGUft1e9Mm8HV/top-tracks').respond({});
+
+          var promise = Spotify.getArtistTopTracks('spotify:artist:0LcJLqbBmaGUft1e9Mm8HV'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should resolve to an array of artist albums', function () {
+          $httpBackend.when('GET', api + '/artists/0LcJLqbBmaGUft1e9Mm8HV/top-tracks').respond(200, { 'albums': [] });
+
+          var promise = Spotify.getArtistTopTracks('0LcJLqbBmaGUft1e9Mm8HV'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should reject the promise and respond with error', function () {
+          $httpBackend.when('GET', api + '/artists/ABCDEFGHIJKLMNOP/top-tracks').respond(400, {
+            'error': {
+              'status': 400,
+              'message': 'invalid id'
+            }
+          });
+
+          var promise = Spotify.getArtistTopTracks('ABCDEFGHIJKLMNOP'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          }, function (reason) {
+            result = reason;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+          expect(result.error.status).toBe(400);
+        });
+      });
+
       describe('Spotify.getRelatedArtists', function() {
         it('should make an ajax call to https://api.spotify.com/v1/artists/{id}/related-artists', function () {
 
