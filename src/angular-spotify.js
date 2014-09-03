@@ -144,7 +144,7 @@
          */
         NgSpotify.prototype.getArtists = function(artists) {
           return this.api('/artists/', 'GET', {
-            ids: artists.toString()
+            ids: artists ? artists.toString() : ''
           });
         };
 

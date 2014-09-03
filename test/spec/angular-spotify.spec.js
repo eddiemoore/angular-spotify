@@ -425,7 +425,7 @@ describe('angular-spotify', function () {
           $httpBackend = _$httpBackend_;
         }));
 
-        it('should make an ajax call to https://api.spotify.com/v1/albums', function () {
+        it('should make an ajax call to https://api.spotify.com/v1/albums/{id}/tracks', function () {
 
           $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj/tracks').respond({});
 
@@ -486,6 +486,144 @@ describe('angular-spotify', function () {
           expect(result.data.error.status).toBe(404);
         });
       });
+    });
+
+    describe('Artists', function () {
+      describe('Spotify.getArtist', function () {
+        var $httpBackend;
+        var Spotify;
+        var api = 'https://api.spotify.com/v1';
+
+        beforeEach(inject(function(_Spotify_, _$httpBackend_) {
+          Spotify = _Spotify_;
+          $httpBackend = _$httpBackend_;
+        }));
+
+        it('should make an ajax call to https://api.spotify.com/v1/artists/{id}', function () {
+
+          $httpBackend.when('GET', api + '/artists/0LcJLqbBmaGUft1e9Mm8HV').respond({});
+
+          expect(Spotify.getArtist('0LcJLqbBmaGUft1e9Mm8HV')).toBeDefined();
+        });
+
+        it('should convert spotify uri to just an id', function () {
+
+          $httpBackend.when('GET', api + '/artists/0LcJLqbBmaGUft1e9Mm8HV').respond({});
+
+          var promise = Spotify.getArtist('spotify:artist:0LcJLqbBmaGUft1e9Mm8HV'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should resolve to an object of an artist', function () {
+          $httpBackend.when('GET', api + '/artists/0LcJLqbBmaGUft1e9Mm8HV').respond(200, { 'external_urls': {} });
+
+          var promise = Spotify.getArtist('0LcJLqbBmaGUft1e9Mm8HV'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should reject the promise and respond with error', function () {
+          $httpBackend.when('GET', api + '/artists/ABCDEFGHIJKLMNOP').respond(404, {
+            'error': {
+              'status': 404,
+              'message': 'non existing id'
+            }
+          });
+
+          var promise = Spotify.getArtist('ABCDEFGHIJKLMNOP'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          }, function (reason) {
+            result = reason;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+          expect(result.data.error.status).toBe(404);
+        });
+      });
+
+      describe('Spotify.getArtists', function () {
+        var $httpBackend;
+        var Spotify;
+        var api = 'https://api.spotify.com/v1';
+
+        beforeEach(inject(function(_Spotify_, _$httpBackend_) {
+          Spotify = _Spotify_;
+          $httpBackend = _$httpBackend_;
+        }));
+
+        it('should make an ajax call to https://api.spotify.com/v1/artists?ids={id}', function () {
+
+          $httpBackend.when('GET', api + '/artists?ids=0oSGxfWSnnOXhD2fKuz2Gy,3dBVyJ7JuOMt4GE9607Qin').respond({});
+
+          expect(Spotify.getArtists('0oSGxfWSnnOXhD2fKuz2Gy,3dBVyJ7JuOMt4GE9607Qin')).toBeDefined();
+        });
+
+        it('should resolve to an object of an artist', function () {
+          $httpBackend.when('GET', api + '/artists/?ids=0oSGxfWSnnOXhD2fKuz2Gy,3dBVyJ7JuOMt4GE9607Qin').respond(200, { 'artists': [] });
+
+          var promise = Spotify.getArtists('0oSGxfWSnnOXhD2fKuz2Gy,3dBVyJ7JuOMt4GE9607Qin'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should reject the promise and respond with error', function () {
+          $httpBackend.when('GET', api + '/artists/?ids=').respond(400, {
+            'error': {
+              'status': 400,
+              'message': 'invalid id'
+            }
+          });
+
+          var promise = Spotify.getArtists(),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          }, function (reason) {
+            result = reason;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+          expect(result.data.error.status).toBe(400);
+        });
+      });
+    });
+
+    describe('Tracks', function () {
+
+    });
+
+    describe('Playlists', function () {
+
     });
 
   });
