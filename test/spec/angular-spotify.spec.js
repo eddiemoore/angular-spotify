@@ -790,6 +790,125 @@ describe('angular-spotify', function () {
     });
 
     describe('Tracks', function () {
+      var $httpBackend;
+      var Spotify;
+      var api = 'https://api.spotify.com/v1';
+
+      beforeEach(inject(function(_Spotify_, _$httpBackend_) {
+        Spotify = _Spotify_;
+        $httpBackend = _$httpBackend_;
+      }));
+
+      describe('Spotify.getTrack', function() {
+        
+        it('should make an ajax call to https://api.spotify.com/v1/tracks/{id}', function () {
+
+          $httpBackend.when('GET', api + '/tracks/0eGsygTp906u18L0Oimnem').respond({});
+
+          expect(Spotify.getTrack('0eGsygTp906u18L0Oimnem')).toBeDefined();
+        });
+
+        it('should convert spotify uri to just an id', function () {
+
+          $httpBackend.when('GET', api + '/tracks/0eGsygTp906u18L0Oimnem').respond({});
+
+          var promise = Spotify.getTrack('spotify:artist:0eGsygTp906u18L0Oimnem'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should resolve to an object of a track', function () {
+          $httpBackend.when('GET', api + '/tracks/0eGsygTp906u18L0Oimnem').respond(200, { 'albums': [] });
+
+          var promise = Spotify.getTrack('0eGsygTp906u18L0Oimnem'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should reject the promise and respond with error', function () {
+          $httpBackend.when('GET', api + '/tracks/ABCDEFGHIJKLMNOP').respond(400, {
+            'error': {
+              'status': 400,
+              'message': 'invalid id'
+            }
+          });
+
+          var promise = Spotify.getTrack('ABCDEFGHIJKLMNOP'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          }, function (reason) {
+            result = reason;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+          expect(result.error.status).toBe(400);
+        });
+      });
+
+      describe('Spotify.getTracks', function() {
+        it('should make an ajax call to https://api.spotify.com/v1/tracks?ids={id}', function () {
+
+          $httpBackend.when('GET', api + '/tracks/?ids=0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G').respond({});
+
+          expect(Spotify.getTracks('0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G')).toBeDefined();
+        });
+
+        it('should resolve to an array of tracks', function () {
+          $httpBackend.when('GET', api + '/tracks/?ids=0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G').respond(200, { 'tracks': [] });
+
+          var promise = Spotify.getTracks('0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G'),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should reject the promise and respond with error', function () {
+          $httpBackend.when('GET', api + '/tracks/?ids=').respond(400, {
+            'error': {
+              'status': 400,
+              'message': 'invalid id'
+            }
+          });
+
+          var promise = Spotify.getTracks(),
+              result;
+
+          promise.then(function (data) {
+            result = data;
+          }, function (reason) {
+            result = reason;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+          expect(result.error.status).toBe(400);
+        });
+      });
 
     });
 

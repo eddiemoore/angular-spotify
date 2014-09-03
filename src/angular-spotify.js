@@ -197,7 +197,7 @@
 
         NgSpotify.prototype.getTracks = function (tracks) {
           return this.api('/tracks/', 'GET', {
-            ids: tracks.toString()
+            ids: tracks ? tracks.toString() : ''
           });
         };
 
