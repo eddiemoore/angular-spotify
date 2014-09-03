@@ -1,4 +1,4 @@
-# angular-spotify [![Build Status](https://travis-ci.org/eddiemoore/angular-spotify.svg?branch=master)](https://travis-ci.org/eddiemoore/angular-spotify) [![Coverage Status](https://img.shields.io/coveralls/eddiemoore/angular-spotify.svg)](https://coveralls.io/r/eddiemoore/angular-spotify)
+# angular-spotify [![Build Status](https://travis-ci.org/eddiemoore/angular-spotify.svg?branch=master)](https://travis-ci.org/eddiemoore/angular-spotify) [![Coverage Status](https://img.shields.io/coveralls/eddiemoore/angular-spotify.svg)](https://coveralls.io/r/eddiemoore/angular-spotify) [![devDependency Status](https://david-dm.org/eddiemoore/angular-spotify/dev-status.svg)](https://david-dm.org/eddiemoore/angular-spotify#info=devDependencies)
 
 angular service to connect to the [Spotify Web API](https://developer.spotify.com/web-api/)
 
@@ -52,8 +52,14 @@ type - Required. A comma-separated list of item types to search across. Valid ty
 
 #####Options Object (Optional)
  - limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50. 
- - offset - Optional. The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects. 
+ - offset - Optional. The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects.
 
+Example:
+```javascript
+Spotify.search('Nirvana', 'artist').then(function (data) {
+  console.log(data);
+});
+```
 
 
 
