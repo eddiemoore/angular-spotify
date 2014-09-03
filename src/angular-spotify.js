@@ -42,7 +42,8 @@
         return settings.scope;
       };
 
-      var toQueryString = function (obj) {
+      var utils = {};
+      utils.toQueryString = function (obj) {
         var parts = [];
         for (var i in obj) {
           if (obj.hasOwnProperty(i)) {
@@ -67,6 +68,7 @@
           this.apiBase = settings.apiBase;
           this.scope = settings.scope;
           this.accessToken = null;
+          this.toQueryString = utils.toQueryString;
         }
 
         NgSpotify.prototype.api = function(endpoint, method, params, data, headers) {
@@ -351,7 +353,7 @@
           };
 
           var authWindow = window.open(
-            'https://accounts.spotify.com/authorize?' + toQueryString(params),
+            'https://accounts.spotify.com/authorize?' + this.toQueryString(params),
             'Spotify',
             'menubar=no,location=no,resizable=no,scrollbars=no,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left
           );

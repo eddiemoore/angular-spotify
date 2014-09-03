@@ -207,6 +207,10 @@ describe('angular-spotify', function () {
       expect(Spotify.setAuthToken('ABCDEFGHIJKLMNOP')).toBe('ABCDEFGHIJKLMNOP');
     });
 
+    it('should turn an object into a query string', function () {
+      expect(Spotify.toQueryString({a: 't', b: 4, c: 'q'})).toBe('a=t&b=4&c=q');
+    });
+
     describe('Spotify.search', function () {
 
       var $httpBackend;
