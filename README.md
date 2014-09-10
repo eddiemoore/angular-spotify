@@ -376,7 +376,7 @@ Spotify.getCurrentUser().then(function (data) {
 
 ###User Library *(may have name changes in next version)*
 ####Get Current User’s Saved Tracks
-Get a list of the songs saved in the current Spotify user’s “Your Music” library.
+Get a list of the songs saved in the current Spotify user’s “Your Music” library. Requires the ```user-library-read``` scope.
 ```javascript
 Spotify.getSavedUserTracks(options);
 ```
@@ -391,7 +391,7 @@ Spotify.getSavedUserTracks().then(function (data) {
 ```
 
 ####Check Current User’s Saved Tracks
-Check if one or more tracks is already saved in the current Spotify user’s “Your Music” library.
+Check if one or more tracks is already saved in the current Spotify user’s “Your Music” library. Requires the ```user-library-read``` scope.
 ```javascript
 Spotify.userTracksContains('comma separated string or array of spotify track ids');
 ```
@@ -404,7 +404,7 @@ Spotify.userTracksContains('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9').then
 
 
 ####Save Tracks for Current User
-Save one or more tracks to the current user’s “Your Music” library.
+Save one or more tracks to the current user’s “Your Music” library. Requires the ```user-library-modify``` scope.
 ```javascript
 Spotify.saveUserTracks('comma separated string or array of spotify track ids');
 ```
@@ -417,7 +417,7 @@ Spotify.saveUserTracks('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9').then(fun
 
 
 ####Remove Tracks for Current User
-Remove one or more tracks from the current user’s “Your Music” library.
+Remove one or more tracks from the current user’s “Your Music” library. Requires the ```user-library-modify``` scope.
 ```javascript
 Spotify.removeUserTracks('comma separated string or array of spotify track ids');
 ```
