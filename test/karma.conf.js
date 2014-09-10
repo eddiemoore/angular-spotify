@@ -18,11 +18,19 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      // angular
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      // jasmine jquery helper
+      'test/vendor/jquery-1.11.1.js',
+      'test/vendor/jasmine-jquery.js',
+      // app
       'src/**/*.js',
+      // tests
       'test/mock/**/*.js',
-      'test/spec/angular-spotify.spec.js'
+      'test/spec/angular-spotify.spec.js',
+      // fixtures
+      {pattern: 'test/mock/*.json', watched: true, served: true, included: false}
     ],
 
     // list of files / patterns to exclude

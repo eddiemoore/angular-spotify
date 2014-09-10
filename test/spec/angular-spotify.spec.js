@@ -214,12 +214,15 @@ describe('angular-spotify', function () {
     describe('Spotify.search', function () {
 
       var $httpBackend;
+      var $rootScope;
       var Spotify;
       var api = 'https://api.spotify.com/v1';
 
-      beforeEach(inject(function(_Spotify_, _$httpBackend_) {
+      beforeEach(inject(function(_Spotify_, _$httpBackend_, _$rootScope_) {
         Spotify = _Spotify_;
         $httpBackend = _$httpBackend_;
+        $rootScope = _$rootScope_;
+        jasmine.getJSONFixtures().fixturesPath='base/test/mock';
       }));
 
       it('should make an ajax call to https://api.spotify.com/v1/search', function () {
@@ -232,19 +235,17 @@ describe('angular-spotify', function () {
         expect(Spotify.search('Nirvana', 'artist')).toBeDefined();
       });
 
-      it('should return an object of artists', function () {
-        $httpBackend.when('GET', api + '/search?q=Nirvana&type=artist').respond(200, { 'artists': { } });
+      it('should return an array of artists', function () {
+        $httpBackend.when('GET', api + '/search?q=Nirvana&type=artist').respond(
+          getJSONFixture('search.artist.json')
+        );
 
-        var promise = Spotify.search('Nirvana', 'artist'),
-            result;
-
-        promise.then(function (data) {
-          result = data;
+        Spotify.search('Nirvana', 'artist').then(function (data) {
+          expect(data).toBeDefined();
+          expect(data.artists.items.length).toBeGreaterThan(0);
         });
 
         $httpBackend.flush();
-        expect(result).toBeDefined();
-        expect(result instanceof Object).toBeTruthy();
       });
 
       it('should reject the promise and respond with error', function () {

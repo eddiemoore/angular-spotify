@@ -24,7 +24,7 @@
     "angular": "latest"
   },
   "devDependencies": {
-    "angular-mocks": "1.2.16",
-    "angular-scenario": "1.2.16"
+    "angular-mocks": "1.2.24",
+    "angular-scenario": "1.2.24"
   }
 }
