@@ -220,7 +220,7 @@ Spotify.getTracks('0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G').then(function
 User needs to be logged in to gain access to playlists
 
 ####Get a List of a User’s Playlists
-Get a list of the playlists owned by a Spotify user.
+Get a list of the playlists owned by a Spotify user. Requires the ```playlist-read-private``` scope
 ```javascript
 Spotify.getUserPlaylists('user_id', options);
 ```
@@ -251,7 +251,7 @@ Spotify.getPlaylist('1176458919', '6Df19VKaShrdWrAnHinwVO').then(function (data)
 
 
 ####Get a Playlist’s Tracks
-Get full details of the tracks of a playlist owned by a Spotify user.
+Get full details of the tracks of a playlist owned by a Spotify user. Requires the ```playlist-read-private``` scope.
 ```javascript
 Spotify.getPlaylistTracks('user_id', 'playlist_id', options);
 ```
@@ -263,7 +263,7 @@ Spotify.getPlaylistTracks('1176458919', '6Df19VKaShrdWrAnHinwVO').then(function 
 ```
 
 ####Create a Playlist
-Create a playlist for a Spotify user. (The playlist will be empty until you add tracks.)
+Create a playlist for a Spotify user. (The playlist will be empty until you add tracks.) Creating a public playlist requires the ```playlist-modify-public``` scope. Creating a private playlist requires the ```playlist-modify-private``` scope.
 ```javascript
 Spotify.createPlaylist('user_id', options);
 ```
@@ -280,7 +280,7 @@ Spotify.createPlaylist('1176458919', { name: 'Awesome Mix Vol. 1' }).then(functi
 
 
 ####Add Tracks to a Playlist
-Add one or more tracks to a user’s playlist.
+Add one or more tracks to a user’s playlist. Adding tracks to a public playlist requires the ```playlist-modify-public``` scope. Adding tracks to a private playlist requires the ```playlist-modify-private``` scope.
 ```javascript
 Spotify.addPlaylistTracks('user_id', 'playlist_id', 'comma separated string or array of spotify track uris');
 ```
@@ -298,7 +298,7 @@ Spotify
 
 
 ####Remove Tracks from a Playlist
-Remove one or more tracks from a user’s playlist.
+Remove one or more tracks from a user’s playlist. Removing tracks from a public playlist requires the ```playlist-modify-public``` scope. Removing tracks from a private playlist requires the ```playlist-modify-private``` scope.
 ```javascript
 Spotify.removePlaylistTracks('user_id', 'playlist_id', 'comma separated string or array of spotify track ids or uris');
 ```
@@ -312,7 +312,7 @@ Spotify
 ```
 
 ####Replace a Playlist’s Tracks
-Replace all the tracks in a playlist, overwriting its existing tracks. This powerful request can be useful for replacing tracks, re-ordering existing tracks, or clearing the playlist.
+Replace all the tracks in a playlist, overwriting its existing tracks. This powerful request can be useful for replacing tracks, re-ordering existing tracks, or clearing the playlist. Replacing tracks in a public playlist requires the ```playlist-modify-public``` scope. Replacing tracks in a private playlist requires the ```playlist-modify-private``` scope.
 ```javascript
 Spotify.replacePlaylistTracks('user_id', 'playlist_id', 'comma separated string or array of spotify track ids or uris');
 ```
@@ -327,7 +327,7 @@ Spotify
 
 
 ####Change a Playlist’s Details
-Change a playlist’s name and public/private state. (The user must, of course, own the playlist.)
+Change a playlist’s name and public/private state. (The user must, of course, own the playlist.) Changing a public playlist requires the ```playlist-modify-public``` scope. Changing a private playlist requires the ```playlist-modify-private``` scope.
 ```javascript
 Spotify.updatePlaylistDetails('user_id', 'playlist_id', options);
 ```
