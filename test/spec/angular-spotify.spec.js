@@ -232,7 +232,7 @@ describe('angular-spotify', function () {
         expect(Spotify.search('Nirvana', 'artist')).toBeDefined();
       });
 
-      it('should resolve to an object of artists', function () {
+      it('should return an object of artists', function () {
         $httpBackend.when('GET', api + '/search?q=Nirvana&type=artist').respond(200, { 'artists': { } });
 
         var promise = Spotify.search('Nirvana', 'artist'),
@@ -800,7 +800,7 @@ describe('angular-spotify', function () {
       }));
 
       describe('Spotify.getTrack', function() {
-        
+
         it('should make an ajax call to https://api.spotify.com/v1/tracks/{id}', function () {
 
           $httpBackend.when('GET', api + '/tracks/0eGsygTp906u18L0Oimnem').respond({});
