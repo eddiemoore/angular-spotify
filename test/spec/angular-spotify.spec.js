@@ -1,5 +1,5 @@
 'use strict';
-
+/* global getJSONFixture */
 describe('angular-spotify', function () {
 
   //For the config
