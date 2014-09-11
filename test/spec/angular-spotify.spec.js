@@ -242,24 +242,17 @@ describe('angular-spotify', function () {
 
         Spotify.search('Nirvana', 'artist').then(function (data) {
           expect(data).toBeDefined();
-          expect(data.artists.items.length).toBeGreaterThan(0);
+          expect(data.artists.items.length).toBe(20);
         });
 
         $httpBackend.flush();
       });
 
       it('should reject the promise and respond with error', function () {
-        $httpBackend.when('GET', api + '/search?q=Nirvana').respond(400, {
-          'error': {
-            'status': 400,
-            'message': 'Missing parameter type'
-          }
-        });
+        $httpBackend.when('GET', api + '/search?q=Nirvana').respond(400, getJSONFixture('search.missing-type.json'));
 
-        var promise = Spotify.search('Nirvana'),
-            result;
-
-        promise.then(function (data) {
+        var result;
+        Spotify.search('Nirvana').then(function (data) {
           result = data;
         }, function (reason) {
           result = reason;
@@ -288,36 +281,37 @@ describe('angular-spotify', function () {
 
         it('should make an ajax call to https://api.spotify.com/v1/albums', function () {
 
-          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond({});
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond(getJSONFixture('album.json'));
 
           expect(Spotify.getAlbum('0sNOF9WDwhWunNAHPD3Baj')).toBeDefined();
         });
 
         it('should convert spotify uri to just an id', function () {
 
-          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond({});
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond(getJSONFixture('album.json'));
 
-          var promise = Spotify.getAlbum('spotify:album:0sNOF9WDwhWunNAHPD3Baj'),
-              result;
-
-          promise.then(function (data) {
-            result = data;
-          });
+          var result;
+          Spotify
+            .getAlbum('spotify:album:0sNOF9WDwhWunNAHPD3Baj')
+            .then(function (data) {
+              result = data;
+            });
 
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
+          expect(result.album_type).toBe('album');
         });
 
         it('should resolve to an object of an album', function () {
-          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond(200, { 'album_type': { } });
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj').respond(200, getJSONFixture('album.json'));
 
-          var promise = Spotify.getAlbum('0sNOF9WDwhWunNAHPD3Baj'),
-              result;
-
-          promise.then(function (data) {
-            result = data;
-          });
+          var result;
+          Spotify
+            .getAlbum('0sNOF9WDwhWunNAHPD3Baj')
+            .then(function (data) {
+              result = data;
+            });
 
           $httpBackend.flush();
           expect(result).toBeDefined();
@@ -325,18 +319,10 @@ describe('angular-spotify', function () {
         });
 
         it('should reject the promise and respond with error', function () {
-          $httpBackend.when('GET', api + '/albums/ABCDEFGHIJKLMNOP').respond(404, {
-            'error': {
-              'status': 404,
-              'message': 'non existing id'
-            }
-          });
+          $httpBackend.when('GET', api + '/albums/ABCDEFGHIJKLMNOP').respond(404, getJSONFixture('album.error.json'));
 
-          var promise = Spotify.getAlbum('ABCDEFGHIJKLMNOP'),
-              result;
-
-          promise.then(function (data) {
-            result = data;
+          var result;
+          Spotify.getAlbum('ABCDEFGHIJKLMNOP').then(function () {
           }, function (reason) {
             result = reason;
           });
@@ -352,56 +338,50 @@ describe('angular-spotify', function () {
 
         it('should make an ajax call to https://api.spotify.com/v1/albums?ids={ids}', function () {
 
-          $httpBackend.when('GET', api + '/albums?ids=41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37').respond({});
+          $httpBackend.when('GET', api + '/albums?ids=41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37').respond(getJSONFixture('albums.json'));
 
           expect(Spotify.getAlbums('41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37')).toBeDefined();
         });
 
         it('should resolve to an array of albums', function () {
-          $httpBackend.when('GET', api + '/albums?ids=41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37').respond(200, { 'albums': [] });
+          $httpBackend.when('GET', api + '/albums?ids=41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37').respond(200, getJSONFixture('albums.json'));
 
-          var promise = Spotify.getAlbums('41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37'),
-              result;
-
-          promise.then(function (data) {
-            result = data;
-          });
+          var result;
+          Spotify
+            .getAlbums('41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37')
+            .then(function (data) {
+              result = data;
+            });
 
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
           expect(result.albums instanceof Array).toBeTruthy();
+          expect(result.albums.length).toBe(3);
         });
 
         it('should resolve to an array of albums when sending an array', function () {
-          $httpBackend.when('GET', api + '/albums?ids=41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37').respond(200, { 'albums': [] });
+          $httpBackend.when('GET', api + '/albums?ids=41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37').respond(200, getJSONFixture('albums.json'));
 
-          var promise = Spotify.getAlbums(['41MnTivkwTO3UUJ8DrqEJJ','6JWc4iAiJ9FjyK0B59ABb4','6UXCm6bOO4gFlDQZV5yL37']),
-              result;
-
-          promise.then(function (data) {
-            result = data;
-          });
+          var result;
+          Spotify
+            .getAlbums(['41MnTivkwTO3UUJ8DrqEJJ','6JWc4iAiJ9FjyK0B59ABb4','6UXCm6bOO4gFlDQZV5yL37'])
+            .then(function (data) {
+              result = data;
+            });
 
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
           expect(result.albums instanceof Array).toBeTruthy();
+          expect(result.albums.length).toBe(3);
         });
 
         it('should reject the promise and respond with error', function () {
-          $httpBackend.when('GET', api + '/albums?ids=').respond(400, {
-            'error': {
-              'status': 400,
-              'message': 'invalid id'
-            }
-          });
+          $httpBackend.when('GET', api + '/albums?ids=').respond(400, getJSONFixture('albums.invalid-id.json'));
 
-          var promise = Spotify.getAlbums(),
-              result;
-
-          promise.then(function (data) {
-            result = data;
+          var result;
+          Spotify.getAlbums().then(function () {
           }, function (reason) {
             result = reason;
           });
@@ -417,58 +397,54 @@ describe('angular-spotify', function () {
 
         it('should make an ajax call to https://api.spotify.com/v1/albums/{id}/tracks', function () {
 
-          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj/tracks').respond({});
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj/tracks').respond(getJSONFixture('albums.tracks.json'));
 
           expect(Spotify.getAlbumTracks('0sNOF9WDwhWunNAHPD3Baj')).toBeDefined();
         });
 
         it('should convert spotify uri to just an id', function () {
 
-          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj/tracks').respond({});
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj/tracks').respond(getJSONFixture('albums.tracks.json'));
 
-          var promise = Spotify.getAlbumTracks('spotify:album:0sNOF9WDwhWunNAHPD3Baj'),
-              result;
-
-          promise.then(function (data) {
-            result = data;
-          });
+          var result;
+          Spotify
+            .getAlbumTracks('spotify:album:0sNOF9WDwhWunNAHPD3Baj')
+            .then(function (data) {
+              result = data;
+            });
 
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
+          expect(result.items.length).toBe(13);
         });
 
         it('should resolve to an object of album tracks', function () {
-          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj/tracks').respond(200, { 'items': [] });
+          $httpBackend.when('GET', api + '/albums/0sNOF9WDwhWunNAHPD3Baj/tracks').respond(200, getJSONFixture('albums.tracks.json'));
 
-          var promise = Spotify.getAlbumTracks('0sNOF9WDwhWunNAHPD3Baj'),
-              result;
-
-          promise.then(function (data) {
-            result = data;
-          });
+          var result;
+          Spotify
+            .getAlbumTracks('0sNOF9WDwhWunNAHPD3Baj')
+            .then(function (data) {
+              result = data;
+            });
 
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
+          expect(result.items.length).toBe(13);
         });
 
         it('should reject the promise and respond with error', function () {
-          $httpBackend.when('GET', api + '/albums/ABCDEFGHIJKLMNOP/tracks').respond(404, {
-            'error': {
-              'status': 404,
-              'message': 'non existing id'
-            }
-          });
+          $httpBackend.when('GET', api + '/albums/ABCDEFGHIJKLMNOP/tracks').respond(404, getJSONFixture('album.error.json'));
 
-          var promise = Spotify.getAlbumTracks('ABCDEFGHIJKLMNOP'),
-              result;
-
-          promise.then(function (data) {
-            result = data;
-          }, function (reason) {
-            result = reason;
-          });
+          var result;
+          Spotify
+            .getAlbumTracks('ABCDEFGHIJKLMNOP')
+            .then(function () {
+            }, function (reason) {
+              result = reason;
+            });
 
           $httpBackend.flush();
           expect(result).toBeDefined();
