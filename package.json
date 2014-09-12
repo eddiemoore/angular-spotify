@@ -1,6 +1,6 @@
 {
   "name": "angular-spotify",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Angular Service to connect to Spotify Web API",
   "main": "Gruntfile.js",
   "devDependencies": {
