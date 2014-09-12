@@ -159,6 +159,10 @@
          * Get multiple artists
          */
         NgSpotify.prototype.getArtists = function (artists) {
+          artists = angular.isString(artists) ? artists.split(',') : artists;
+          angular.forEach(artists, function (value, index) {
+            artists[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+          });
           return this.api('/artists/', 'GET', {
             ids: artists ? artists.toString() : ''
           });

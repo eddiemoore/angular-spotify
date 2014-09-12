@@ -254,7 +254,7 @@ describe('angular-spotify', function () {
         $httpBackend.when('GET', api + '/search?q=Nirvana').respond(400, getJSONFixture('search.missing-type.json'));
 
         var result;
-        Spotify.search('Nirvana').then(function (data) {
+        Spotify.search('Nirvana').then(function () {
         }, function (reason) {
           result = reason;
         });
@@ -358,10 +358,10 @@ describe('angular-spotify', function () {
 
           Spotify.getAlbums('spotify:album:41MnTivkwTO3UUJ8DrqEJJ,spotify:album:6JWc4iAiJ9FjyK0B59ABb4,spotify:album:6UXCm6bOO4gFlDQZV5yL37');
 
-          expect(Spotify.api).toHaveBeenCalled()
+          expect(Spotify.api).toHaveBeenCalled();
           expect(Spotify.api).toHaveBeenCalledWith('/albums', 'GET', {
             ids: '41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37'
-          })
+          });
         });
 
         it('should resolve to an array of albums when sending an array', function () {
@@ -527,6 +527,17 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should convert spotify uris to ids', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.getArtists('spotify:artist:0oSGxfWSnnOXhD2fKuz2Gy,spotify:artist:3dBVyJ7JuOMt4GE9607Qin');
+
+          expect(Spotify.api).toHaveBeenCalled()
+          expect(Spotify.api).toHaveBeenCalledWith('/artists/', 'GET', {
+            ids: '0oSGxfWSnnOXhD2fKuz2Gy,3dBVyJ7JuOMt4GE9607Qin'
+          })
         });
 
         it('should reject the promise and respond with error', function () {
