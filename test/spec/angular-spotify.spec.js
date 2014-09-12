@@ -534,10 +534,10 @@ describe('angular-spotify', function () {
 
           Spotify.getArtists('spotify:artist:0oSGxfWSnnOXhD2fKuz2Gy,spotify:artist:3dBVyJ7JuOMt4GE9607Qin');
 
-          expect(Spotify.api).toHaveBeenCalled()
+          expect(Spotify.api).toHaveBeenCalled();
           expect(Spotify.api).toHaveBeenCalledWith('/artists/', 'GET', {
             ids: '0oSGxfWSnnOXhD2fKuz2Gy,3dBVyJ7JuOMt4GE9607Qin'
-          })
+          });
         });
 
         it('should reject the promise and respond with error', function () {
