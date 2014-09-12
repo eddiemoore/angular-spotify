@@ -204,6 +204,10 @@
         };
 
         NgSpotify.prototype.getTracks = function (tracks) {
+          tracks = angular.isString(tracks) ? tracks.split(',') : tracks;
+          angular.forEach(tracks, function (value, index) {
+            tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+          });
           return this.api('/tracks/', 'GET', {
             ids: tracks ? tracks.toString() : ''
           });

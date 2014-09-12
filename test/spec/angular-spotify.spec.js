@@ -826,6 +826,17 @@ describe('angular-spotify', function () {
           expect(result instanceof Object).toBeTruthy();
         });
 
+        it('should convert spotify uris to Ids', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.getTracks('spotify:track:0eGsygTp906u18L0Oimnem,spotify:track:1lDWb6b6ieDQ2xT7ewTC3G');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/tracks/', 'GET', {
+            ids: '0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G'
+          });
+        });
+
         it('should reject the promise and respond with error', function () {
           $httpBackend.when('GET', api + '/tracks/?ids=').respond(400, {
             'error': {
