@@ -227,12 +227,14 @@ describe('angular-spotify', function () {
 
       it('should make an ajax call to https://api.spotify.com/v1/search', function () {
 
-        $httpBackend.when('GET', api + '/search', {
+        spyOn(Spotify, 'api');
+
+        Spotify.search('Nirvana', 'artist');
+
+        expect(Spotify.api).toHaveBeenCalledWith('/search', 'GET', {
           q: 'Nirvana',
           type: 'artist'
-        }).respond({});
-
-        expect(Spotify.search('Nirvana', 'artist')).toBeDefined();
+        });
       });
 
       it('should return an array of artists', function () {
@@ -253,7 +255,6 @@ describe('angular-spotify', function () {
 
         var result;
         Spotify.search('Nirvana').then(function (data) {
-          result = data;
         }, function (reason) {
           result = reason;
         });
@@ -350,6 +351,17 @@ describe('angular-spotify', function () {
           expect(result instanceof Object).toBeTruthy();
           expect(result.albums instanceof Array).toBeTruthy();
           expect(result.albums.length).toBe(3);
+        });
+
+        it('should convert spotify uris to ids', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.getAlbums('spotify:album:41MnTivkwTO3UUJ8DrqEJJ,spotify:album:6JWc4iAiJ9FjyK0B59ABb4,spotify:album:6UXCm6bOO4gFlDQZV5yL37');
+
+          expect(Spotify.api).toHaveBeenCalled()
+          expect(Spotify.api).toHaveBeenCalledWith('/albums', 'GET', {
+            ids: '41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37'
+          })
         });
 
         it('should resolve to an array of albums when sending an array', function () {

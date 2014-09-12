@@ -123,6 +123,10 @@
          * Pass in comma separated string or array of album ids
          */
         NgSpotify.prototype.getAlbums = function (albums) {
+          albums = angular.isString(albums) ? albums.split(',') : albums;
+          angular.forEach(albums, function (value, index) {
+            albums[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+          });
           return this.api('/albums', 'GET', {
             ids: albums ? albums.toString() : ''
           });
