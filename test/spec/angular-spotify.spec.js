@@ -211,6 +211,83 @@ describe('angular-spotify', function () {
       expect(Spotify.toQueryString({a: 't', b: 4, c: 'q'})).toBe('a=t&b=4&c=q');
     });
 
+    describe('Spotify.api', function () {
+      var $httpBackend;
+      var Spotify;
+      var api = 'https://api.spotify.com/v1';
+
+      beforeEach(inject(function(_Spotify_, _$httpBackend_) {
+        Spotify = _Spotify_;
+        $httpBackend = _$httpBackend_;
+        jasmine.getJSONFixtures().fixturesPath='base/test/mock';
+      }));
+
+      afterEach(function(){
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
+
+      it('should call the api with params', function () {
+        $httpBackend.when('GET', api + '/search?q=Nirvana&type=artist').respond(
+          getJSONFixture('search.artist.json')
+        );
+
+        var result;
+        Spotify.api('/search', 'GET', {
+          q: 'Nirvana',
+          type: 'artist'
+        }).then(function (data) {
+          result = data;
+        });
+
+        $httpBackend.flush();
+
+        expect(result).toBeDefined();
+      });
+
+      it('should call the api with data', function () {
+        $httpBackend.when('POST', api + '/users/wizzler/playlists', {
+          name: 'TESTING',
+          public: false
+        }).respond({});
+
+        var result;
+        Spotify.api('/users/wizzler/playlists', 'POST', null, {
+          name: 'TESTING',
+          public: false
+        }).then(function (data) {
+          result = data;
+        });
+
+        $httpBackend.flush();
+
+        expect(result).toBeDefined();
+      });
+
+      it('should call the api with headers', function () {
+        $httpBackend.when('POST', api + '/users/wizzler/playlists', {
+          name: 'TESTING',
+          public: false
+        }, function (headers) {
+          return headers.Authorization === 'Bearer TESTING';
+        }).respond({});
+
+        var result;
+        Spotify.api('/users/wizzler/playlists', 'POST', null, {
+          name: 'TESTING',
+          public: false
+        }, {
+          'Authorization': 'Bearer TESTING'
+        }).then(function (data) {
+          result = data;
+        });
+
+        $httpBackend.flush();
+
+        expect(result).toBeDefined();
+      });
+    });
+
     describe('Spotify.search', function () {
 
       var $httpBackend;
@@ -863,6 +940,23 @@ describe('angular-spotify', function () {
     });
 
     describe('Playlists', function () {
+
+      describe('Spotify.getUserPlaylists', function () {
+
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getUserPlaylists('wizzler');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/wizzler/playlists', 'GET', undefined, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+      });
 
     });
 
