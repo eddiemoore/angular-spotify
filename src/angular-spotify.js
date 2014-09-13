@@ -245,7 +245,7 @@
         NgSpotify.prototype.addPlaylistTracks = function (userId, playlistId, tracks, options) {
           return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'POST', {
             uris: tracks.toString(),
-            position: options.position || null
+            position: options ? options.position : null
           }, null, {
             'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
