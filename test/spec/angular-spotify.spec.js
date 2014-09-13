@@ -1039,6 +1039,32 @@ describe('angular-spotify', function () {
 
       });
 
+      describe('Spotify.removePlaylistTracks', function() {
+        it('should call the correct url', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.removePlaylistTracks('triple.j.abc', '73ppZmbaAS2aW9hmDTTDcb', [
+            'spotify:track:5LwukQO2fCx35GUUN6d6NW',
+            'spotify:track:4w8CsAnzn0lXJxYlAuCtCW',
+            'spotify:track:2Foc5Q5nqNiosCNqttzHof'
+          ]);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/triple.j.abc/playlists/73ppZmbaAS2aW9hmDTTDcb/tracks', 'DELETE', null, {
+            tracks: [
+              {uri: 'spotify:track:5LwukQO2fCx35GUUN6d6NW'},
+              {uri: 'spotify:track:4w8CsAnzn0lXJxYlAuCtCW'},
+              {uri: 'spotify:track:2Foc5Q5nqNiosCNqttzHof'}
+            ]
+          }, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+      });
+
     });
 
     describe('User Profiles', function() {
