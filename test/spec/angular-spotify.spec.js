@@ -992,6 +992,28 @@ describe('angular-spotify', function () {
 
       });
 
+      describe('Spotify.createPlaylist', function() {
+        
+        it('should call the correct url', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.createPlaylist('1176458919', {
+            name: 'Awesome Mix Vol. 1'
+          });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/1176458919/playlists', 'POST', null, {
+            name: 'Awesome Mix Vol. 1'
+          }, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+
+      });
+
     });
 
     describe('User Profiles', function() {
