@@ -975,6 +975,23 @@ describe('angular-spotify', function () {
 
       });
 
+      describe('Spotify.getPlaylistTracks', function() {
+        
+        it('should call the correct url', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getPlaylistTracks('triple.j.abc', '73ppZmbaAS2aW9hmDTTDcb');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/triple.j.abc/playlists/73ppZmbaAS2aW9hmDTTDcb/tracks', 'GET', undefined, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+      });
+
     });
 
     describe('User Profiles', function() {
