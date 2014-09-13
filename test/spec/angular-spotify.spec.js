@@ -958,7 +958,7 @@ describe('angular-spotify', function () {
 
       });
 
-      describe("Spotify.getPlaylist", function() {
+      describe('Spotify.getPlaylist', function() {
         
         it('should call the correct url', function () {
           spyOn(Spotify, 'api');
