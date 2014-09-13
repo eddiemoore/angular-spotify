@@ -243,6 +243,10 @@
         };
 
         NgSpotify.prototype.addPlaylistTracks = function (userId, playlistId, tracks, options) {
+          tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
+          angular.forEach(tracks, function (value, index) {
+            tracks[index] = value.indexOf('spotify:') === -1 ? 'spotify:track:' + value : value;
+          });
           return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'POST', {
             uris: tracks.toString(),
             position: options ? options.position : null

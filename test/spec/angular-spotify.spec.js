@@ -1037,6 +1037,27 @@ describe('angular-spotify', function () {
           });
         });
 
+        it('should be able to pass Track IDs', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.addPlaylistTracks('triple.j.abc', '73ppZmbaAS2aW9hmDTTDcb', [
+            '5LwukQO2fCx35GUUN6d6NW',
+            '4w8CsAnzn0lXJxYlAuCtCW',
+            '2Foc5Q5nqNiosCNqttzHof'
+          ]);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/triple.j.abc/playlists/73ppZmbaAS2aW9hmDTTDcb/tracks', 'POST', {
+            uris: 'spotify:track:5LwukQO2fCx35GUUN6d6NW,spotify:track:4w8CsAnzn0lXJxYlAuCtCW,spotify:track:2Foc5Q5nqNiosCNqttzHof',
+            position: null
+          }, null, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+
       });
 
       describe('Spotify.removePlaylistTracks', function() {
@@ -1049,6 +1070,30 @@ describe('angular-spotify', function () {
             'spotify:track:5LwukQO2fCx35GUUN6d6NW',
             'spotify:track:4w8CsAnzn0lXJxYlAuCtCW',
             'spotify:track:2Foc5Q5nqNiosCNqttzHof'
+          ]);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/triple.j.abc/playlists/73ppZmbaAS2aW9hmDTTDcb/tracks', 'DELETE', null, {
+            tracks: [
+              {uri: 'spotify:track:5LwukQO2fCx35GUUN6d6NW'},
+              {uri: 'spotify:track:4w8CsAnzn0lXJxYlAuCtCW'},
+              {uri: 'spotify:track:2Foc5Q5nqNiosCNqttzHof'}
+            ]
+          }, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+
+        it('should be able to pass track IDs', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.removePlaylistTracks('triple.j.abc', '73ppZmbaAS2aW9hmDTTDcb', [
+            '5LwukQO2fCx35GUUN6d6NW',
+            '4w8CsAnzn0lXJxYlAuCtCW',
+            '2Foc5Q5nqNiosCNqttzHof'
           ]);
 
           expect(Spotify.api).toHaveBeenCalled();
