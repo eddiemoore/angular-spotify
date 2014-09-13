@@ -257,17 +257,17 @@
         };
 
         NgSpotify.prototype.removePlaylistTracks = function (userId, playlistId, tracks) {
-          var t = [];
+          //var t = [];
           tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
           var track;
-          for (var i = 0; i < tracks.length; i++) {
-            track = tracks[i];
-            t.push({
+          angular.forEach(tracks, function (value, index) {
+            track = tracks[index];
+            tracks[index] = {
               uri: track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track
-            });
-          }
+            };
+          });
           return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'DELETE', null, {
-            tracks: t
+            tracks: tracks
           }, {
             'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
