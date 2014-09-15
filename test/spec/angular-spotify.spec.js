@@ -1152,6 +1152,28 @@ describe('angular-spotify', function () {
         });
       });
 
+      describe('Spotify.updatePlaylistDetails', function () {
+
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.updatePlaylistDetails('1176458919', '3ygKiRcD8ed3i2g8P7jlXr', {
+            name: 'Awesome Mix Vol. 2'
+          });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/1176458919/playlists/3ygKiRcD8ed3i2g8P7jlXr', 'PUT', null, {
+            name: 'Awesome Mix Vol. 2'
+          }, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+
+      });
+
     });
 
     describe('User Profiles', function() {
@@ -1202,6 +1224,24 @@ describe('angular-spotify', function () {
           expect(result.error.status).toBe(404);
         });
       });
+
+      describe('Spotify.getCurrentUser', function () {
+
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getCurrentUser();
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me', 'GET', null, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+      });
+
     });
 
   });
