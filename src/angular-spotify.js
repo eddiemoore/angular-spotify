@@ -277,10 +277,10 @@
         NgSpotify.prototype.replacePlaylistTracks = function (userId, playlistId, tracks) {
           tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
           var track;
-          for (var i = 0; i < tracks.length; i++) {
-            track = tracks[i];
-            tracks[i] = track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track;
-          }
+          angular.forEach(tracks, function (value, index) {
+            track = tracks[index];
+            tracks[index] = track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track;
+          });
           return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'PUT', {
             uris: tracks.toString()
           }, null, {
