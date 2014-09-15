@@ -281,7 +281,7 @@
             track = tracks[i];
             tracks[i] = track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track;
           }
-          return this.api('/users/' + userId + '/playlistId' + playlistId + '/tracks', 'PUT', {
+          return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'PUT', {
             uris: tracks.toString()
           }, null, {
             'Authorization': 'Bearer ' + this.authToken,

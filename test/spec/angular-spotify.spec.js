@@ -959,7 +959,7 @@ describe('angular-spotify', function () {
       });
 
       describe('Spotify.getPlaylist', function() {
-        
+
         it('should call the correct url', function () {
           spyOn(Spotify, 'api');
 
@@ -976,7 +976,7 @@ describe('angular-spotify', function () {
       });
 
       describe('Spotify.getPlaylistTracks', function() {
-        
+
         it('should call the correct url', function () {
           spyOn(Spotify, 'api');
 
@@ -993,7 +993,7 @@ describe('angular-spotify', function () {
       });
 
       describe('Spotify.createPlaylist', function() {
-        
+
         it('should call the correct url', function () {
           spyOn(Spotify, 'api');
 
@@ -1015,7 +1015,7 @@ describe('angular-spotify', function () {
       });
 
       describe('Spotify.addPlaylistTracks', function() {
-        
+
         it('should call the correct url', function () {
           spyOn(Spotify, 'api');
 
@@ -1104,6 +1104,48 @@ describe('angular-spotify', function () {
               {uri: 'spotify:track:2Foc5Q5nqNiosCNqttzHof'}
             ]
           }, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+      });
+
+      describe('Spotify.replacePlaylistTracks', function() {
+        it('should call the correct url', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.replacePlaylistTracks('triple.j.abc', '73ppZmbaAS2aW9hmDTTDcb', [
+            'spotify:track:5LwukQO2fCx35GUUN6d6NW',
+            'spotify:track:4w8CsAnzn0lXJxYlAuCtCW',
+            'spotify:track:2Foc5Q5nqNiosCNqttzHof'
+          ]);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/triple.j.abc/playlists/73ppZmbaAS2aW9hmDTTDcb/tracks', 'PUT', {
+            uris: 'spotify:track:5LwukQO2fCx35GUUN6d6NW,spotify:track:4w8CsAnzn0lXJxYlAuCtCW,spotify:track:2Foc5Q5nqNiosCNqttzHof'
+          }, null, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+
+        it('should be able to pass track IDs', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.replacePlaylistTracks('triple.j.abc', '73ppZmbaAS2aW9hmDTTDcb', [
+            '5LwukQO2fCx35GUUN6d6NW',
+            '4w8CsAnzn0lXJxYlAuCtCW',
+            '2Foc5Q5nqNiosCNqttzHof'
+          ]);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/triple.j.abc/playlists/73ppZmbaAS2aW9hmDTTDcb/tracks', 'PUT', {
+            uris: 'spotify:track:5LwukQO2fCx35GUUN6d6NW,spotify:track:4w8CsAnzn0lXJxYlAuCtCW,spotify:track:2Foc5Q5nqNiosCNqttzHof'
+          }, null, {
             'Authorization': 'Bearer TESTING',
             'Content-Type': 'application/json'
           });
