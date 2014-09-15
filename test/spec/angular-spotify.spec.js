@@ -1244,6 +1244,46 @@ describe('angular-spotify', function () {
 
     });
 
+    describe('User Library', function () {
+
+      describe('Spotify.getSavedUserTracks', function () {
+
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getSavedUserTracks();
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/tracks', 'GET', undefined, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+      });
+
+      describe('Spotify.userTracksContains', function () {
+
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.userTracksContains(['0udZHhCi7p1YzMlvI4fXoK','3SF5puV5eb6bgRSxBeMOk9']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/tracks/contains', 'GET', {
+            ids: '0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9'
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+      });
+
+    });
+
   });
 
 });

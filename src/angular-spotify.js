@@ -320,7 +320,7 @@
         };
 
         NgSpotify.prototype.userTracksContains = function (tracks) {
-          return this.api('/me/tracks', 'GET', {
+          return this.api('/me/tracks/contains', 'GET', {
             ids: tracks.toString()
           }, null, {
             'Authorization': 'Bearer ' + this.authToken
