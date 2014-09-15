@@ -1301,6 +1301,26 @@ describe('angular-spotify', function () {
 
       });
 
+      describe('Spotify.removeUserTracks', function () {
+
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.removeUserTracks(['4iV5W9uYEdYUVa79Axb7Rh','1301WleyT98MSxVHPZCA6M']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/tracks', 'DELETE', {
+            ids: '4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M'
+          }, null, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          })
+        });
+
+      });
+
     });
 
   });
