@@ -1296,7 +1296,7 @@ describe('angular-spotify', function () {
             ids: '4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M'
           }, null, {
             'Authorization': 'Bearer TESTING'
-          })
+          });
         });
 
       });
@@ -1316,7 +1316,7 @@ describe('angular-spotify', function () {
           }, null, {
             'Authorization': 'Bearer TESTING',
             'Content-Type': 'application/json'
-          })
+          });
         });
 
       });
