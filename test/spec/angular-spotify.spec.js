@@ -1349,6 +1349,22 @@ describe('angular-spotify', function () {
           });
         });
 
+        it('should be able to pass Spotify URIs', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.removeUserTracks(['spotify:track:0udZHhCi7p1YzMlvI4fXoK','spotify:track:3SF5puV5eb6bgRSxBeMOk9']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/tracks', 'DELETE', {
+            ids: '0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9'
+          }, null, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+
       });
 
     });
