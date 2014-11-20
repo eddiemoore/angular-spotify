@@ -1,19 +1,12 @@
 (function (window, angular, undefined) {
   'use strict';
 
-  // Module global settings.
-  var settings = {};
-
   angular
     .module('spotify', [])
-    // Declare module settings value
-    .value('settings', settings)
     .provider('Spotify', function () {
 
-      /**
-       * Spotify Client ID
-       * @type {Number}
-       */
+      // Module global settings.
+      var settings = {};
       settings.clientId = null;
       settings.redirectUri = null;
       settings.scope = null;
@@ -45,11 +38,9 @@
       var utils = {};
       utils.toQueryString = function (obj) {
         var parts = [];
-        for (var i in obj) {
-          if (obj.hasOwnProperty(i)) {
-            parts.push(encodeURIComponent(i) + '=' + encodeURIComponent(obj[i]));
-          }
-        }
+        angular.forEach(obj, function (value, key) {
+          this.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+        }, parts);
         return parts.join('&');
       };
 
@@ -257,7 +248,6 @@
         };
 
         NgSpotify.prototype.removePlaylistTracks = function (userId, playlistId, tracks) {
-          //var t = [];
           tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
           var track;
           angular.forEach(tracks, function (value, index) {
@@ -394,7 +384,7 @@
 
               that.setAuthToken(e.newValue);
               $window.removeEventListener('storage', storageChanged, false);
-              localStorage.removeItem('spotify-token');
+              //localStorage.removeItem('spotify-token');
 
               deferred.resolve(event.data);
             }
