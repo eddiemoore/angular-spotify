@@ -1,9 +1,8 @@
 angular
-  .module('example', ['spotify'])
+  .module('exampleApp', ['spotify'])
   .config(function (SpotifyProvider) {
-    console.log(SpotifyProvider);
-    SpotifyProvider.setClientId('123456789');
-    SpotifyProvider.setRedirectUri('http://www.example.com/callback.html');
+    SpotifyProvider.setClientId('123456789123456789');
+    SpotifyProvider.setRedirectUri('http://example.com/callback.html');
     SpotifyProvider.setScope('playlist-read-private');
   })
   .controller('MainController', ['$scope', 'Spotify', function ($scope, Spotify) {
@@ -15,7 +14,10 @@ angular
     };
 
     $scope.login = function () {
-      Spotify.login();
+      Spotify.login().then(function (data) {
+        console.log(data);
+        alert("You are now logged in");
+      })
     };
 
     // Gets an album

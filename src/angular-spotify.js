@@ -383,20 +383,24 @@
           var authWindow = window.open(
             'https://accounts.spotify.com/authorize?' + this.toQueryString(params),
             'Spotify',
-            'menubar=no,location=no,resizable=no,scrollbars=no,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left
+            'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left
           );
 
-          function receiveMessage (event) {
-            if (authWindow) {
-              authWindow.close();
+          function storageChanged (e) {
+            if (e.key === 'spotify-token') {
+              if (authWindow) {
+                authWindow.close();
+              }
+
+              that.setAuthToken(e.newValue);
+              $window.removeEventListener('storage', storageChanged, false);
+              localStorage.removeItem('spotify-token');
+
+              deferred.resolve(event.data);
             }
-
-            that.setAuthToken(event.data);
-
-            deferred.resolve(event.data);
           }
 
-          $window.addEventListener('message', receiveMessage, false);
+          $window.addEventListener('storage', storageChanged, false);
 
           return deferred.promise;
         };
