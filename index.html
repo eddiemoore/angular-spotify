@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>angular-spotify by eddiemoore</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>angular-spotify</h1>
+        <h2>Angular Service to connect to Spotify Web API</h2>
+        <a href="https://github.com/eddiemoore/angular-spotify" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="angular-spotify---" class="anchor" href="#angular-spotify---" aria-hidden="true"><span class="octicon octicon-link"></span></a>angular-spotify <a href="https://travis-ci.org/eddiemoore/angular-spotify"><img src="https://travis-ci.org/eddiemoore/angular-spotify.svg?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/r/eddiemoore/angular-spotify"><img src="https://img.shields.io/coveralls/eddiemoore/angular-spotify.svg" alt="Coverage Status"></a> <a href="https://david-dm.org/eddiemoore/angular-spotify#info=devDependencies"><img src="https://david-dm.org/eddiemoore/angular-spotify/dev-status.svg" alt="devDependency Status"></a>
+</h1>
+
+<p>angular service to connect to the <a href="https://developer.spotify.com/web-api/">Spotify Web API</a></p>
+
+<p>angular-spotify makes heavy use of promises throughout the service</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Install angular-spotify via bower. Use the --save property to save into your bower.json file.</p>
+
+<div class="highlight highlight-shell"><pre>bower install angular-spotify --save</pre></div>
+
+<p>Include spotify into your angular module</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> app <span class="pl-k">=</span> angular.module(<span class="pl-s1"><span class="pl-pds">'</span>example<span class="pl-pds">'</span></span>, [<span class="pl-s1"><span class="pl-pds">'</span>spotify<span class="pl-pds">'</span></span>]);</pre></div>
+
+<p>Most of the functions in Spotify do not require you to authenticate your application. However if you do need to gain access to playlists or a user's data then configure it like this:</p>
+
+<div class="highlight highlight-javascript"><pre>app.config(<span class="pl-st">function</span> (<span class="pl-vpf">SpotifyProvider</span>) {
+  SpotifyProvider.setClientId(<span class="pl-s1"><span class="pl-pds">'</span>&lt;CLIENT_ID&gt;<span class="pl-pds">'</span></span>);
+  SpotifyProvider.setRedirectUri(<span class="pl-s1"><span class="pl-pds">'</span>&lt;CALLBACK_URI&gt;<span class="pl-pds">'</span></span>);
+  SpotifyProvider.setScope(<span class="pl-s1"><span class="pl-pds">'</span>&lt;SCOPE&gt;<span class="pl-pds">'</span></span>);
+});</pre></div>
+
+<p>For example:</p>
+
+<div class="highlight highlight-javascript"><pre>app.config(<span class="pl-st">function</span> (<span class="pl-vpf">SpotifyProvider</span>) {
+  SpotifyProvider.setClientId(<span class="pl-s1"><span class="pl-pds">'</span>ABC123DEF456GHI789JKL<span class="pl-pds">'</span></span>);
+  SpotifyProvider.setRedirectUri(<span class="pl-s1"><span class="pl-pds">'</span>http://www.example.com/callback.html<span class="pl-pds">'</span></span>);
+  SpotifyProvider.setScope(<span class="pl-s1"><span class="pl-pds">'</span>user-read-private playlist-read-private playlist-modify-private playlist-modify-public<span class="pl-pds">'</span></span>);
+});</pre></div>
+
+<p>Inject Spotify into a controller to gain access to all the functions available</p>
+
+<div class="highlight highlight-javascript"><pre>app.controller(<span class="pl-s1"><span class="pl-pds">'</span>MainCtrl<span class="pl-pds">'</span></span>, <span class="pl-st">function</span> (<span class="pl-vpf">Spotify</span>) {
+
+});</pre></div>
+
+<h3>
+<a id="search" class="anchor" href="#search" aria-hidden="true"><span class="octicon octicon-link"></span></a>Search</h3>
+
+<h4>
+<a id="search-for-an-item" class="anchor" href="#search-for-an-item" aria-hidden="true"><span class="octicon octicon-link"></span></a>Search for an Item</h4>
+
+<p>Get Spotify catalog information about artists, albums, or tracks that match a keyword string.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.<span class="pl-s3">search</span>(<span class="pl-s1"><span class="pl-pds">'</span>Search Query<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>type<span class="pl-pds">'</span></span>, options);</pre></div>
+
+<p>type - Required. A comma-separated list of item types to search across. Valid types are: album, artist, and track.</p>
+
+<h5>
+<a id="options-object-optional" class="anchor" href="#options-object-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options Object (Optional)</h5>
+
+<ul>
+<li>limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50. </li>
+<li>offset - Optional. The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects.</li>
+</ul>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.<span class="pl-s3">search</span>(<span class="pl-s1"><span class="pl-pds">'</span>Nirvana<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>artist<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h3>
+<a id="albums" class="anchor" href="#albums" aria-hidden="true"><span class="octicon octicon-link"></span></a>Albums</h3>
+
+<h4>
+<a id="get-an-album" class="anchor" href="#get-an-album" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get an Album</h4>
+
+<p>Get Spotify catalog information for a single album.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getAlbum(<span class="pl-s1"><span class="pl-pds">'</span>AlbumID or Spotify Album URI<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getAlbum(<span class="pl-s1"><span class="pl-pds">'</span>0sNOF9WDwhWunNAHPD3Baj<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="get-several-albums" class="anchor" href="#get-several-albums" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Several Albums</h4>
+
+<p>Get Spotify catalog information for multiple albums identified by their Spotify IDs.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getAlbums(<span class="pl-s1"><span class="pl-pds">'</span>Array or comma separated list of Album IDs<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getAlbums(<span class="pl-s1"><span class="pl-pds">'</span>41MnTivkwTO3UUJ8DrqEJJ,6JWc4iAiJ9FjyK0B59ABb4,6UXCm6bOO4gFlDQZV5yL37<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="get-an-albums-tracks" class="anchor" href="#get-an-albums-tracks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get an Album’s Tracks</h4>
+
+<p>Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getAlbumTracks(<span class="pl-s1"><span class="pl-pds">'</span>AlbumID or Spotify Album URI<span class="pl-pds">'</span></span>, options);</pre></div>
+
+<h5>
+<a id="options-object-optional-1" class="anchor" href="#options-object-optional-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options Object (Optional)</h5>
+
+<ul>
+<li>limit - Optional. The maximum number of tracks to return. Default: 20. Minimum: 1. Maximum: 50.</li>
+<li>offset - Optional. The index of the first track to return. Default: 0 (the first object). Use with limit to get the next set of tracks.</li>
+</ul>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getAlbumTracks(<span class="pl-s1"><span class="pl-pds">'</span>6akEvsycLGftJxYudPjmqK<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h3>
+<a id="artists" class="anchor" href="#artists" aria-hidden="true"><span class="octicon octicon-link"></span></a>Artists</h3>
+
+<h4>
+<a id="get-an-artist" class="anchor" href="#get-an-artist" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get an Artist</h4>
+
+<p>Get Spotify catalog information for a single artist identified by their unique Spotify ID or Spotify URI.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getArtist(<span class="pl-s1"><span class="pl-pds">'</span>Artist Id or Spotify Artist URI<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getArtist(<span class="pl-s1"><span class="pl-pds">'</span>0LcJLqbBmaGUft1e9Mm8HV<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="get-several-artists" class="anchor" href="#get-several-artists" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Several Artists</h4>
+
+<p>Get Spotify catalog information for several artists based on their Spotify IDs.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getArtists(<span class="pl-s1"><span class="pl-pds">'</span>Comma separated string or array of Artist Ids<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getArtists(<span class="pl-s1"><span class="pl-pds">'</span>0oSGxfWSnnOXhD2fKuz2Gy,3dBVyJ7JuOMt4GE9607Qin<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="get-an-artists-albums" class="anchor" href="#get-an-artists-albums" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get an Artist’s Albums</h4>
+
+<p>Get Spotify catalog information about an artist’s albums. Optional parameters can be passed in to filter and sort the response.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getArtistAlbums(<span class="pl-s1"><span class="pl-pds">'</span>Artist Id or Spotify Artist URI<span class="pl-pds">'</span></span>, options);</pre></div>
+
+<h5>
+<a id="options-object-optional-2" class="anchor" href="#options-object-optional-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options Object (Optional)</h5>
+
+<ul>
+<li>album_type - Optional A comma-separated list of keywords that will be used to filter the response. If not supplied, all album types will be returned. Valid values are:
+
+<ul>
+<li>album</li>
+<li>single</li>
+<li>appears_on</li>
+<li>compilation</li>
+</ul>
+</li>
+</ul>
+
+<p>Example: { album_type: 'album,single' }</p>
+
+<ul>
+<li>country - Optional. An ISO 3166-1 alpha-2 country code. Supply this parameter to limit the response to one particular country. Note if you do not provide this field, you are likely to get duplicate results per album, one for each country in which the album is available!</li>
+<li>limit - The number of album objects to return. Default: 20. Minimum: 1. Maximum: 50. For example: { limit: 2 }</li>
+<li>offset - Optional. The index of the first album to return. Default: 0 (i.e., the first album). Use with limit to get the next set of albums. </li>
+</ul>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getArtistAlbums(<span class="pl-s1"><span class="pl-pds">'</span>1vCWHaC5f2uS3yhpwWbIA6<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="get-an-artists-top-tracks" class="anchor" href="#get-an-artists-top-tracks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get an Artist’s Top Tracks</h4>
+
+<p>Get Spotify catalog information about an artist’s top tracks by country.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getArtistTopTracks(<span class="pl-s1"><span class="pl-pds">'</span>Artist Id or Spotify Artist URI<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>Country Code<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>The country: an ISO 3166-1 alpha-2 country code. 
+Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getArtistTopTracks(<span class="pl-s1"><span class="pl-pds">'</span>1vCWHaC5f2uS3yhpwWbIA6<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>AU<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="get-an-artists-related-artists" class="anchor" href="#get-an-artists-related-artists" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get an Artist’s Related Artists</h4>
+
+<p>Get Spotify catalog information about artists similar to a given artist. Similarity is based on analysis of the Spotify community’s listening history.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getRelatedArtists(<span class="pl-s1"><span class="pl-pds">'</span>Artist Id or Spotify Artist URI<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getRelatedArtists(<span class="pl-s1"><span class="pl-pds">'</span>1vCWHaC5f2uS3yhpwWbIA6<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h3>
+<a id="tracks" class="anchor" href="#tracks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tracks</h3>
+
+<h4>
+<a id="get-a-track" class="anchor" href="#get-a-track" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get a Track</h4>
+
+<p>Get Spotify catalog information for a single track identified by its unique Spotify ID or Spotify URI.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getTrack(<span class="pl-s1"><span class="pl-pds">'</span>Track Id or Spotify Track URI<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getTrack(<span class="pl-s1"><span class="pl-pds">'</span>0eGsygTp906u18L0Oimnem<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="get-several-tracks" class="anchor" href="#get-several-tracks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Several Tracks</h4>
+
+<p>Get Spotify catalog information for multiple tracks based on their Spotify IDs.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getTracks(<span class="pl-s1"><span class="pl-pds">'</span>Comma separated list or array of Track Ids<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getTracks(<span class="pl-s1"><span class="pl-pds">'</span>0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h3>
+<a id="playlists" class="anchor" href="#playlists" aria-hidden="true"><span class="octicon octicon-link"></span></a>Playlists</h3>
+
+<p>User needs to be logged in to gain access to playlists</p>
+
+<h4>
+<a id="get-a-list-of-a-users-playlists" class="anchor" href="#get-a-list-of-a-users-playlists" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get a List of a User’s Playlists</h4>
+
+<p>Get a list of the playlists owned by a Spotify user. Requires the <code>playlist-read-private</code> scope</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getUserPlaylists(<span class="pl-s1"><span class="pl-pds">'</span>user_id<span class="pl-pds">'</span></span>, options);</pre></div>
+
+<h5>
+<a id="options-object-optional-3" class="anchor" href="#options-object-optional-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options Object (Optional)</h5>
+
+<ul>
+<li>limit - Optional. The maximum number of playlists to return. Default: 20. Minimum: 1. Maximum: 50. </li>
+<li>offset - Optional. The index of the first playlist to return. Default: 0 (the first object). Use with limit to get the next set of playlists.</li>
+</ul>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getUserPlaylists(<span class="pl-s1"><span class="pl-pds">'</span>wizzler<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="get-a-playlist" class="anchor" href="#get-a-playlist" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get a Playlist</h4>
+
+<p>Get a playlist owned by a Spotify user.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getPlaylist(<span class="pl-s1"><span class="pl-pds">'</span>user_id<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>playlist_id<span class="pl-pds">'</span></span>, options);</pre></div>
+
+<h5>
+<a id="options-object-optional-4" class="anchor" href="#options-object-optional-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options Object (Optional)</h5>
+
+<ul>
+<li>fields - Optional. Filters for the query: a comma-separated list of the fields to return. If omitted, all fields are returned. Sub-fields can be excluded by prefixing them with an exclamation mark. <a href="https://developer.spotify.com/web-api/get-playlist/">More Info</a>
+</li>
+</ul>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getPlaylist(<span class="pl-s1"><span class="pl-pds">'</span>1176458919<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>6Df19VKaShrdWrAnHinwVO<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="get-a-playlists-tracks" class="anchor" href="#get-a-playlists-tracks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get a Playlist’s Tracks</h4>
+
+<p>Get full details of the tracks of a playlist owned by a Spotify user. Requires the <code>playlist-read-private</code> scope.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getPlaylistTracks(<span class="pl-s1"><span class="pl-pds">'</span>user_id<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>playlist_id<span class="pl-pds">'</span></span>, options);</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getPlaylistTracks(<span class="pl-s1"><span class="pl-pds">'</span>1176458919<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>6Df19VKaShrdWrAnHinwVO<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="create-a-playlist" class="anchor" href="#create-a-playlist" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a Playlist</h4>
+
+<p>Create a playlist for a Spotify user. (The playlist will be empty until you add tracks.) Creating a public playlist requires the <code>playlist-modify-public</code> scope. Creating a private playlist requires the <code>playlist-modify-private</code> scope.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.createPlaylist(<span class="pl-s1"><span class="pl-pds">'</span>user_id<span class="pl-pds">'</span></span>, options);</pre></div>
+
+<h5>
+<a id="options-object" class="anchor" href="#options-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options Object</h5>
+
+<ul>
+<li>name - string - Required. The name for the new playlist, for example "Your Coolest Playlist". This name does not need to be unique; a user may have several playlists with the same name.</li>
+<li>public - boolean - Optional, default true. If true the playlist will be public, if false it will be private. To be able to create private playlists, the user must have granted the playlist-modify-private scope.</li>
+</ul>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.createPlaylist(<span class="pl-s1"><span class="pl-pds">'</span>1176458919<span class="pl-pds">'</span></span>, { name<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>Awesome Mix Vol. 1<span class="pl-pds">'</span></span> }).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>playlist created<span class="pl-pds">'</span></span>);
+});</pre></div>
+
+<h4>
+<a id="add-tracks-to-a-playlist" class="anchor" href="#add-tracks-to-a-playlist" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add Tracks to a Playlist</h4>
+
+<p>Add one or more tracks to a user’s playlist. Adding tracks to a public playlist requires the <code>playlist-modify-public</code> scope. Adding tracks to a private playlist requires the <code>playlist-modify-private</code> scope.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.addPlaylistTracks(<span class="pl-s1"><span class="pl-pds">'</span>user_id<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>playlist_id<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>comma separated string or array of spotify track uris<span class="pl-pds">'</span></span>);</pre></div>
+
+<h5>
+<a id="options-object-optional-5" class="anchor" href="#options-object-optional-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options Object (Optional)</h5>
+
+<ul>
+<li>position - integer - Optional. The position to insert the tracks, a zero-based index. For example, to insert the tracks in the first position: position=0; to insert the tracks in the third position: position=2. If omitted, the tracks will be appended to the playlist. Tracks are added in the order they are listed in the query string or request body.</li>
+</ul>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify
+  .addPlaylistTracks(<span class="pl-s1"><span class="pl-pds">'</span>1176458919<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>2TkWjGCu8jurholsfdWtG4<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M<span class="pl-pds">'</span></span>)
+  .then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+    <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>tracks added to playlist<span class="pl-pds">'</span></span>);
+  });</pre></div>
+
+<h4>
+<a id="remove-tracks-from-a-playlist" class="anchor" href="#remove-tracks-from-a-playlist" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remove Tracks from a Playlist</h4>
+
+<p>Remove one or more tracks from a user’s playlist. Removing tracks from a public playlist requires the <code>playlist-modify-public</code> scope. Removing tracks from a private playlist requires the <code>playlist-modify-private</code> scope.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.removePlaylistTracks(<span class="pl-s1"><span class="pl-pds">'</span>user_id<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>playlist_id<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>comma separated string or array of spotify track ids or uris<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<pre><code>Spotify
+  .removePlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M')
+  .then(function (data) {
+    console.log('tracks removed from playlist');
+  });
+</code></pre>
+
+<h4>
+<a id="replace-a-playlists-tracks" class="anchor" href="#replace-a-playlists-tracks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Replace a Playlist’s Tracks</h4>
+
+<p>Replace all the tracks in a playlist, overwriting its existing tracks. This powerful request can be useful for replacing tracks, re-ordering existing tracks, or clearing the playlist. Replacing tracks in a public playlist requires the <code>playlist-modify-public</code> scope. Replacing tracks in a private playlist requires the <code>playlist-modify-private</code> scope.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.replacePlaylistTracks(<span class="pl-s1"><span class="pl-pds">'</span>user_id<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>playlist_id<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>comma separated string or array of spotify track ids or uris<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<pre><code>Spotify
+  .replacePlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M')
+  .then(function (data) {
+    console.log('tracks removed from playlist');
+  });
+</code></pre>
+
+<h4>
+<a id="change-a-playlists-details" class="anchor" href="#change-a-playlists-details" aria-hidden="true"><span class="octicon octicon-link"></span></a>Change a Playlist’s Details</h4>
+
+<p>Change a playlist’s name and public/private state. (The user must, of course, own the playlist.) Changing a public playlist requires the <code>playlist-modify-public</code> scope. Changing a private playlist requires the <code>playlist-modify-private</code> scope.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.updatePlaylistDetails(<span class="pl-s1"><span class="pl-pds">'</span>user_id<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>playlist_id<span class="pl-pds">'</span></span>, options);</pre></div>
+
+<h5>
+<a id="options-object-optional-6" class="anchor" href="#options-object-optional-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options Object (Optional)</h5>
+
+<ul>
+<li>name - string - Optional. The new name for the playlist, for example "My New Playlist Title".</li>
+<li>public - Boolean - Optional. If true the playlist will be public, if false it will be private.</li>
+</ul>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify
+  .updatePlaylistDetails(<span class="pl-s1"><span class="pl-pds">'</span>1176458919<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>2TkWjGCu8jurholsfdWtG4<span class="pl-pds">'</span></span>, { name<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>Updated Playlist Title<span class="pl-pds">'</span></span> })
+  .then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+    <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>Updated playlist details<span class="pl-pds">'</span></span>);
+  });</pre></div>
+
+<h3>
+<a id="user-profiles" class="anchor" href="#user-profiles" aria-hidden="true"><span class="octicon octicon-link"></span></a>User Profiles</h3>
+
+<p>User needs to be logged in to gain access to user profiles</p>
+
+<h4>
+<a id="get-a-users-profile" class="anchor" href="#get-a-users-profile" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get a User’s Profile</h4>
+
+<p>Get public profile information about a Spotify user.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getUser(<span class="pl-s1"><span class="pl-pds">'</span>user_id<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getUser(<span class="pl-s1"><span class="pl-pds">'</span>wizzler<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="get-current-users-profile" class="anchor" href="#get-current-users-profile" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Current User’s Profile</h4>
+
+<p>Get detailed profile information about the current user (including the current user’s username).</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getCurrentUser();</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getCurrentUser().then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h3>
+<a id="user-library-may-have-name-changes-in-next-version" class="anchor" href="#user-library-may-have-name-changes-in-next-version" aria-hidden="true"><span class="octicon octicon-link"></span></a>User Library <em>(may have name changes in next version)</em>
+</h3>
+
+<h4>
+<a id="get-current-users-saved-tracks" class="anchor" href="#get-current-users-saved-tracks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Current User’s Saved Tracks</h4>
+
+<p>Get a list of the songs saved in the current Spotify user’s “Your Music” library. Requires the <code>user-library-read</code> scope.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getSavedUserTracks(options);</pre></div>
+
+<h5>
+<a id="options-object-optional-7" class="anchor" href="#options-object-optional-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options Object (Optional)</h5>
+
+<ul>
+<li>limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50. </li>
+<li>offset - Optional. The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects. </li>
+</ul>
+
+<div class="highlight highlight-javascript"><pre>Spotify.getSavedUserTracks().then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="check-current-users-saved-tracks" class="anchor" href="#check-current-users-saved-tracks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Check Current User’s Saved Tracks</h4>
+
+<p>Check if one or more tracks is already saved in the current Spotify user’s “Your Music” library. Requires the <code>user-library-read</code> scope.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.userTracksContains(<span class="pl-s1"><span class="pl-pds">'</span>comma separated string or array of spotify track ids<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.userTracksContains(<span class="pl-s1"><span class="pl-pds">'</span>0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="save-tracks-for-current-user" class="anchor" href="#save-tracks-for-current-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Save Tracks for Current User</h4>
+
+<p>Save one or more tracks to the current user’s “Your Music” library. Requires the <code>user-library-modify</code> scope.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.saveUserTracks(<span class="pl-s1"><span class="pl-pds">'</span>comma separated string or array of spotify track ids<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.saveUserTracks(<span class="pl-s1"><span class="pl-pds">'</span>0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h4>
+<a id="remove-tracks-for-current-user" class="anchor" href="#remove-tracks-for-current-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remove Tracks for Current User</h4>
+
+<p>Remove one or more tracks from the current user’s “Your Music” library. Requires the <code>user-library-modify</code> scope.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.removeUserTracks(<span class="pl-s1"><span class="pl-pds">'</span>comma separated string or array of spotify track ids<span class="pl-pds">'</span></span>);</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.removeUserTracks(<span class="pl-s1"><span class="pl-pds">'</span>0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9<span class="pl-pds">'</span></span>).then(<span class="pl-st">function</span> (<span class="pl-vpf">data</span>) {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+});</pre></div>
+
+<h3>
+<a id="authentication" class="anchor" href="#authentication" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authentication</h3>
+
+<h4>
+<a id="login" class="anchor" href="#login" aria-hidden="true"><span class="octicon octicon-link"></span></a>Login</h4>
+
+<p>Will open login window. Requires user to initiate as it will open a pop up window.
+Requires client id, callback uri and scope to be set in config.</p>
+
+<div class="highlight highlight-javascript"><pre>Spotify.login();</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s3">$scope</span>.<span class="pl-en">login</span> <span class="pl-k">=</span> <span class="pl-st">function</span> () {
+  Spotify.login();
+};</pre></div>
+
+<h4>
+<a id="example-callback-html" class="anchor" href="#example-callback-html" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example callback html</h4>
+
+<div class="highlight highlight-html"><pre>&lt;!DOCTYPE html&gt;
+&lt;<span class="pl-ent">html</span>&gt;
+&lt;<span class="pl-ent">head</span>&gt;
+  &lt;<span class="pl-ent">meta</span> <span class="pl-e">charset</span>=<span class="pl-s1"><span class="pl-pds">"</span>utf-8<span class="pl-pds">"</span></span>&gt;
+  &lt;<span class="pl-ent">meta</span> <span class="pl-e">http-equiv</span>=<span class="pl-s1"><span class="pl-pds">"</span>X-UA-Compatible<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s1"><span class="pl-pds">"</span>IE=edge<span class="pl-pds">"</span></span>&gt;
+  &lt;<span class="pl-ent">title</span>&gt;&lt;/<span class="pl-ent">title</span>&gt;
+<span class="pl-s2">  &lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">'</span>text/javascript<span class="pl-pds">'</span></span>&gt;<span class="pl-c">//&lt;![CDATA[ </span></span>
+<span class="pl-s2">  <span class="pl-s3">window</span>.<span class="pl-en">onload</span><span class="pl-k">=</span><span class="pl-st">function</span>(){</span>
+<span class="pl-s2">    <span class="pl-s">var</span> target <span class="pl-k">=</span> <span class="pl-s3">window</span>.<span class="pl-sc">self</span> <span class="pl-k">===</span> <span class="pl-s3">window</span>.<span class="pl-sc">top</span> <span class="pl-k">?</span> <span class="pl-s3">window</span>.<span class="pl-sc">opener</span> <span class="pl-k">:</span> <span class="pl-s3">window</span>.<span class="pl-sc">parent</span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">    <span class="pl-s">var</span> hash <span class="pl-k">=</span> <span class="pl-s3">window</span>.<span class="pl-sc">location</span>.<span class="pl-sc">hash</span>;</span>
+<span class="pl-s2">    <span class="pl-k">if</span> (hash) {</span>
+<span class="pl-s2">        <span class="pl-s">var</span> token <span class="pl-k">=</span> <span class="pl-s3">window</span>.<span class="pl-sc">location</span>.<span class="pl-sc">hash</span>.<span class="pl-s3">split</span>(<span class="pl-s1"><span class="pl-pds">'</span>&amp;<span class="pl-pds">'</span></span>)[<span class="pl-c1">0</span>].<span class="pl-s3">split</span>(<span class="pl-s1"><span class="pl-pds">'</span>=<span class="pl-pds">'</span></span>)[<span class="pl-c1">1</span>];</span>
+<span class="pl-s2">        <span class="pl-c">// target.postMessage(token, 'http://example.com/'); // v0.7.0 and below</span></span>
+<span class="pl-s2">        localStorage.setItem(<span class="pl-s1"><span class="pl-pds">'</span>spotify-token<span class="pl-pds">'</span></span>, token);</span>
+<span class="pl-s2">    }</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">  }<span class="pl-c">//]]&gt;  </span></span>
+<span class="pl-s2"></span>
+<span class="pl-s2">  &lt;/<span class="pl-ent">script</span>&gt;</span>
+&lt;/<span class="pl-ent">head</span>&gt;
+&lt;<span class="pl-ent">body</span>&gt;
+
+&lt;/<span class="pl-ent">body</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/eddiemoore/angular-spotify/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/eddiemoore/angular-spotify/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/eddiemoore/angular-spotify"></a> is maintained by <a href="https://github.com/eddiemoore">eddiemoore</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
