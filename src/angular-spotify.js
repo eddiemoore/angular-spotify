@@ -45,11 +45,9 @@
       };
 
       /**
-       * SDK version
+       * API Base URL
        */
-      settings.version = 'v1';
-
-      settings.apiBase = 'https://api.spotify.com/' + settings.version;
+      settings.apiBase = 'https://api.spotify.com/v1';
 
       this.$get = ['$q', '$http', '$window', function ($q, $http, $window) {
 
