@@ -384,7 +384,7 @@
               $window.removeEventListener('storage', storageChanged, false);
               //localStorage.removeItem('spotify-token');
 
-              deferred.resolve(event.data);
+              deferred.resolve(e.newValue);
             }
           }
 
