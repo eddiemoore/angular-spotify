@@ -347,7 +347,7 @@ Spotify
 ###Discover
 Discover new releases and featured playlists. User needs to be logged in to gain access to these features.
 
-####Get the feautured playlists
+####Get the featured playlists
 Get a list of Spotify featured playlists 
 ```javascript
 Spotify.getFeaturedPlaylists(options);
