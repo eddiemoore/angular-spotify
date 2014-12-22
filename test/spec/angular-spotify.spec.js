@@ -211,6 +211,15 @@ describe('angular-spotify', function () {
       expect(Spotify.toQueryString({a: 't', b: 4, c: 'q'})).toBe('a=t&b=4&c=q');
     });
 
+    it('should have a method getFeaturedPlaylists()', function () {
+      expect(Spotify.getFeaturedPlaylists).toBeDefined();
+    });
+
+    it('should have a method getNewReleases()', function () {
+      expect(Spotify.getNewReleases).toBeDefined();
+    });
+
+
     describe('Spotify.api', function () {
       var $httpBackend;
       var Spotify;
@@ -1367,6 +1376,84 @@ describe('angular-spotify', function () {
 
       });
 
+    });
+
+    describe('Browse', function() {
+      var $httpBackend;
+      var Spotify;
+      var api = 'https://api.spotify.com/v1';
+
+      beforeEach(inject(function(_Spotify_, _$httpBackend_) {
+        Spotify = _Spotify_;
+        $httpBackend = _$httpBackend_;
+      }));
+
+      describe('Browse.getFeaturedPlaylists', function() {
+
+        it('should call the correct URL with authentication and options', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getFeaturedPlaylists({ country: "NL", locale: "nl_NL" });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/browse/featured-playlists', 'GET', {
+            country: "NL", locale: "nl_NL"
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+        it('should resolve to an object with a message and playlists', function () {
+          $httpBackend.when('GET', api + '/browse/featured-playlists').respond(200, getJSONFixture('featured-playlists.json'));
+
+          var result;
+          Spotify.getFeaturedPlaylists().then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+          expect(result.message).toBeDefined();
+          expect(result.playlists).toBeDefined();
+        });
+
+      });
+
+      describe('Browse.getNewReleases', function() {
+
+        it('should call the correct URL with authentication and options', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getNewReleases({ country: "NL" });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/browse/new-releases', 'GET', {
+            country: "NL"
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+        it('should resolve to an object with albums', function () {
+          $httpBackend.when('GET', api + '/browse/new-releases').respond(200, getJSONFixture('new-releases.json'));
+
+          var result;
+          Spotify.getNewReleases().then(function (data) {
+            result = data;
+          });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+          expect(result.albums).toBeDefined();
+        });
+
+      });
     });
 
   });
