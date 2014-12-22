@@ -1395,11 +1395,11 @@ describe('angular-spotify', function () {
 
           Spotify.setAuthToken('TESTING');
 
-          Spotify.getFeaturedPlaylists({ country: "NL", locale: "nl_NL" });
+          Spotify.getFeaturedPlaylists({ country: 'NL', locale: 'nl_NL' });
 
           expect(Spotify.api).toHaveBeenCalled();
           expect(Spotify.api).toHaveBeenCalledWith('/browse/featured-playlists', 'GET', {
-            country: "NL", locale: "nl_NL"
+            country: 'NL', locale: 'nl_NL'
           }, null, {
             'Authorization': 'Bearer TESTING'
           });
@@ -1429,11 +1429,11 @@ describe('angular-spotify', function () {
 
           Spotify.setAuthToken('TESTING');
 
-          Spotify.getNewReleases({ country: "NL" });
+          Spotify.getNewReleases({ country: 'NL' });
 
           expect(Spotify.api).toHaveBeenCalled();
           expect(Spotify.api).toHaveBeenCalledWith('/browse/new-releases', 'GET', {
-            country: "NL"
+            country: 'NL'
           }, null, {
             'Authorization': 'Bearer TESTING'
           });
