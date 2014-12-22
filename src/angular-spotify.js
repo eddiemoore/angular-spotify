@@ -76,7 +76,6 @@
           .error(function (data) {
             deferred.reject(data);
           });
-
           return deferred.promise;
         };
 
@@ -341,6 +340,21 @@
           }, null, {
             'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
+          });
+        };
+
+        /**
+          ====================== Bowse =====================
+         */
+        NgSpotify.prototype.getFeaturedPlaylists = function (options) {
+          return this.api('/browse/featured-playlists', 'GET', options, null, {
+            'Authorization': 'Bearer ' + this.authToken
+          });
+        };
+
+        NgSpotify.prototype.getNewReleases = function (options) {
+          return this.api('/browse/new-releases', 'GET', options, null, {
+            'Authorization': 'Bearer ' + this.authToken
           });
         };
 
