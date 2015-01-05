@@ -50,7 +50,7 @@ Get Spotify catalog information about artists, albums, or tracks that match a ke
 ```javascript
 Spotify.search('Search Query', 'type', options);
 ```
-type - Required. A comma-separated list of item types to search across. Valid types are: album, artist, and track.
+type - Required. A comma-separated list of item types to search across. Valid types are: album, artist, playlist, and track.
 
 #####Options Object (Optional)
  - limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50. 
