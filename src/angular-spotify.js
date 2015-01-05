@@ -359,6 +359,27 @@
         };
 
         /**
+          ====================== Following =====================
+         */
+        NgSpotify.prototype.follow = function (type, ids) {
+          return this.api('/me/following', 'PUT', { type: type, ids: ids }, null, {
+            'Authorization': 'Bearer ' + this.authToken
+          });
+        };
+
+        NgSpotify.prototype.unfollow = function (type, ids) {
+          return this.api('/me/following', 'DELETE', { type: type, ids: ids }, null, {
+            'Authorization': 'Bearer ' + this.authToken
+          });
+        };
+
+        NgSpotify.prototype.userFollowingContains = function (type, ids) {
+          return this.api('/me/following/contains', 'GET', { type: type, ids: ids }, null, {
+            'Authorization': 'Bearer ' + this.authToken
+          });
+        };
+
+        /**
           ====================== Login =====================
          */
         NgSpotify.prototype.setAuthToken = function (authToken) {
