@@ -381,6 +381,48 @@ Spotify.getNewReleases({ country: "NL" }).then(function (data) {
 });
 ```
 
+###Follow
+These endpoints allow you manage the list of artists and users that a logged in user follows. Following and unfollowing requires the ```user-follow-modify``` scope. Check if Current User Follows requires the ```user-follow-read``` scope.
+
+####Follow Artists or Users
+Add the current user as a follower of one or more artists or other Spotify users.
+```javascript
+Spotify.follow('type', 'ids');
+```
+type: Required. either ```artist``` or ```user```
+Example:
+```javascript
+Spotify.follow('user', 'exampleuser01').then(function (data) {
+  console.log(data);
+});
+```
+
+####Unfollow Artists or Users
+Remove the current user as a follower of one or more artists or other Spotify users.
+```javascript
+Spotify.unfollow('type', 'ids');
+```
+type: Required. either ```artist``` or ```user```
+Example:
+```javascript
+Spotify.unfollow('user', 'exampleuser01').then(function (data) {
+  console.log(data);
+});
+```
+
+####Check if Current User Follows
+Check to see if the current user is following one or more artists or other Spotify users.
+```javascript
+Spotify.userFollowingContains('type', 'ids');
+```
+type: Required. either ```artist``` or ```user```
+ids: Required. comma-separated list.
+Example:
+```javascript
+Spotify.userFollowingContains('user', 'exampleuser01').then(function (data) {
+  console.log(data);
+});
+```
 
 ###User Profiles
 User needs to be logged in to gain access to user profiles
