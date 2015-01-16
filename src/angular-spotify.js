@@ -388,6 +388,12 @@
           });
         };
 
+        NgSpotify.prototype.unfollowPlaylist = function (userId, playlistId) {
+          return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers', 'DELETE', null, null, {
+            'Authorization': 'Bearer ' + this.authToken
+          });
+        };
+
         /**
           ====================== Login =====================
          */

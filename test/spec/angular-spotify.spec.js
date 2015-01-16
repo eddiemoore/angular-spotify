@@ -235,6 +235,10 @@ describe('angular-spotify', function () {
       expect(Spotify.followPlaylist).toBeDefined();
     });
 
+    it('should have a method unfollowPlaylist()', function () {
+      expect(Spotify.unfollowPlaylist).toBeDefined();
+    });
+
 
     describe('Spotify.api', function () {
       var $httpBackend;
@@ -1597,6 +1601,21 @@ describe('angular-spotify', function () {
           }, {
             'Authorization': 'Bearer TESTING',
             'Content-Type': 'application/json'
+          });
+        });
+      });
+
+      describe('Spotify.unfollowPlaylist', function () {
+        it ('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.unfollowPlaylist('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/jmperezperez/playlists/2v3iNvBX8Ay1Gt2uXtUKUT/followers', 'DELETE', null, null, {
+            'Authorization': 'Bearer TESTING'
           });
         });
       });
