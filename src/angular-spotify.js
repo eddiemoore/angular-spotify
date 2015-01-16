@@ -380,7 +380,7 @@
         };
 
         NgSpotify.prototype.followPlaylist = function (userId, playlistId, isPublic) {
-          return this.api('/users/' + userId + '/playlists/' + playlistId + '/following', 'PUT', null, {
+          return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers', 'PUT', null, {
             public: isPublic || null
           }, {
             'Authorization': 'Bearer ' + this.authToken,
