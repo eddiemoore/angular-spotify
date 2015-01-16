@@ -231,6 +231,10 @@ describe('angular-spotify', function () {
       expect(Spotify.userFollowingContains).toBeDefined();
     });
 
+    it('should have a method followPlaylist()', function () {
+      expect(Spotify.followPlaylist).toBeDefined();
+    });
+
 
     describe('Spotify.api', function () {
       var $httpBackend;
@@ -1559,6 +1563,22 @@ describe('angular-spotify', function () {
             ids: 'exampleuser01'
           }, null, {
             'Authorization': 'Bearer TESTING'
+          });
+        });
+      });
+
+      describe('Spotify.followPlaylist', function () {
+        it ('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.followPlaylist('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/jmperezperez/playlists/2v3iNvBX8Ay1Gt2uXtUKUT/following', 'PUT', null, null, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
           });
         });
       });
