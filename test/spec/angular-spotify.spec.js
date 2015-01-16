@@ -1576,7 +1576,25 @@ describe('angular-spotify', function () {
           Spotify.followPlaylist('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT');
 
           expect(Spotify.api).toHaveBeenCalled();
-          expect(Spotify.api).toHaveBeenCalledWith('/users/jmperezperez/playlists/2v3iNvBX8Ay1Gt2uXtUKUT/following', 'PUT', null, null, {
+          expect(Spotify.api).toHaveBeenCalledWith('/users/jmperezperez/playlists/2v3iNvBX8Ay1Gt2uXtUKUT/following', 'PUT', null, {
+            public: null
+          }, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+
+        it('should be able to follow and set to public', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.followPlaylist('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT', true);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/jmperezperez/playlists/2v3iNvBX8Ay1Gt2uXtUKUT/following', 'PUT', null, {
+            public: true
+          }, {
             'Authorization': 'Bearer TESTING',
             'Content-Type': 'application/json'
           });

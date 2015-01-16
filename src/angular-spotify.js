@@ -379,8 +379,10 @@
           });
         };
 
-        NgSpotify.prototype.followPlaylist = function (userId, playlistId) {
-          return this.api('/users/' + userId + '/playlists/' + playlistId + '/following', 'PUT', null, null, {
+        NgSpotify.prototype.followPlaylist = function (userId, playlistId, isPublic) {
+          return this.api('/users/' + userId + '/playlists/' + playlistId + '/following', 'PUT', null, {
+            public: isPublic || null
+          }, {
             'Authorization': 'Bearer ' + this.authToken,
             'Content-Type': 'application/json'
           });
