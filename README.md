@@ -424,6 +424,35 @@ Spotify.userFollowingContains('user', 'exampleuser01').then(function (data) {
 });
 ```
 
+####Follow a Playlist
+Add the current user as a follower of a playlist. Requires ```playlist-modify-public``` or ```playlist-modify-private``` scope to work.
+```javascript
+Spotify.followPlaylist('owner_id', 'playlist_id', isPublic);
+```
+owner_id: The Spotify user ID of the person who owns the playlist.
+playlist_id: The Spotify ID of the playlist. Any playlist can be followed, regardless of its public/private status, as long as you know its playlist ID.
+isPublic: Boolean (Optional), default true. If true the playlist will be included in user's public playlists, if false it will remain private.
+Example:
+```javascript
+Spotify.followPlaylist('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT', false).then(function (data) {
+  console.log(data);
+});
+```
+
+####Unfollow a Playlist
+Remove the current user as a follower of a playlist. Requires ```playlist-modify-public``` or ```playlist-modify-private``` scope to work.
+```javascript
+Spotify.unfollowPlaylist('owner_id', 'playlist_id', isPublic);
+```
+owner_id: The Spotify user ID of the person who owns the playlist.
+playlist_id: The Spotify ID of the playlist that is to be no longer followed.
+Example:
+```javascript
+Spotify.unfollowPlaylist('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT').then(function (data) {
+  console.log(data);
+});
+```
+
 ###User Profiles
 User needs to be logged in to gain access to user profiles
 
