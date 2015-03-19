@@ -317,6 +317,26 @@ Spotify
   });
 ```
 
+####Reorder a Playlist's Tracks
+Reorder a track or a group of tracks in a playlist.
+```javascript
+Spotify.reorderPlaylistTracks('user_id', 'playlist_id', options);
+```
+#####Options Object (Required)
+ - range_start - integer - Required. The position of the first track to be reordered.
+ - range_length - integer - Optional. The amount of tracks to be reordered. Defaults to 1 if not set.
+ - insert_before - integer - Required. The position where the tracks should be inserted. 
+ - snapshot_id - string - Optional. The playlist's snapshot ID against which you want to make the changes.
+
+Example:
+```javascript
+Spotify.reorderPlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', {
+  range_start: 8,
+  range_length: 5,
+  insert_before: 0
+});
+```
+
 ####Replace a Playlist’s Tracks
 Replace all the tracks in a playlist, overwriting its existing tracks. This powerful request can be useful for replacing tracks, re-ordering existing tracks, or clearing the playlist. Replacing tracks in a public playlist requires the ```playlist-modify-public``` scope. Replacing tracks in a private playlist requires the ```playlist-modify-private``` scope.
 ```javascript

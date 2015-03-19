@@ -266,6 +266,13 @@
           });
         };
 
+        NgSpotify.prototype.reorderPlaylistTracks = function (userId, playlistId, options) {
+          return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'PUT', null, options, {
+            'Authorization': 'Bearer ' + this.authToken,
+            'Content-Type': 'application/json'
+          });
+        };
+
         NgSpotify.prototype.replacePlaylistTracks = function (userId, playlistId, tracks) {
           tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
           var track;

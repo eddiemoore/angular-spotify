@@ -171,6 +171,10 @@ describe('angular-spotify', function () {
       expect(Spotify.removePlaylistTracks).toBeDefined();
     });
 
+    it('should have a method reorderPlaylistTracks()', function () {
+      expect(Spotify.reorderPlaylistTracks).toBeDefined();
+    });
+
     it('should have a method replacePlaylistTracks()', function () {
       expect(Spotify.replacePlaylistTracks).toBeDefined();
     });
@@ -1141,6 +1145,30 @@ describe('angular-spotify', function () {
               {uri: 'spotify:track:2Foc5Q5nqNiosCNqttzHof'}
             ]
           }, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+      });
+
+      describe('Spotify.reorderPlaylistTracks', function () {
+        it('should call the correct url', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.reorderPlaylistTracks('triple.j.abc', '73ppZmbaAS2aW9hmDTTDcb', {
+            range_start: 2,
+            range_length: 10,
+            insert_before: 15
+          });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/triple.j.abc/playlists/73ppZmbaAS2aW9hmDTTDcb/tracks', 'PUT', null, {
+            range_start: 2,
+            range_length: 10,
+            insert_before: 15
+          },{
             'Authorization': 'Bearer TESTING',
             'Content-Type': 'application/json'
           });
