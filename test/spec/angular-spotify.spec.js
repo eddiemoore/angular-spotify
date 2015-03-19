@@ -48,6 +48,10 @@ describe('angular-spotify', function () {
       expect(spotifyProvider.setScope).toBeDefined();
     });
 
+    it('should have a method setAuthToken', function () {
+      expect(spotifyProvider.setAuthToken).toBeDefined();
+    });
+
     it('should set the client id', function () {
       expect(spotifyProvider.setClientId('ABCDEFGHIJKLMNOP')).toBe('ABCDEFGHIJKLMNOP');
     });
@@ -68,6 +72,10 @@ describe('angular-spotify', function () {
 
     it('should set the scope', function () {
       expect(spotifyProvider.setScope('user-read-private playlist-read-private')).toBe('user-read-private playlist-read-private');
+    });
+
+    it('should set the authToken', function () {
+      expect(spotifyProvider.setAuthToken('ABCDEFGHIJKLMNOP')).toBe('ABCDEFGHIJKLMNOP');
     });
 
   });

@@ -21,6 +21,11 @@
         return settings.clientId;
       };
 
+      this.setAuthToken = function (accessToken) {
+        settings.accessToken = accessToken;
+        return settings.accessToken;
+      };
+
       this.setRedirectUri = function (redirectUri) {
         settings.redirectUri = redirectUri;
         return settings.redirectUri;
