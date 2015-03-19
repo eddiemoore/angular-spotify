@@ -406,6 +406,14 @@
           });
         };
 
+        NgSpotify.prototype.playlistFollowingContains = function(userId, playlistId, ids) {
+          return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers/contains', 'GET', {
+            ids: ids.toString()
+          }, null, {
+            'Authorization': 'Bearer ' + this.authToken
+          });
+        };
+
         /**
           ====================== Login =====================
          */

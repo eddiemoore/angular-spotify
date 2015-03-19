@@ -251,6 +251,10 @@ describe('angular-spotify', function () {
       expect(Spotify.unfollowPlaylist).toBeDefined();
     });
 
+    it('should have a method playlistFollowingContains()', function () {
+      expect(Spotify.playlistFollowingContains).toBeDefined();
+    });
+
 
     describe('Spotify.api', function () {
       var $httpBackend;
@@ -1651,6 +1655,38 @@ describe('angular-spotify', function () {
 
           expect(Spotify.api).toHaveBeenCalled();
           expect(Spotify.api).toHaveBeenCalledWith('/users/jmperezperez/playlists/2v3iNvBX8Ay1Gt2uXtUKUT/followers', 'DELETE', null, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+      });
+
+      describe('Spotify.playlistFollowingContains', function () {
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.playlistFollowingContains('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT', 'possan,elogain');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/jmperezperez/playlists/2v3iNvBX8Ay1Gt2uXtUKUT/followers/contains', 'GET', {
+            ids: 'possan,elogain'
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+        it('should be able to be called with an array of users', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.playlistFollowingContains('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT', ['possan','elogain']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/jmperezperez/playlists/2v3iNvBX8Ay1Gt2uXtUKUT/followers/contains', 'GET', {
+            ids: 'possan,elogain'
+          }, null, {
             'Authorization': 'Bearer TESTING'
           });
         });

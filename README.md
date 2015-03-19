@@ -334,6 +334,8 @@ Spotify.reorderPlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', {
   range_start: 8,
   range_length: 5,
   insert_before: 0
+}).then(function (data) {
+  console.log(data);
 });
 ```
 
@@ -476,6 +478,21 @@ Spotify.unfollowPlaylist('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT').then(function
   console.log(data);
 });
 ```
+
+####Check if Users Follow a Playlist
+Check to see if one or more Spotify users are following a specified playlist.Following a playlist can be done publicly or privately. Checking if a user publicly follows a playlist doesn't require any scopes; if the user is publicly following the playlist, this endpoint returns true.
+
+Checking if the user is privately following a playlist is only possible for the current user when that user has granted access to the ```playlist-read-private``` scope.
+```javascript
+Spotify.playlistFollowingContains('owner_id', 'playlist_id', 'comma separated string or array of user ids');
+```
+Example:
+```javascript
+Spotify.playlistFollowingContains('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT', 'possan,elogain').then(function (data) {
+  console.log(data);
+});
+```
+
 
 ###User Profiles
 User needs to be logged in to gain access to user profiles
