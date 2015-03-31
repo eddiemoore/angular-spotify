@@ -1692,7 +1692,32 @@ describe('angular-spotify', function () {
         });
       });
     });
+    
 
+    describe('Spotify.login', function () {
+      it('should open the login window', function () {
+        spyOn(window, 'open');
+
+        Spotify.login();
+
+        var w = 400,
+            h = 500,
+            left = (screen.width / 2) - (w / 2),
+            top = (screen.height / 2) - (h / 2);
+
+        var params = {
+          client_id: null,
+          redirect_uri: null,
+          scope: '',
+          response_type: 'token'
+        };
+
+        expect(window.open).toHaveBeenCalled();
+        expect(window.open).toHaveBeenCalledWith('https://accounts.spotify.com/authorize?' + Spotify.toQueryString(params),
+            'Spotify',
+            'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left);
+      });
+    });
   });
 
 });
