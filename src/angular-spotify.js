@@ -10,7 +10,7 @@
       settings.clientId = null;
       settings.redirectUri = null;
       settings.scope = null;
-      settings.accessToken = null;
+      settings.authToken = null;
 
       this.setClientId = function (clientId) {
         settings.clientId = clientId;
@@ -21,9 +21,9 @@
         return settings.clientId;
       };
 
-      this.setAuthToken = function (accessToken) {
-        settings.accessToken = accessToken;
-        return settings.accessToken;
+      this.setAuthToken = function (authToken) {
+        settings.authToken = authToken;
+        return settings.authToken;
       };
 
       this.setRedirectUri = function (redirectUri) {
@@ -61,7 +61,7 @@
           this.redirectUri = settings.redirectUri;
           this.apiBase = settings.apiBase;
           this.scope = settings.scope;
-          this.accessToken = settings.accessToken;
+          this.authToken = settings.authToken;
           this.toQueryString = utils.toQueryString;
         }
 
