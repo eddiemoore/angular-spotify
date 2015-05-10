@@ -61,7 +61,7 @@
           this.redirectUri = settings.redirectUri;
           this.apiBase = settings.apiBase;
           this.scope = settings.scope;
-          this.accessToken = null;
+          this.accessToken = settings.accessToken;
           this.toQueryString = utils.toQueryString;
         }
 
