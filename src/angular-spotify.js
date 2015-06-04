@@ -407,9 +407,7 @@
 
             function storageChanged (e) {
               if (e.key === 'spotify-token') {
-                if (authWindow) {
-                  authWindow.close();
-                }
+                if (authWindow) { authWindow.close(); }
 
                 that.setAuthToken(e.newValue);
                 $window.removeEventListener('storage', storageChanged, false);

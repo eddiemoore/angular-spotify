@@ -1692,7 +1692,7 @@ describe('angular-spotify', function () {
         });
       });
     });
-    
+
 
     describe('Spotify.login', function () {
       it('should open the login window', function () {
