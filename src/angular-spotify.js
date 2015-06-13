@@ -344,6 +344,18 @@
             return this.api('/browse/new-releases', 'GET', options, null, this._auth());
           },
 
+          getCategories: function (options) {
+            return this.api('/browse/categories', 'GET', options, null, this._auth());
+          },
+
+          getCategory: function (category_id, options) {
+            return this.api('/browse/categories/' + category_id, 'GET', options, null, this._auth());
+          },
+
+          getCategoryPlaylists: function (category_id, options) {
+            return this.api('/browse/categories/' + category_id + '/playlists', 'GET', options, null, this._auth());
+          },
+
           /**
             ====================== Following =====================
            */

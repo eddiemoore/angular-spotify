@@ -255,6 +255,18 @@ describe('angular-spotify', function () {
       expect(Spotify.playlistFollowingContains).toBeDefined();
     });
 
+    it('should have a method getCategories()', function () {
+      expect(Spotify.getCategories).toBeDefined();
+    });
+
+    it('should have a method getCategory()', function () {
+      expect(Spotify.getCategory).toBeDefined();
+    });
+
+    it('should have a method getCategoryPlaylists()', function () {
+      expect(Spotify.getCategoryPlaylists).toBeDefined();
+    });
+
 
     describe('Spotify.api', function () {
       var $httpBackend;
@@ -1514,6 +1526,106 @@ describe('angular-spotify', function () {
         });
 
       });
+
+      describe('Spotify.getCategories', function () {
+        it('should call the correct URL with authentication', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getCategories();
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/browse/categories', 'GET', undefined, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+        it('should call the correct URL with authentication and options', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getCategories({
+            country: 'SG',
+            limit: 20
+          });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/browse/categories', 'GET', {
+            country: 'SG',
+            limit: 20
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+      });
+
+      describe('Spotify.getCategory', function () {
+        it('should call the correct URL with authentication', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getCategory('party');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/browse/categories/party', 'GET', undefined, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+        it('should call the correct URL with authentication and options', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getCategory('party', {
+            country: 'SG'
+          });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/browse/categories/party', 'GET', {
+            country: 'SG'
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+      });
+
+      describe('Spotify.getCategoryPlaylists', function () {
+        it('should call the correct URL with authentication', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getCategoryPlaylists('party');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/browse/categories/party/playlists', 'GET', undefined, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+        it('should call the correct URL with authentication with options', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getCategoryPlaylists('party', {
+            country: 'SG',
+            limit: 20
+          });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/browse/categories/party/playlists', 'GET', {
+            country: 'SG',
+            limit: 20
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+      });
     });
 
     describe('Follow', function () {
@@ -1717,6 +1829,17 @@ describe('angular-spotify', function () {
             'Spotify',
             'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left);
       });
+
+      // it('should set the auth token', function (done) {
+      //   spyOn(Spotify, 'setAuthToken');
+      //   Spotify.login();
+      //   localStorage.setItem('spotify-token', 'TESTINGTOKEN');
+      //   setTimeout(function () {
+      //     expect(Spotify.setAuthToken).toHaveBeenCalled();
+      //     expect(Spotify.setAuthToken).toHaveBeenCalledWith('TESTINGTOKEN');
+      //     done();
+      //   }, 300);
+      // });
     });
   });
 
