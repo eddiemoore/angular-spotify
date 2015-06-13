@@ -30,8 +30,8 @@
   },
   "scripts": {
     "test": "grunt test",
-    "coveralls": "cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./test/coverage",
-    "codecov": "cat ./test/coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js && rm -rf ./test/coverage"
+    "coveralls": "cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "codecov": "cat ./test/coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js"
   },
   "repository": {
     "type": "git",
