@@ -1833,12 +1833,15 @@ describe('angular-spotify', function () {
       // it('should set the auth token', function (done) {
       //   spyOn(Spotify, 'setAuthToken');
       //   Spotify.login();
-      //   localStorage.setItem('spotify-token', 'TESTINGTOKEN');
+      //   setTimeout(function () {
+      //     localStorage.setItem('spotify-token', 'TESTINGTOKEN');
+      //   }, 1000);
+      //   // console.log('spotify token: ', localStorage.getItem('spotify-token'));
       //   setTimeout(function () {
       //     expect(Spotify.setAuthToken).toHaveBeenCalled();
       //     expect(Spotify.setAuthToken).toHaveBeenCalledWith('TESTINGTOKEN');
       //     done();
-      //   }, 300);
+      //   }, 3500);
       // });
     });
   });
