@@ -1,4 +1,4 @@
-# angular-spotify [![Build Status](https://travis-ci.org/eddiemoore/angular-spotify.svg?branch=master)](https://travis-ci.org/eddiemoore/angular-spotify) [![Coverage Status](https://img.shields.io/coveralls/eddiemoore/angular-spotify.svg)](https://coveralls.io/r/eddiemoore/angular-spotify) [![devDependency Status](https://david-dm.org/eddiemoore/angular-spotify/dev-status.svg)](https://david-dm.org/eddiemoore/angular-spotify#info=devDependencies) [![Code Climate](https://codeclimate.com/github/eddiemoore/angular-spotify/badges/gpa.svg)](https://codeclimate.com/github/eddiemoore/angular-spotify)
+# angular-spotify [![Build Status](https://travis-ci.org/eddiemoore/angular-spotify.svg?branch=master)](https://travis-ci.org/eddiemoore/angular-spotify) [![codecov.io](http://codecov.io/github/eddiemoore/angular-spotify/coverage.svg?branch=master)](http://codecov.io/github/eddiemoore/angular-spotify?branch=master) [![Coverage Status](https://img.shields.io/coveralls/eddiemoore/angular-spotify.svg)](https://coveralls.io/r/eddiemoore/angular-spotify) [![devDependency Status](https://david-dm.org/eddiemoore/angular-spotify/dev-status.svg)](https://david-dm.org/eddiemoore/angular-spotify#info=devDependencies) [![Code Climate](https://codeclimate.com/github/eddiemoore/angular-spotify/badges/gpa.svg)](https://codeclimate.com/github/eddiemoore/angular-spotify)
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/eddiemoore/angular-spotify?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -57,7 +57,7 @@ Spotify.search('Search Query', 'type', options);
 type - Required. A comma-separated list of item types to search across. Valid types are: album, artist, playlist, and track.
 
 #####Options Object (Optional)
- - limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50. 
+ - limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50.
  - offset - Optional. The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects.
 
 Example:
@@ -156,7 +156,7 @@ Spotify.getArtistAlbums('Artist Id or Spotify Artist URI', options);
 Example: { album_type: 'album,single' }
  - country - Optional. An ISO 3166-1 alpha-2 country code. Supply this parameter to limit the response to one particular country. Note if you do not provide this field, you are likely to get duplicate results per album, one for each country in which the album is available!
  - limit - The number of album objects to return. Default: 20. Minimum: 1. Maximum: 50. For example: { limit: 2 }
- - offset - Optional. The index of the first album to return. Default: 0 (i.e., the first album). Use with limit to get the next set of albums. 
+ - offset - Optional. The index of the first album to return. Default: 0 (i.e., the first album). Use with limit to get the next set of albums.
 
 
 Example:
@@ -172,7 +172,7 @@ Get Spotify catalog information about an artist’s top tracks by country.
 ```javascript
 Spotify.getArtistTopTracks('Artist Id or Spotify Artist URI', 'Country Code');
 ```
-The country: an ISO 3166-1 alpha-2 country code. 
+The country: an ISO 3166-1 alpha-2 country code.
 Example:
 ```javascript
 Spotify.getArtistTopTracks('1vCWHaC5f2uS3yhpwWbIA6', 'AU').then(function (data) {
@@ -231,7 +231,7 @@ Get a list of the playlists owned by a Spotify user. Requires the ```playlist-re
 Spotify.getUserPlaylists('user_id', options);
 ```
 #####Options Object (Optional)
- - limit - Optional. The maximum number of playlists to return. Default: 20. Minimum: 1. Maximum: 50. 
+ - limit - Optional. The maximum number of playlists to return. Default: 20. Minimum: 1. Maximum: 50.
  - offset - Optional. The index of the first playlist to return. Default: 0 (the first object). Use with limit to get the next set of playlists.
 
 Example:
@@ -325,7 +325,7 @@ Spotify.reorderPlaylistTracks('user_id', 'playlist_id', options);
 #####Options Object (Required)
  - range_start - integer - Required. The position of the first track to be reordered.
  - range_length - integer - Optional. The amount of tracks to be reordered. Defaults to 1 if not set.
- - insert_before - integer - Required. The position where the tracks should be inserted. 
+ - insert_before - integer - Required. The position where the tracks should be inserted.
  - snapshot_id - string - Optional. The playlist's snapshot ID against which you want to make the changes.
 
 Example:
@@ -372,16 +372,16 @@ Spotify
   });
 ```
 
-###Discover
+###Browse
 Discover new releases and featured playlists. User needs to be logged in to gain access to these features.
 
 ####Get the featured playlists
-Get a list of Spotify featured playlists 
+Get a list of Spotify featured playlists
 ```javascript
 Spotify.getFeaturedPlaylists(options);
 ```
 #####Options Object (Optional)
- - locale - string - Optional. The desired language, consisting of a lowercase ISO 639 language code and an uppercase ISO 3166-1 alpha-2 country code, joined by an underscore. For example: es_MX, meaning "Spanish (Mexico)". Provide this parameter if you want the results returned in a particular language (where available). 
+ - locale - string - Optional. The desired language, consisting of a lowercase ISO 639 language code and an uppercase ISO 3166-1 alpha-2 country code, joined by an underscore. For example: es_MX, meaning "Spanish (Mexico)". Provide this parameter if you want the results returned in a particular language (where available).
  - country - string - Optional. A country: an ISO 3166-1 alpha-2 country code. Provide this parameter if you want the list of returned items to be relevant to a particular country. If omitted, the returned items will be relevant to all countries.
  - timestamp - string - Optional.  A timestamp in ISO 8601 format: yyyy-MM-ddTHH:mm:ss. Use this parameter to specify the user's local time to get results tailored for that specific date and time in the day. If not provided, the response defaults to the current UTC time. Example: "2014-10-23T09:00:00" for a user whose local time is 9AM.
 
@@ -393,7 +393,7 @@ Spotify.getFeaturedPlaylists({ locale: "nl_NL", country: "NL" }).then(function (
 ```
 
 ####Get new releases
-Get a list of new album releases featured in Spotify 
+Get a list of new album releases featured in Spotify
 ```javascript
 Spotify.getNewReleases(options);
 ```
@@ -406,6 +406,67 @@ Spotify.getNewReleases({ country: "NL" }).then(function (data) {
   console.log(data);
 });
 ```
+
+####Get categories
+Get a list of categories used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
+```js
+Spotify.getCategories(options);
+```
+
+##### Options Object (Optional)
+ - country - string - Optional. A country: an ISO 3166-1 alpha-2 country code. Provide this parameter if you want the list of returned items to be relevant to a particular country. If omitted, the returned items will be relevant to all countries.
+ - locale - string - Optional. The desired language, consisting of an ISO 639 language code and an ISO 3166-1 alpha-2 country code, joined by an underscore. For example: es_MX, meaning "Spanish (Mexico)". Provide this parameter if you want the category metadata returned in a particular language.
+ - limit - number - Optional. The maximum number of categories to return. Default: 20. Minimum: 1. Maximum: 50.
+ - offset - number - Optional. The index of the first item to return. Default: 0 (the first object). Use with ```limit``` to get the next set of categories.
+
+Example:
+```js
+Spotify.getCategories({ country: 'SG' }).then(function (data) {
+  console.log(data);
+});
+```
+
+#### Get category
+Get a single category used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
+```js
+Spotify.getCategory(category_id, options);
+```
+
+##### Required
+category_id - The Spotify category ID for the category.
+
+##### Options Object (Optional)
+ - country - string - Optional. A country: an ISO 3166-1 alpha-2 country code. Provide this parameter if you want the list of returned items to be relevant to a particular country. If omitted, the returned items will be relevant to all countries.
+ - locale - string - Optional. The desired language, consisting of an ISO 639 language code and an ISO 3166-1 alpha-2 country code, joined by an underscore. For example: es_MX, meaning "Spanish (Mexico)". Provide this parameter if you want the category metadata returned in a particular language.
+
+Example:
+```js
+Spotify.getCategory('party').then(function (data) {
+  console.log(data);
+})
+```
+
+#### Get category playlists
+Get a list of Spotify playlists tagged with a particular category.
+```js
+Spotify.getCategoryPlaylists(category_id, options);
+```
+
+##### Required
+category_id - The Spotify category ID for the category.
+
+##### Options Object (Optional)
+ - country - string - Optional. A country: an ISO 3166-1 alpha-2 country code. Provide this parameter if you want the list of returned items to be relevant to a particular country. If omitted, the returned items will be relevant to all countries.
+ - limit - number - Optional. The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
+ - offset - number - Optional. The index of the first item to return. Default: 0 (the first object). Use with ```limit``` to get the next set of items.
+
+ Example:
+ ```js
+ Spotify.getCategoryPlaylists('party').then(function (data) {
+   console.log(data);
+ })
+ ```
+
 
 ###Follow
 These endpoints allow you manage the list of artists and users that a logged in user follows. Following and unfollowing requires the ```user-follow-modify``` scope. Check if Current User Follows requires the ```user-follow-read``` scope.
@@ -530,8 +591,8 @@ Get a list of the songs saved in the current Spotify user’s “Your Music” l
 Spotify.getSavedUserTracks(options);
 ```
 #####Options Object (Optional)
- - limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50. 
- - offset - Optional. The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects. 
+ - limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50.
+ - offset - Optional. The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects.
 
 ```javascript
 Spotify.getSavedUserTracks().then(function (data) {
@@ -604,7 +665,7 @@ $scope.login = function () {
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title></title>
-  <script type='text/javascript'>//<![CDATA[ 
+  <script type='text/javascript'>//<![CDATA[
   window.onload=function(){
     var target = window.self === window.top ? window.opener : window.parent;
 
@@ -620,7 +681,7 @@ $scope.login = function () {
   </script>
 </head>
 <body>
-  
+
 </body>
 </html>
 ```
