@@ -5,21 +5,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title></title>
   <script type='text/javascript'>//<![CDATA[
-  window.onload=function(){
-    var target = window.self === window.top ? window.opener : window.parent;
+    window.onload = function() {
+      var hash = window.location.hash;
 
-    var hash = window.location.hash;
-    if (hash) {
-        var token = window.location.hash.split('&')[0].split('=')[1];
-        // target.postMessage(token, 'http://example.com/');
-        localStorage.setItem('spotify-token', token);
-    }
-
-  }//]]>
-
+      if (window.location.search.substring(1).indexOf("error") !== -1) {
+        window.close();
+      } else {
+        if (hash) {
+          var token = window.location.hash.split('&')[0].split('=')[1];
+          // target.postMessage(token, 'http://example.com/');
+          localStorage.setItem('spotify-token', token);
+        }
+      }
+    };
+  //]]>
   </script>
 </head>
 <body>
-
 </body>
 </html>
