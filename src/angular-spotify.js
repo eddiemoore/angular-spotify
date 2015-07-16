@@ -65,6 +65,21 @@
           this.toQueryString = utils.toQueryString;
         }
 
+        function openDialog(uri, name, options, cb) {
+          var win = window.open(uri, name, options);
+          var interval = window.setInterval(function() {
+            try {
+              if (!win || win.closed) {
+                window.clearInterval(interval);
+                cb(win);
+              }
+            }
+            catch (e) {
+            }
+          }, 1000);
+          return win;
+        };
+
         NgSpotify.prototype = {
           api: function (endpoint, method, params, data, headers) {
             var deferred = $q.defer();
@@ -411,14 +426,22 @@
               response_type: 'token'
             };
 
-            var authWindow = window.open(
+            var authCompleted = false;
+            var authWindow = openDialog(
               'https://accounts.spotify.com/authorize?' + this.toQueryString(params),
               'Spotify',
-              'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left
+              'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left,
+              function(){
+                if (!authCompleted) {
+                  deferred.reject();
+                }
+              }
             );
 
             function storageChanged (e) {
               if (e.key === 'spotify-token') {
+                authCompleted = true;
+
                 if (authWindow) { authWindow.close(); }
 
                 that.setAuthToken(e.newValue);
