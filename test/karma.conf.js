@@ -27,7 +27,7 @@ module.exports = function(config) {
       // app
       'src/**/*.js',
       // tests
-      'test/mock/**/*.js',
+      // 'test/mock/**/*.js',
       'test/spec/angular-spotify.spec.js',
       // fixtures
       {pattern: 'test/mock/*.json', watched: true, served: true, included: false}
