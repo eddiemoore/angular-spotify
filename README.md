@@ -665,19 +665,18 @@ $scope.login = function () {
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title></title>
-  <script type='text/javascript'>//<![CDATA[
-  window.onload=function(){
-    var target = window.self === window.top ? window.opener : window.parent;
-
-    var hash = window.location.hash;
-    if (hash) {
+  <script>
+    window.onload = function () {
+      var hash = window.location.hash;
+      if (window.location.search.substring(1).indexOf("error") !== -1) {
+        // login failure
+        window.close();
+      } else if (hash) {
+        // login success
         var token = window.location.hash.split('&')[0].split('=')[1];
-        // target.postMessage(token, 'http://example.com/'); // v0.7.0 and below
         localStorage.setItem('spotify-token', token);
+      }
     }
-
-  }//]]>  
-
   </script>
 </head>
 <body>

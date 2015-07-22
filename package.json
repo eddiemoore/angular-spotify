@@ -1,8 +1,8 @@
 {
   "name": "angular-spotify",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Angular Service to connect to Spotify Web API",
-  "main": "Gruntfile.js",
+  "main": "src/angular-spotify.js",
   "devDependencies": {
     "codecov.io": "^0.1.2",
     "coveralls": "^2.11.2",
@@ -31,7 +31,8 @@
   "scripts": {
     "test": "grunt test",
     "coveralls": "cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "codecov": "cat ./test/coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js"
+    "codecov": "cat ./test/coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js",
+    "prepublish": "grunt"
   },
   "repository": {
     "type": "git",
