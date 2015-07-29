@@ -684,3 +684,7 @@ $scope.login = function () {
 </body>
 </html>
 ```
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/eddiemoore/angular-spotify/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
