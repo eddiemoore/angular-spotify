@@ -87,7 +87,8 @@
               method: method ? method : 'GET',
               params: params,
               data: data,
-              headers: headers
+              headers: headers,
+              withCredentials: false
             })
             .success(function (data) {
               deferred.resolve(data);
