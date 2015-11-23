@@ -159,7 +159,9 @@ Get Spotify catalog information about an artist’s top tracks by country.
 ```js
 Spotify.getArtistTopTracks('Artist Id or Spotify Artist URI', 'Country Code');
 ```
-The country: an ISO 3166-1 alpha-2 country code.
+- The country: an ISO 3166-1 alpha-2 country code.
+
+
 Example:
 ```js
 Spotify
@@ -246,7 +248,7 @@ Spotify.getCategory(category_id, options);
 ```
 
 ##### Required
-category_id - The Spotify category ID for the category.
+- category_id - The Spotify category ID for the category.
 
 ##### Options Object (Optional)
  - country - string - Optional. A country: an ISO 3166-1 alpha-2 country code. Provide this parameter if you want the list of returned items to be relevant to a particular country. If omitted, the returned items will be relevant to all countries.
@@ -266,7 +268,7 @@ Spotify.getCategoryPlaylists(category_id, options);
 ```
 
 ##### Required
-category_id - The Spotify category ID for the category.
+- category_id - The Spotify category ID for the category.
 
 ##### Options Object (Optional)
  - country - string - Optional. A country: an ISO 3166-1 alpha-2 country code. Provide this parameter if you want the list of returned items to be relevant to a particular country. If omitted, the returned items will be relevant to all countries.
@@ -640,7 +642,7 @@ Get Spotify catalog information about artists, albums, or tracks that match a ke
 ```js
 Spotify.search('Search Query', 'type', options);
 ```
-type - Required. A comma-separated list of item types to search across. Valid types are: album, artist, playlist, and track.
+- type - Required. A comma-separated list of item types to search across. Valid types are: album, artist, playlist, and track.
 
 ##### Options Object (Optional)
 - limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50.
