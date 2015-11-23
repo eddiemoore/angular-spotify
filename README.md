@@ -12,6 +12,10 @@ Install angular-spotify via bower. Use the --save property to save into your bow
 ```shell
 bower install angular-spotify --save
 ```
+Also available on npm
+```shell
+npm install angular-spotify --save
+```
 
 Include spotify into your angular module
 ```js
