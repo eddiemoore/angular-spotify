@@ -231,6 +231,10 @@ describe('angular-spotify', function () {
       expect(Spotify.getNewReleases).toBeDefined();
     });
 
+    it('should have a method following()', function () {
+      expect(Spotify.following).toBeDefined();
+    });
+
     it('should have a method follow()', function () {
       expect(Spotify.follow).toBeDefined();
     });
@@ -368,6 +372,18 @@ describe('angular-spotify', function () {
         expect(Spotify.api).toHaveBeenCalledWith('/search', 'GET', {
           q: 'Nirvana',
           type: 'artist'
+        });
+      });
+
+      it('should encode the query', function () {
+
+        spyOn(Spotify, 'api');
+
+        Spotify.search('Smells like teen spirit', 'track');
+
+        expect(Spotify.api).toHaveBeenCalledWith('/search', 'GET', {
+          q: 'Smells%20like%20teen%20spirit',
+          type: 'track'
         });
       });
 
@@ -1448,6 +1464,127 @@ describe('angular-spotify', function () {
 
       });
 
+      describe('Spotify.getSavedUserAlbums', function () {
+
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getSavedUserAlbums();
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/albums', 'GET', undefined, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+      });
+
+      describe('Spotify.saveUserAlbums', function () {
+
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.saveUserAlbums(['4iV5W9uYEdYUVa79Axb7Rh','1301WleyT98MSxVHPZCA6M']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/albums', 'PUT', {
+            ids: '4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M'
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+        it('should be able to pass Spotify URIs', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.saveUserAlbums(['spotify:album:4iV5W9uYEdYUVa79Axb7Rh','spotify:album:1301WleyT98MSxVHPZCA6M']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/albums', 'PUT', {
+            ids: '4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M'
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+      });
+
+      describe('Spotify.removeUserAlbums', function () {
+
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.removeUserAlbums(['4iV5W9uYEdYUVa79Axb7Rh','1301WleyT98MSxVHPZCA6M']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/albums', 'DELETE', {
+            ids: '4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M'
+          }, null, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+
+        it('should be able to pass Spotify URIs', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.removeUserAlbums(['spotify:album:4iV5W9uYEdYUVa79Axb7Rh','spotify:album:1301WleyT98MSxVHPZCA6M']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/albums', 'DELETE', {
+            ids: '4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M'
+          }, null, {
+            'Authorization': 'Bearer TESTING',
+            'Content-Type': 'application/json'
+          });
+        });
+
+      });
+
+      describe('Spotify.userAlbumsContains', function () {
+
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.userAlbumsContains(['4iV5W9uYEdYUVa79Axb7Rh','1301WleyT98MSxVHPZCA6M']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/albums/contains', 'GET', {
+            ids: '4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M'
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+        it('should be able to pass Spotify URIs', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.userAlbumsContains(['spotify:album:4iV5W9uYEdYUVa79Axb7Rh','spotify:album:1301WleyT98MSxVHPZCA6M']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/albums/contains', 'GET', {
+            ids: '4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M'
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+      });
+
     });
 
     describe('Browse', function() {
@@ -1636,6 +1773,39 @@ describe('angular-spotify', function () {
         Spotify = _Spotify_;
         $httpBackend = _$httpBackend_;
       }));
+
+      describe('Spotify.following', function () {
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.following('artist');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following', 'GET', {
+            type: 'artist'
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+        it('should call with options', function() {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.following('artist', { limit: 30 });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following', 'GET', {
+            type: 'artist',
+            limit: 30
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+      });
 
       describe('Spotify.follow', function () {
         it('should call the correct URL', function () {
