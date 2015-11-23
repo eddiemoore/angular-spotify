@@ -286,6 +286,21 @@ Spotify.getCategoryPlaylists(category_id, options);
 ### Follow
 These endpoints allow you manage the list of artists and users that a logged in user follows. Following and unfollowing requires the ```user-follow-modify``` scope. Check if Current User Follows requires the ```user-follow-read``` scope.
 
+#### Get User’s Followed Artists
+Get the current user’s followed artists.
+
+```js
+Spotify.following('type', options)
+```
+- type: Required. currently only ```artist``` is supported.
+
+
+```js
+Spotify.following('artists', { limit: 10 }).then(function (artists) {
+  console.log(artists);
+})
+```
+
 #### Follow Artists or Users
 Add the current user as a follower of one or more artists or other Spotify users.
 ```js
@@ -440,6 +455,68 @@ Spotify
   .removeUserTracks('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9')
   .then(function (data) {
     console.log(data);
+  });
+```
+
+
+#### Save Albums for Current User
+Save one or more albums to the current user’s “Your Music” library. Requires the ```user-library-modify``` scope.
+```js
+Spotify.saveUserAlbums('comma separated string or array of spotify album ids');
+```
+Example:
+```js
+Spotify
+  .saveUserAlbums('4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M')
+  .then(function (data) {
+    console.log(data);
+  });
+```
+
+#### Get Current User’s Saved Albums
+Get a list of the albums saved in the current Spotify user’s “Your Music” library. Requires the ```user-library-read``` scope.
+```js
+Spotify.getSavedUserAlbums(options);
+```
+##### Options Object (Optional)
+
+- limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50.
+- offset - Optional. The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects.
+- market - Optional. An ISO 3166-1 alpha-2 country code. Provide this parameter if you want to apply Track Relinking.
+
+```js
+Spotify.getSavedUserAlbums().then(function (data) {
+  console.log(data);
+});
+```
+
+#### Remove Albums for Current User
+Remove one or more albums from the current user’s “Your Music” library. Requires the ```user-library-modify``` scope.
+```js
+Spotify.removeUserAlbums('comma separated string or array of spotify album ids');
+```
+Example:
+```js
+Spotify
+  .removeUserAlbums('4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M')
+  .then(function (data) {
+    console.log(data);
+  });
+```
+
+
+#### Check User’s Saved Albums
+Check if one or more albums is already saved in the current Spotify user’s “Your Music” library. Requires the ```user-library-read``` scope.
+
+```js
+Spotify.userAlbumsContains('comma separated string or array of spotify album ids');
+```
+Example:
+```js
+Spotify
+  .userAlbumsContains('4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M')
+  .then(function (data) {
+   console.log(data);
   });
 ```
 
