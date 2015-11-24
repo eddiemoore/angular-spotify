@@ -421,7 +421,7 @@
            */
           search: function (q, type, options) {
             options = options || {};
-            options.q = encodeURIComponent(q);
+            options.q = q;
             options.type = type;
 
             return this.api('/search', 'GET', options);
