@@ -375,18 +375,6 @@ describe('angular-spotify', function () {
         });
       });
 
-      it('should encode the query', function () {
-
-        spyOn(Spotify, 'api');
-
-        Spotify.search('Smells like teen spirit', 'track');
-
-        expect(Spotify.api).toHaveBeenCalledWith('/search', 'GET', {
-          q: 'Smells%20like%20teen%20spirit',
-          type: 'track'
-        });
-      });
-
       it('should return an array of artists', function () {
         $httpBackend.when('GET', api + '/search?q=Nirvana&type=artist').respond(
           getJSONFixture('search.artist.json')
