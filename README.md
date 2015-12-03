@@ -310,8 +310,8 @@ Spotify.follow('type', 'ids');
 
 Example:
 ```js
-Spotify.follow('user', 'exampleuser01').then(function (data) {
- console.log(data);
+Spotify.follow('user', 'exampleuser01').then(function () {
+ // no response from Spotify
 });
 ```
 
@@ -324,8 +324,8 @@ Spotify.unfollow('type', 'ids');
 
 Example:
 ```js
-Spotify.unfollow('user', 'exampleuser01').then(function (data) {
- console.log(data);
+Spotify.unfollow('user', 'exampleuser01').then(function () {
+ // no response from Spotify
 });
 ```
 
