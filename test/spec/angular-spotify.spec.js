@@ -10,7 +10,7 @@ describe('angular-spotify', function () {
     beforeEach(function () {
       module('spotify', function (_SpotifyProvider_) {
         spotifyProvider = _SpotifyProvider_;
-      })
+      });
       inject(function () {});
     });
 
