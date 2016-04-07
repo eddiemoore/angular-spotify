@@ -8,15 +8,9 @@ describe('angular-spotify', function () {
     var spotifyProvider;
 
     beforeEach(function () {
-      // Initialize the service provider by injecting it to a fake module's config block
-      angular.module('testApp', function () {})
-        .config(function (SpotifyProvider) {
-        spotifyProvider = SpotifyProvider;
+      module('spotify', function (_SpotifyProvider_) {
+        spotifyProvider = _SpotifyProvider_;
       });
-      // Initialize angular-spotify injector
-      module('spotify', 'testApp');
-
-      // Kickstart the injectors previously registered with calls to angular.mock.module
       inject(function () {});
     });
 
