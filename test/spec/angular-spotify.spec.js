@@ -1745,6 +1745,25 @@ describe('angular-spotify', function () {
           });
         });
       });
+
+      describe('Spotify.getRecommendations', function () {
+        it('should call the correct URL with authentication', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getRecommendations({
+            seed_artists: '4NHQUGzhtTLFvgF5SZesLK'
+          });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/recommendations', 'GET', {
+            seed_artists: '4NHQUGzhtTLFvgF5SZesLK'
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+      })
     });
 
     describe('Follow', function () {

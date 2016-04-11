@@ -223,6 +223,10 @@
             return this.api('/browse/categories/' + category_id + '/playlists', 'GET', options, null, this._auth());
           },
 
+          getRecommendations: function (options) {
+            return this.api('/recommendations', 'GET', options, null, this._auth());
+          },
+
 
           /**
             ====================== Following =====================
