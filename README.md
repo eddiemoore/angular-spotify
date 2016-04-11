@@ -282,6 +282,45 @@ Spotify.getCategoryPlaylists(category_id, options);
  })
  ```
 
+#### Get Recommendations
+Create a playlist-style listening experience based on seed artists, tracks and genres.
+```js
+Spotify.getRecommendations(options);
+```
+
+##### Options Object
+- limit - number - Optional. The target size of the list of recommended tracks. Default: 20. Minimum: 1. Maximum: 100.
+- market - string - Optional. An ISO 3166-1 alpha-2 country code.
+- max_* - number - Optional. Multiple values. For each tunable track attribute, a hard ceiling on the selected track attribute’s value can be provided. See tunable track attributes below for the list of available options. For example, max_instrumentalness=0.35 would filter out most tracks that are likely to be instrumental.
+- min_* - number Optional. Multiple values. For each tunable track attribute, a hard floor on the selected track attribute’s value can be provided. See tunable track attributes below for the list of available options. For example, min_tempo=140 would restrict results to only those tracks with a tempo of greater than 140 beats per minute.
+- seed_artists - A comma separated list of Spotify IDs for seed artists.
+Up to 5 seed values may be provided in any combination of seed_artists, seed_tracks and seed_genres.
+- seed_genres - A comma separated list of any genres in the set of available genre seeds.
+Up to 5 seed values may be provided in any combination of seed_artists, seed_tracks and seed_genres.
+- seed_tracks - A comma separated list of Spotify IDs for a seed track.
+Up to 5 seed values may be provided in any combination of seed_artists, seed_tracks and seed_genres.
+- target_* - Optional. Multiple values. For each of the tunable track attributes (below) a target value may be provided. Tracks with the attribute values nearest to the target values will be preferred. For example, you might request target_energy=0.6 and target_danceability=0.8. All target values will be weighed equally in ranking results.
+
+Example:
+```js
+Spotify.getRecommendations({ seed_artists: '4NHQUGzhtTLFvgF5SZesLK' }).then(function (data) {
+  console.log(data);
+});
+```
+
+#### Get Available Genre Seeds
+Retrieve a list of available genres seed parameter values for recommendations.
+```js
+Spotify.getAvailableGenreSeeds();
+```
+
+Example:
+```js
+Spotify.getAvailableGenreSeeds().then(function (data) {
+  console.log(data);
+});
+```
+
 
 ### Follow
 These endpoints allow you manage the list of artists and users that a logged in user follows. Following and unfollowing requires the ```user-follow-modify``` scope. Check if Current User Follows requires the ```user-follow-read``` scope.
@@ -518,6 +557,46 @@ Spotify
   .then(function (data) {
    console.log(data);
   });
+```
+
+
+### Personalization
+Endpoints for retrieving information about the user’s listening habits.
+
+#### Get a User’s Top Artists
+Get the current user’s top artists based on calculated affinity.
+```js
+Spotify.getUserTopArtists(options);
+```
+
+##### Options Object (Optional)
+- limit - number - Optional. The number of entities to return. Default: 20. Minimum: 1. Maximum: 50.
+- offset - number - Optional. The index of the first entity to return. Default: 0 (i.e., the first track). Use with limit to get the next set of entities.
+- time_range - Optional. Over what time frame the affinities are computed. Valid values: long_term (calculated from several years of data and including all new data as it becomes available), medium_term (approximately last 6 months), short_term (approximately last 4 weeks). Default: medium_term.
+
+Example:
+```js
+Spotify.getUserTopArtists({ limit: 50 }).then(function (data) {
+  console.log(data);
+});
+```
+
+#### Get a User’s Top Tracks
+Get the current user’s top tracks based on calculated affinity.
+```js
+Spotify.getUserTopTracks(options);
+```
+
+##### Options Object (Optional)
+- limit - number - Optional. The number of entities to return. Default: 20. Minimum: 1. Maximum: 50.
+- offset - number - Optional. The index of the first entity to return. Default: 0 (i.e., the first track). Use with limit to get the next set of entities.
+- time_range - Optional. Over what time frame the affinities are computed. Valid values: long_term (calculated from several years of data and including all new data as it becomes available), medium_term (approximately last 6 months), short_term (approximately last 4 weeks). Default: medium_term.
+
+Example:
+```js
+Spotify.getUserTopTracks({ limit: 50 }).then(function (data) {
+  console.log(data);
+});
 ```
 
 
@@ -759,6 +838,31 @@ Spotify.getTracks('0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G').then(function
 });
 ```
 
+#### Get Audio Features for a Track
+Get audio feature information for a single track identified by its unique Spotify ID.
+
+```js
+Spotify.getTrackAudioFeatures('Track Id or Spotify Track URI');
+```
+Example:
+```js
+Spotify.getTrackAudioFeatures('0eGsygTp906u18L0Oimnem').then(function (data) {
+  console.log(data);
+});
+```
+
+#### Get Audio Features for Several Tracks
+Get audio features for multiple tracks based on their Spotify IDs.
+
+```js
+Spotify.getTracksAudioFeatures('Comma separated list or array of Track Ids');
+```
+Example:
+```js
+Spotify.getTracksAudioFeatures('0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G').then(function (data) {
+  console.log(data);
+});
+```
 
 ### Authentication
 #### Login
