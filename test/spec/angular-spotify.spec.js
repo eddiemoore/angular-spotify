@@ -1763,7 +1763,22 @@ describe('angular-spotify', function () {
             'Authorization': 'Bearer TESTING'
           });
         });
-      })
+      });
+
+      describe('Spotify.getAvailableGenreSeeds', function () {
+        it('should call the correct URL with authentication', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getAvailableGenreSeeds();
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/recommendations/available-genre-seeds', 'GET', null, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+      });
     });
 
     describe('Follow', function () {

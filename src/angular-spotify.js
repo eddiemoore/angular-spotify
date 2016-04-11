@@ -227,6 +227,10 @@
             return this.api('/recommendations', 'GET', options, null, this._auth());
           },
 
+          getAvailableGenreSeeds: function () {
+            return this.api('/recommendations/available-genre-seeds', 'GET', null, null, this._auth());
+          },
+
 
           /**
             ====================== Following =====================
