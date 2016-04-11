@@ -223,6 +223,14 @@
             return this.api('/browse/categories/' + category_id + '/playlists', 'GET', options, null, this._auth());
           },
 
+          getRecommendations: function (options) {
+            return this.api('/recommendations', 'GET', options, null, this._auth());
+          },
+
+          getAvailableGenreSeeds: function () {
+            return this.api('/recommendations/available-genre-seeds', 'GET', null, null, this._auth());
+          },
+
 
           /**
             ====================== Following =====================
@@ -335,6 +343,20 @@
 
 
           /**
+            ====================== Personalization =====================
+           */
+           getUserTopArtists: function (options) {
+             options = options || {};
+             return this.api('/me/top/artists', 'GET', options, null, this._auth());
+           },
+
+           getUserTopTracks: function (options) {
+             options = options || {};
+             return this.api('/me/top/tracks', 'GET', options, null, this._auth());
+           },
+
+
+          /**
             ====================== Playlists =====================
            */
           getUserPlaylists: function (userId, options) {
@@ -443,6 +465,21 @@
               tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
             });
             return this.api('/tracks/', 'GET', {
+              ids: tracks ? tracks.toString() : ''
+            });
+          },
+
+          getTrackAudioFeatures: function (track) {
+            track = track.indexOf('spotify:') === -1 ? track : track.split(':')[2];
+            return this.api('/audio-features/' + track);
+          },
+
+          getTracksAudioFeatures: function (tracks) {
+            tracks = angular.isString(tracks) ? tracks.split(',') : tracks;
+            angular.forEach(tracks, function (value, index) {
+              tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+            });
+            return this.api('/audio-features/', 'GET', {
               ids: tracks ? tracks.toString() : ''
             });
           },
