@@ -350,6 +350,11 @@
              return this.api('/me/top/artists', 'GET', options, null, this._auth());
            },
 
+           getUserTopTracks: function (options) {
+             options = options || {};
+             return this.api('/me/top/tracks', 'GET', options, null, this._auth());
+           },
+
 
           /**
             ====================== Playlists =====================

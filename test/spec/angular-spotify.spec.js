@@ -1603,6 +1603,40 @@ describe('angular-spotify', function () {
           });
         });
       });
+
+      describe('Spotify.getUserTopTracks', function () {
+        it('should call the correct URL with authentication', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getUserTopTracks();
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/top/tracks', 'GET', {}, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+        it('should call the correct URL with authentication and options', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getUserTopTracks({
+            limit: 50,
+            offset: 50
+          });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/top/tracks', 'GET', {
+            limit: 50,
+            offset: 50
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+      });
     });
 
     describe('Browse', function() {
