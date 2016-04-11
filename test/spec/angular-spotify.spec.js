@@ -1569,6 +1569,42 @@ describe('angular-spotify', function () {
 
     });
 
+    describe('Personalization', function () {
+      describe('Spotify.getUserTopArtists', function () {
+        it('should call the correct URL with authentication', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getUserTopArtists();
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/top/artists', 'GET', {}, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+
+        it('should call the correct URL with authentication and options', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAuthToken('TESTING');
+
+          Spotify.getUserTopArtists({
+            limit: 50,
+            offset: 50
+          });
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/top/artists', 'GET', {
+            limit: 50,
+            offset: 50
+          }, null, {
+            'Authorization': 'Bearer TESTING'
+          });
+        });
+      });
+    });
+
     describe('Browse', function() {
       var $httpBackend;
       var Spotify;
