@@ -474,6 +474,16 @@
             return this.api('/audio-features/' + track);
           },
 
+          getTracksAudioFeatures: function (tracks) {
+            tracks = angular.isString(tracks) ? tracks.split(',') : tracks;
+            angular.forEach(tracks, function (value, index) {
+              tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+            });
+            return this.api('/audio-features/', 'GET', {
+              ids: tracks ? tracks.toString() : ''
+            });
+          },
+
 
           /**
             ====================== Login =====================
