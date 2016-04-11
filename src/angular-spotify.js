@@ -469,6 +469,11 @@
             });
           },
 
+          getTrackAudioFeatures: function (track) {
+            track = track.indexOf('spotify:') === -1 ? track : track.split(':')[2];
+            return this.api('/audio-features/' + track);
+          },
+
 
           /**
             ====================== Login =====================

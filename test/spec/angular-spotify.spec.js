@@ -992,6 +992,60 @@ describe('angular-spotify', function () {
         });
       });
 
+      describe('Spotify.getTrackAudioFeatures', function () {
+        it('should make an ajax call to https://api.spotify.com/v1/audio-features/{id}', function () {
+          expect(Spotify.getTrackAudioFeatures('0eGsygTp906u18L0Oimnem')).toBeDefined();
+        });
+
+        it('should convert spotify uri to just an id', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.getTrackAudioFeatures('spotify:artist:0eGsygTp906u18L0Oimnem');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/audio-features/0eGsygTp906u18L0Oimnem');
+        });
+
+        it('should resolve to an object of a track', function () {
+          $httpBackend.when('GET', api + '/audio-features/0eGsygTp906u18L0Oimnem').respond(200, {
+            'danceability': 0.735
+          });
+
+          var result;
+          Spotify
+            .getTrackAudioFeatures('0eGsygTp906u18L0Oimnem')
+            .then(function (data) {
+              result = data;
+            });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+        });
+
+        it('should reject the promise and respond with error', function () {
+          $httpBackend.when('GET', api + '/audio-features/ABCDEFGHIJKLMNOP').respond(400, {
+            'error': {
+              'status': 400,
+              'message': 'invalid id'
+            }
+          });
+
+          var result;
+          Spotify
+            .getTrackAudioFeatures('ABCDEFGHIJKLMNOP')
+            .then(function () {
+            }, function (reason) {
+              result = reason;
+            });
+
+          $httpBackend.flush();
+          expect(result).toBeDefined();
+          expect(result instanceof Object).toBeTruthy();
+          expect(result.error.status).toBe(400);
+        });
+      });
+
     });
 
     describe('Playlists', function () {
