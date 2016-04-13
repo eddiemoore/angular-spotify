@@ -79,15 +79,17 @@
         }
 
         NgSpotify.prototype = {
-          api: function (endpoint, method, params, data, headers) {
+          api: function (endpoint, options) {
             var deferred = $q.defer();
+            options = options || {};
+            options.method = options.method || 'GET';
 
             $http({
               url: this.apiBase + endpoint,
-              method: method ? method : 'GET',
-              params: params,
-              data: data,
-              headers: headers,
+              method: options.method,
+              params: options.params,
+              data: options.data,
+              headers: options.headers,
               withCredentials: false
             })
             .success(function (data) {
@@ -132,8 +134,10 @@
             angular.forEach(albums, function (value, index) {
               albums[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
             });
-            return this.api('/albums', 'GET', {
-              ids: albums ? albums.toString() : ''
+            return this.api('/albums', {
+              params: {
+                ids: albums ? albums.toString() : ''
+              }
             });
           },
 
@@ -143,8 +147,8 @@
            */
           getAlbumTracks: function (album, options) {
             album = album.indexOf('spotify:') === -1 ? album : album.split(':')[2];
-
-            return this.api('/albums/' + album + '/tracks', 'GET', options);
+            var o = options && { params: options };
+            return this.api('/albums/' + album + '/tracks', o);
           },
 
 
@@ -169,16 +173,18 @@
             angular.forEach(artists, function (value, index) {
               artists[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
             });
-            return this.api('/artists/', 'GET', {
-              ids: artists ? artists.toString() : ''
+            return this.api('/artists/', {
+              params: {
+                ids: artists ? artists.toString() : ''
+              }
             });
           },
 
           //Artist Albums
           getArtistAlbums: function (artist, options) {
             artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
-
-            return this.api('/artists/' + artist + '/albums', 'GET', options);
+            var o = options && { params: options };
+            return this.api('/artists/' + artist + '/albums', o);
           },
 
           /**
@@ -188,8 +194,10 @@
           getArtistTopTracks: function (artist, country) {
             artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
 
-            return this.api('/artists/' + artist + '/top-tracks', 'GET', {
-              country: country
+            return this.api('/artists/' + artist + '/top-tracks', {
+              params: {
+                country: country
+              }
             });
           },
 
@@ -204,31 +212,48 @@
             ====================== Browse =====================
            */
           getFeaturedPlaylists: function (options) {
-            return this.api('/browse/featured-playlists', 'GET', options, null, this._auth());
+            return this.api('/browse/featured-playlists', {
+              params: options,
+              headers: this._auth()
+            });
           },
 
           getNewReleases: function (options) {
-            return this.api('/browse/new-releases', 'GET', options, null, this._auth());
+            return this.api('/browse/new-releases', {
+              params: options,
+              headers: this._auth()
+            });
           },
 
           getCategories: function (options) {
-            return this.api('/browse/categories', 'GET', options, null, this._auth());
+            var o = { headers: this._auth() };
+            if (options) { o.params = options; }
+            return this.api('/browse/categories', o);
           },
 
           getCategory: function (category_id, options) {
-            return this.api('/browse/categories/' + category_id, 'GET', options, null, this._auth());
+            var o = { headers: this._auth() };
+            if (options) { o.params = options; }
+            return this.api('/browse/categories/' + category_id, o);
           },
 
           getCategoryPlaylists: function (category_id, options) {
-            return this.api('/browse/categories/' + category_id + '/playlists', 'GET', options, null, this._auth());
+            var o = { headers: this._auth() };
+            if (options) { o.params = options; }
+            return this.api('/browse/categories/' + category_id + '/playlists', o);
           },
 
           getRecommendations: function (options) {
-            return this.api('/recommendations', 'GET', options, null, this._auth());
+            return this.api('/recommendations', {
+              params: options,
+              headers: this._auth()
+            });
           },
 
           getAvailableGenreSeeds: function () {
-            return this.api('/recommendations/available-genre-seeds', 'GET', null, null, this._auth());
+            return this.api('/recommendations/available-genre-seeds', {
+              headers: this._auth()
+            });
           },
 
 
@@ -238,35 +263,59 @@
           following: function (type, options) {
             options = options || {};
             options.type = type;
-            return this.api('/me/following', 'GET', options, null, this._auth());
+            return this.api('/me/following', {
+              params: options,
+              headers: this._auth()
+            });
           },
 
           follow: function (type, ids) {
-            return this.api('/me/following', 'PUT', { type: type, ids: ids }, null, this._auth());
+            return this.api('/me/following', {
+              method: 'PUT',
+              params: { type: type, ids: ids },
+              headers: this._auth()
+            });
           },
 
           unfollow: function (type, ids) {
-            return this.api('/me/following', 'DELETE', { type: type, ids: ids }, null, this._auth());
+            return this.api('/me/following', {
+              method: 'DELETE',
+              params: { type: type, ids: ids },
+              headers: this._auth()
+            });
           },
 
           userFollowingContains: function (type, ids) {
-            return this.api('/me/following/contains', 'GET', { type: type, ids: ids }, null, this._auth());
+            return this.api('/me/following/contains', {
+              params: { type: type, ids: ids },
+              headers: this._auth()
+            });
           },
 
           followPlaylist: function (userId, playlistId, isPublic) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers', 'PUT', null, {
-              public: isPublic || null
-            }, this._auth(true));
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers', {
+              method: 'PUT',
+              data: {
+                public: isPublic || null
+              },
+              headers: this._auth(true)
+            });
           },
 
           unfollowPlaylist: function (userId, playlistId) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers', 'DELETE', null, null, this._auth());
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers', {
+              method: 'DELETE',
+              headers: this._auth()
+            });
           },
 
           playlistFollowingContains: function(userId, playlistId, ids) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers/contains', 'GET', {
-              ids: ids.toString()
-            }, null, this._auth());
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers/contains', {
+              params: {
+                ids: ids.toString()
+              },
+              headers: this._auth()
+            });
           },
 
 
@@ -274,7 +323,9 @@
             ====================== Library =====================
            */
           getSavedUserTracks: function (options) {
-            return this.api('/me/tracks', 'GET', options, null, this._auth());
+            var o = { headers: this._auth() };
+            if (options) { o.params = options; }
+            return this.api('/me/tracks', o);
           },
 
           userTracksContains: function (tracks) {
@@ -282,9 +333,12 @@
             angular.forEach(tracks, function (value, index) {
               tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
             });
-            return this.api('/me/tracks/contains', 'GET', {
-              ids: tracks.toString()
-            }, null, this._auth());
+            return this.api('/me/tracks/contains', {
+              params: {
+                ids: tracks.toString()
+              },
+              headers: this._auth()
+            });
           },
 
           saveUserTracks: function (tracks) {
@@ -292,9 +346,13 @@
             angular.forEach(tracks, function (value, index) {
               tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
             });
-            return this.api('/me/tracks', 'PUT', {
-              ids: tracks.toString()
-            }, null, this._auth());
+            return this.api('/me/tracks', {
+              method: 'PUT',
+              params: {
+                ids: tracks.toString()
+              },
+              headers: this._auth()
+            });
           },
 
           removeUserTracks: function (tracks) {
@@ -302,9 +360,13 @@
             angular.forEach(tracks, function (value, index) {
               tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
             });
-            return this.api('/me/tracks', 'DELETE', {
-              ids: tracks.toString()
-            }, null, this._auth(true));
+            return this.api('/me/tracks', {
+              method: 'DELETE',
+              params: {
+                ids: tracks.toString()
+              },
+              headers: this._auth(true)
+            });
           },
 
           saveUserAlbums: function (albums) {
@@ -312,13 +374,19 @@
             angular.forEach(albums, function (value, index) {
               albums[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
             });
-            return this.api('/me/albums', 'PUT', {
-              ids: albums.toString()
-            }, null, this._auth());
+            return this.api('/me/albums', {
+              method: 'PUT',
+              params: {
+                ids: albums.toString()
+              },
+              headers: this._auth()
+            });
           },
 
           getSavedUserAlbums: function (options) {
-            return this.api('/me/albums', 'GET', options, null, this._auth());
+            var o = { headers: this._auth() };
+            if (options) { o.params = options; }
+            return this.api('/me/albums', o);
           },
 
           removeUserAlbums: function (albums) {
@@ -326,9 +394,13 @@
             angular.forEach(albums, function (value, index) {
               albums[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
             });
-            return this.api('/me/albums', 'DELETE', {
-              ids: albums.toString()
-            }, null, this._auth(true));
+            return this.api('/me/albums', {
+              method: 'DELETE',
+              params: {
+                ids: albums.toString()
+              },
+              headers: this._auth(true)
+            });
           },
 
           userAlbumsContains: function (albums) {
@@ -336,9 +408,12 @@
             angular.forEach(albums, function (value, index) {
               albums[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
             });
-            return this.api('/me/albums/contains', 'GET', {
-              ids: albums.toString()
-            }, null, this._auth());
+            return this.api('/me/albums/contains', {
+              params: {
+                ids: albums.toString()
+              },
+              headers: this._auth()
+            });
           },
 
 
@@ -346,13 +421,15 @@
             ====================== Personalization =====================
            */
            getUserTopArtists: function (options) {
-             options = options || {};
-             return this.api('/me/top/artists', 'GET', options, null, this._auth());
+             var o = { headers: this._auth() };
+             if (options) { o.params = options; }
+             return this.api('/me/top/artists', o);
            },
 
            getUserTopTracks: function (options) {
-             options = options || {};
-             return this.api('/me/top/tracks', 'GET', options, null, this._auth());
+             var o = { headers: this._auth() };
+             if (options) { o.params = options; }
+             return this.api('/me/top/tracks', o);
            },
 
 
@@ -360,21 +437,29 @@
             ====================== Playlists =====================
            */
           getUserPlaylists: function (userId, options) {
-            return this.api('/users/' + userId + '/playlists', 'GET', options, null, {
-              'Authorization': 'Bearer ' + this.authToken
-            });
+            var o = { headers: this._auth() };
+            if (options) { o.params = options; }
+            return this.api('/users/' + userId + '/playlists', o);
           },
 
           getPlaylist: function (userId, playlistId, options) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId, 'GET', options, null, this._auth());
+            var o = { headers: this._auth() };
+            if (options) { o.params = options; }
+            return this.api('/users/' + userId + '/playlists/' + playlistId, o);
           },
 
           getPlaylistTracks: function (userId, playlistId, options) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'GET', options, null, this._auth());
+            var o = { headers: this._auth() };
+            if (options) { o.params = options; }
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', o);
           },
 
           createPlaylist: function (userId, options) {
-            return this.api('/users/' + userId + '/playlists', 'POST', null, options, this._auth(true));
+            return this.api('/users/' + userId + '/playlists', {
+              method: 'POST',
+              data: options,
+              headers: this._auth(true)
+            });
           },
 
           addPlaylistTracks: function (userId, playlistId, tracks, options) {
@@ -382,10 +467,14 @@
             angular.forEach(tracks, function (value, index) {
               tracks[index] = value.indexOf('spotify:') === -1 ? 'spotify:track:' + value : value;
             });
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'POST', {
-              uris: tracks.toString(),
-              position: options ? options.position : null
-            }, null, this._auth(true));
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', {
+              method: 'POST',
+              params: {
+                uris: tracks.toString(),
+                position: options ? options.position : null
+              },
+              headers: this._auth(true)
+            });
           },
 
           removePlaylistTracks: function (userId, playlistId, tracks) {
@@ -397,13 +486,21 @@
                 uri: track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track
               };
             });
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'DELETE', null, {
-              tracks: tracks
-            }, this._auth(true));
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', {
+              method: 'DELETE',
+              data: {
+                tracks: tracks
+              },
+              headers: this._auth(true)
+            });
           },
 
           reorderPlaylistTracks: function (userId, playlistId, options) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'PUT', null, options, this._auth(true));
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', {
+              method: 'PUT',
+              data: options,
+              headers: this._auth(true)
+            });
           },
 
           replacePlaylistTracks: function (userId, playlistId, tracks) {
@@ -413,13 +510,21 @@
               track = tracks[index];
               tracks[index] = track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track;
             });
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'PUT', {
-              uris: tracks.toString()
-            }, null, this._auth(true));
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', {
+              method: 'PUT',
+              params: {
+                uris: tracks.toString()
+              },
+              headers: this._auth(true)
+            });
           },
 
           updatePlaylistDetails: function (userId, playlistId, options) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId, 'PUT', null, options, this._auth(true));
+            return this.api('/users/' + userId + '/playlists/' + playlistId, {
+              method: 'PUT',
+              data: options,
+              headers: this._auth(true)
+            });
           },
 
           /**
@@ -431,7 +536,9 @@
           },
 
           getCurrentUser: function () {
-            return this.api('/me', 'GET', null, null, this._auth());
+            return this.api('/me', {
+              headers: this._auth()
+            });
           },
 
 
@@ -446,7 +553,9 @@
             options.q = q;
             options.type = type;
 
-            return this.api('/search', 'GET', options);
+            return this.api('/search', {
+              params: options
+            });
           },
 
 
@@ -464,8 +573,10 @@
             angular.forEach(tracks, function (value, index) {
               tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
             });
-            return this.api('/tracks/', 'GET', {
-              ids: tracks ? tracks.toString() : ''
+            return this.api('/tracks/', {
+              params: {
+                ids: tracks ? tracks.toString() : ''
+              }
             });
           },
 
@@ -479,8 +590,10 @@
             angular.forEach(tracks, function (value, index) {
               tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
             });
-            return this.api('/audio-features/', 'GET', {
-              ids: tracks ? tracks.toString() : ''
+            return this.api('/audio-features/', {
+              params: {
+                ids: tracks ? tracks.toString() : ''
+              }
             });
           },
 
