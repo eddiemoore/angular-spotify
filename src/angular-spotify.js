@@ -95,6 +95,10 @@
             var deferred = $q.defer();
             options = options || {};
             options.method = options.method || 'GET';
+            options.headers = options.headers || {};
+            if (this.authToken) {
+              options.headers.Authorization = 'Bearer ' + this.authToken;
+            }
 
             $http({
               url: this.apiBase + endpoint,
@@ -111,16 +115,6 @@
               deferred.reject(data);
             });
             return deferred.promise;
-          },
-
-          _auth: function (isJson) {
-            var auth = {
-              'Authorization': 'Bearer ' + this.authToken
-            };
-            if (isJson) {
-              auth['Content-Type'] = 'application/json';
-            }
-            return auth;
           },
 
           /**
@@ -204,7 +198,7 @@
             });
           },
 
-          getRelatedArtists: function (artist) {
+          getArtistRelatedArtists: function (artist) {
             var a = getSpotifyId(artist);
             return this.api('/artists/' + a + '/related-artists');
           },
@@ -215,82 +209,73 @@
            */
           getFeaturedPlaylists: function (options) {
             return this.api('/browse/featured-playlists', {
-              params: options,
-              headers: this._auth()
+              params: options
             });
           },
 
           getNewReleases: function (options) {
             return this.api('/browse/new-releases', {
-              params: options,
-              headers: this._auth()
+              params: options
             });
           },
 
           getCategories: function (options) {
-            var o = { headers: this._auth() };
+            var o = {};
             if (options) { o.params = options; }
             return this.api('/browse/categories', o);
           },
 
           getCategory: function (category_id, options) {
-            var o = { headers: this._auth() };
+            var o = {};
             if (options) { o.params = options; }
             return this.api('/browse/categories/' + category_id, o);
           },
 
           getCategoryPlaylists: function (category_id, options) {
-            var o = { headers: this._auth() };
+            var o = {};
             if (options) { o.params = options; }
             return this.api('/browse/categories/' + category_id + '/playlists', o);
           },
 
           getRecommendations: function (options) {
             return this.api('/recommendations', {
-              params: options,
-              headers: this._auth()
+              params: options
             });
           },
 
           getAvailableGenreSeeds: function () {
-            return this.api('/recommendations/available-genre-seeds', {
-              headers: this._auth()
-            });
+            return this.api('/recommendations/available-genre-seeds');
           },
 
 
           /**
             ====================== Following =====================
            */
-          following: function (type, options) {
+          getFollowed: function (type, options) {
             var params = options || {};
             params.type = type;
             return this.api('/me/following', {
-              params: params,
-              headers: this._auth()
+              params: params
             });
           },
 
           follow: function (type, ids) {
             return this.api('/me/following', {
               method: 'PUT',
-              params: { type: type, ids: ids },
-              headers: this._auth()
+              params: { type: type, ids: ids }
             });
           },
 
           unfollow: function (type, ids) {
             return this.api('/me/following', {
               method: 'DELETE',
-              params: { type: type, ids: ids },
-              headers: this._auth()
+              params: { type: type, ids: ids }
             });
           },
 
-          userFollowingContains: function (type, ids) {
+          isFollowing: function (type, ids) {
             return this.api('/me/following/contains', {
-              params: { type: type, ids: ids },
-              headers: this._auth()
+              params: { type: type, ids: ids }
             });
           },
 
@@ -300,23 +285,23 @@
               data: {
                 public: isPublic || null
               },
-              headers: this._auth(true)
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
           },
 
           unfollowPlaylist: function (userId, playlistId) {
             return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers', {
-              method: 'DELETE',
-              headers: this._auth()
+              method: 'DELETE'
             });
           },
 
-          playlistFollowingContains: function(userId, playlistId, ids) {
+          areFollowingPlaylist: function(userId, playlistId, ids) {
             return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers/contains', {
               params: {
                 ids: ids.toString()
-              },
-              headers: this._auth()
+              }
             });
           },
 
@@ -324,79 +309,79 @@
           /**
             ====================== Library =====================
            */
-          getSavedUserTracks: function (options) {
-            var o = { headers: this._auth() };
+          getMySavedTracks: function (options) {
+            var o = {};
             if (options) { o.params = options; }
             return this.api('/me/tracks', o);
           },
 
-          userTracksContains: function (tracks) {
+          containsMySavedTracks: function (tracks) {
             var trks = stringToArray(tracks);
             return this.api('/me/tracks/contains', {
               params: {
                 ids: trks.toString()
-              },
-              headers: this._auth()
+              }
             });
           },
 
-          saveUserTracks: function (tracks) {
+          addToMySavedTracks: function (tracks) {
             var trks = stringToArray(tracks);
             return this.api('/me/tracks', {
               method: 'PUT',
               params: {
                 ids: trks.toString()
-              },
-              headers: this._auth()
+              }
             });
           },
 
-          removeUserTracks: function (tracks) {
+          removeFromMySavedTracks: function (tracks) {
             var trks = stringToArray(tracks);
             return this.api('/me/tracks', {
               method: 'DELETE',
               params: {
                 ids: trks.toString()
               },
-              headers: this._auth(true)
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
           },
 
-          saveUserAlbums: function (albums) {
+          addToMySavedAlbums: function (albums) {
             var albs = stringToArray(albums);
             return this.api('/me/albums', {
               method: 'PUT',
               params: {
                 ids: albs.toString()
-              },
-              headers: this._auth()
+              }
             });
           },
 
-          getSavedUserAlbums: function (options) {
-            var o = { headers: this._auth() };
+          getMySavedAlbums: function (options) {
+            var o = {};
             if (options) { o.params = options; }
             return this.api('/me/albums', o);
           },
 
-          removeUserAlbums: function (albums) {
+          removeFromMySavedAlbums: function (albums) {
             var albs = stringToArray(albums);
             return this.api('/me/albums', {
               method: 'DELETE',
               params: {
                 ids: albs.toString()
               },
-              headers: this._auth(true)
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
           },
 
-          userAlbumsContains: function (albums) {
+          containsMySavedAlbums: function (albums) {
             var albs = stringToArray(albums);
             return this.api('/me/albums/contains', {
               params: {
                 ids: albs.toString()
-              },
-              headers: this._auth()
+              }
             });
           },
 
@@ -404,14 +389,14 @@
           /**
             ====================== Personalization =====================
            */
-           getUserTopArtists: function (options) {
-             var o = { headers: this._auth() };
+           getMyTopArtists: function (options) {
+             var o = {};
              if (options) { o.params = options; }
              return this.api('/me/top/artists', o);
            },
 
-           getUserTopTracks: function (options) {
-             var o = { headers: this._auth() };
+           getMyTopTracks: function (options) {
+             var o = {};
              if (options) { o.params = options; }
              return this.api('/me/top/tracks', o);
            },
@@ -421,19 +406,19 @@
             ====================== Playlists =====================
            */
           getUserPlaylists: function (userId, options) {
-            var o = { headers: this._auth() };
+            var o = {};
             if (options) { o.params = options; }
             return this.api('/users/' + userId + '/playlists', o);
           },
 
           getPlaylist: function (userId, playlistId, options) {
-            var o = { headers: this._auth() };
+            var o = {};
             if (options) { o.params = options; }
             return this.api('/users/' + userId + '/playlists/' + playlistId, o);
           },
 
           getPlaylistTracks: function (userId, playlistId, options) {
-            var o = { headers: this._auth() };
+            var o = {};
             if (options) { o.params = options; }
             return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', o);
           },
@@ -442,11 +427,13 @@
             return this.api('/users/' + userId + '/playlists', {
               method: 'POST',
               data: options,
-              headers: this._auth(true)
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
           },
 
-          addPlaylistTracks: function (userId, playlistId, tracks, options) {
+          addTracksToPlaylist: function (userId, playlistId, tracks, options) {
             var arr = angular.isArray(tracks) ? tracks : tracks.split(',');
             var trks = arr.map(function (value) {
               return value.indexOf('spotify:') === -1 ? 'spotify:track:' + value : value;
@@ -457,11 +444,13 @@
                 uris: trks.toString(),
                 position: options ? options.position : null
               },
-              headers: this._auth(true)
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
           },
 
-          removePlaylistTracks: function (userId, playlistId, tracks) {
+          removeTracksFromPlaylist: function (userId, playlistId, tracks) {
             var arr = angular.isArray(tracks) ? tracks : tracks.split(',');
             var trks = arr.map(function (track) {
               return {
@@ -473,19 +462,23 @@
               data: {
                 tracks: trks
               },
-              headers: this._auth(true)
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
           },
 
-          reorderPlaylistTracks: function (userId, playlistId, options) {
+          reorderTracksInPlaylist: function (userId, playlistId, options) {
             return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', {
               method: 'PUT',
               data: options,
-              headers: this._auth(true)
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
           },
 
-          replacePlaylistTracks: function (userId, playlistId, tracks) {
+          replaceTracksInPlaylist: function (userId, playlistId, tracks) {
             var arr = tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
             var trks = arr.map(function (track) {
               return track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track;
@@ -495,15 +488,19 @@
               params: {
                 uris: trks.toString()
               },
-              headers: this._auth(true)
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
           },
 
-          updatePlaylistDetails: function (userId, playlistId, options) {
+          changePlaylistDetails: function (userId, playlistId, options) {
             return this.api('/users/' + userId + '/playlists/' + playlistId, {
               method: 'PUT',
               data: options,
-              headers: this._auth(true)
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
           },
 
@@ -515,10 +512,8 @@
             return this.api('/users/' + userId);
           },
 
-          getCurrentUser: function () {
-            return this.api('/me', {
-              headers: this._auth()
-            });
+          getMe: function () {
+            return this.api('/me');
           },
 
 
@@ -528,10 +523,10 @@
            * q = search query
            * type = artist, album or track
            */
-          search: function (q, type, options) {
+          search: function (q, types, options) {
             var params = options || {};
             params.q = q;
-            params.type = type;
+            params.type = angular.isArray(types) ? types.join(',') : types;
 
             return this.api('/search', {
               params: params
@@ -556,12 +551,12 @@
             });
           },
 
-          getTrackAudioFeatures: function (track) {
+          getAudioFeaturesForTrack: function (track) {
             var t = getSpotifyId(track);
             return this.api('/audio-features/' + t);
           },
 
-          getTracksAudioFeatures: function (tracks) {
+          getAudioFeaturesForTracks: function (tracks) {
             var trks = stringToArray(tracks);
             return this.api('/audio-features/', {
               params: {
@@ -576,6 +571,10 @@
            */
           setAuthToken: function (authToken) {
             this.authToken = authToken;
+            return this.authToken;
+          },
+
+          getAuthToken: function () {
             return this.authToken;
           },
 

@@ -175,11 +175,11 @@ Spotify
 #### Get an Artist’s Related Artists
 Get Spotify catalog information about artists similar to a given artist. Similarity is based on analysis of the Spotify community’s listening history.
 ```js
-Spotify.getRelatedArtists('Artist Id or Spotify Artist URI');
+Spotify.getArtistRelatedArtists('Artist Id or Spotify Artist URI');
 ```
 Example:
 ```js
-Spotify.getRelatedArtists('1vCWHaC5f2uS3yhpwWbIA6').then(function (data) {
+Spotify.getArtistRelatedArtists('1vCWHaC5f2uS3yhpwWbIA6').then(function (data) {
   console.log(data);
 });
 ```
@@ -329,13 +329,13 @@ These endpoints allow you manage the list of artists and users that a logged in 
 Get the current user’s followed artists.
 
 ```js
-Spotify.following('type', options)
+Spotify.getFollowed('type', options)
 ```
 - type: Required. currently only ```artist``` is supported.
 
 
 ```js
-Spotify.following('artists', { limit: 10 }).then(function (artists) {
+Spotify.getFollowed('artists', { limit: 10 }).then(function (artists) {
   console.log(artists);
 })
 ```
@@ -371,14 +371,14 @@ Spotify.unfollow('user', 'exampleuser01').then(function () {
 #### Check if Current User Follows
 Check to see if the current user is following one or more artists or other Spotify users.
 ```js
-Spotify.userFollowingContains('type', 'ids');
+Spotify.isFollowing('type', 'ids');
 ```
 - type: Required. either ```artist``` or ```user```
 - ids: Required. comma-separated list.
 
 Example:
 ```js
-Spotify.userFollowingContains('user', 'exampleuser01').then(function (data) {
+Spotify.isFollowing('user', 'exampleuser01').then(function (data) {
   console.log(data);
 });
 ```
@@ -424,11 +424,11 @@ Spotify
  Checking if the user is privately following a playlist is only possible for the current user when that user has granted access to the ```playlist-read-private``` scope.
  ```js
  Spotify
- .playlistFollowingContains('owner_id', 'playlist_id', 'comma separated string or array of user ids');
+ .areFollowingPlaylist('owner_id', 'playlist_id', 'comma separated string or array of user ids');
  ```
  Example:
  ```js
- Spotify.playlistFollowingContains('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT', 'possan,elogain').then(function (data) {
+ Spotify.areFollowingPlaylist('jmperezperez', '2v3iNvBX8Ay1Gt2uXtUKUT', 'possan,elogain').then(function (data) {
    console.log(data);
  });
  ```
@@ -438,7 +438,7 @@ Spotify
 #### Get Current User’s Saved Tracks
 Get a list of the songs saved in the current Spotify user’s “Your Music” library. Requires the ```user-library-read``` scope.
 ```js
-Spotify.getSavedUserTracks(options);
+Spotify.getMySavedTracks(options);
 ```
 ##### Options Object (Optional)
 
@@ -446,7 +446,7 @@ Spotify.getSavedUserTracks(options);
 - offset - Optional. The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects.
 
 ```js
-Spotify.getSavedUserTracks().then(function (data) {
+Spotify.getMySavedTracks().then(function (data) {
   console.log(data);
 });
 ```
@@ -456,12 +456,12 @@ Spotify.getSavedUserTracks().then(function (data) {
 Check if one or more tracks is already saved in the current Spotify user’s “Your Music” library. Requires the ```user-library-read``` scope.
 
 ```js
-Spotify.userTracksContains('comma separated string or array of spotify track ids');
+Spotify.containsMySavedTracks('comma separated string or array of spotify track ids');
 ```
 Example:
 ```js
 Spotify
-  .userTracksContains('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9')
+  .containsMySavedTracks('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9')
   .then(function (data) {
    console.log(data);
   });
@@ -471,12 +471,12 @@ Spotify
 #### Save Tracks for Current User
 Save one or more tracks to the current user’s “Your Music” library. Requires the ```user-library-modify``` scope.
 ```js
-Spotify.saveUserTracks('comma separated string or array of spotify track ids');
+Spotify.addToMySavedTracks('comma separated string or array of spotify track ids');
 ```
 Example:
 ```js
 Spotify
-  .saveUserTracks('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9')
+  .addToMySavedTracks('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9')
   .then(function (data) {
     console.log(data);
   });
@@ -486,12 +486,12 @@ Spotify
 #### Remove Tracks for Current User
 Remove one or more tracks from the current user’s “Your Music” library. Requires the ```user-library-modify``` scope.
 ```js
-Spotify.removeUserTracks('comma separated string or array of spotify track ids');
+Spotify.removeFromMySavedTracks('comma separated string or array of spotify track ids');
 ```
 Example:
 ```js
 Spotify
-  .removeUserTracks('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9')
+  .removeFromMySavedTracks('0udZHhCi7p1YzMlvI4fXoK,3SF5puV5eb6bgRSxBeMOk9')
   .then(function (data) {
     console.log(data);
   });
@@ -501,12 +501,12 @@ Spotify
 #### Save Albums for Current User
 Save one or more albums to the current user’s “Your Music” library. Requires the ```user-library-modify``` scope.
 ```js
-Spotify.saveUserAlbums('comma separated string or array of spotify album ids');
+Spotify.addToMySavedAlbums('comma separated string or array of spotify album ids');
 ```
 Example:
 ```js
 Spotify
-  .saveUserAlbums('4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M')
+  .addToMySavedAlbums('4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M')
   .then(function (data) {
     console.log(data);
   });
@@ -515,7 +515,7 @@ Spotify
 #### Get Current User’s Saved Albums
 Get a list of the albums saved in the current Spotify user’s “Your Music” library. Requires the ```user-library-read``` scope.
 ```js
-Spotify.getSavedUserAlbums(options);
+Spotify.getMySavedAlbums(options);
 ```
 ##### Options Object (Optional)
 
@@ -524,7 +524,7 @@ Spotify.getSavedUserAlbums(options);
 - market - Optional. An ISO 3166-1 alpha-2 country code. Provide this parameter if you want to apply Track Relinking.
 
 ```js
-Spotify.getSavedUserAlbums().then(function (data) {
+Spotify.getMySavedAlbums().then(function (data) {
   console.log(data);
 });
 ```
@@ -532,12 +532,12 @@ Spotify.getSavedUserAlbums().then(function (data) {
 #### Remove Albums for Current User
 Remove one or more albums from the current user’s “Your Music” library. Requires the ```user-library-modify``` scope.
 ```js
-Spotify.removeUserAlbums('comma separated string or array of spotify album ids');
+Spotify.removeFromMySavedAlbums('comma separated string or array of spotify album ids');
 ```
 Example:
 ```js
 Spotify
-  .removeUserAlbums('4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M')
+  .removeFromMySavedAlbums('4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M')
   .then(function (data) {
     console.log(data);
   });
@@ -548,12 +548,12 @@ Spotify
 Check if one or more albums is already saved in the current Spotify user’s “Your Music” library. Requires the ```user-library-read``` scope.
 
 ```js
-Spotify.userAlbumsContains('comma separated string or array of spotify album ids');
+Spotify.containsMySavedAlbums('comma separated string or array of spotify album ids');
 ```
 Example:
 ```js
 Spotify
-  .userAlbumsContains('4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M')
+  .containsMySavedAlbums('4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M')
   .then(function (data) {
    console.log(data);
   });
@@ -566,7 +566,7 @@ Endpoints for retrieving information about the user’s listening habits.
 #### Get a User’s Top Artists
 Get the current user’s top artists based on calculated affinity.
 ```js
-Spotify.getUserTopArtists(options);
+Spotify.getMyTopArtists(options);
 ```
 
 ##### Options Object (Optional)
@@ -576,7 +576,7 @@ Spotify.getUserTopArtists(options);
 
 Example:
 ```js
-Spotify.getUserTopArtists({ limit: 50 }).then(function (data) {
+Spotify.getMyTopArtists({ limit: 50 }).then(function (data) {
   console.log(data);
 });
 ```
@@ -584,7 +584,7 @@ Spotify.getUserTopArtists({ limit: 50 }).then(function (data) {
 #### Get a User’s Top Tracks
 Get the current user’s top tracks based on calculated affinity.
 ```js
-Spotify.getUserTopTracks(options);
+Spotify.getMyTopTracks(options);
 ```
 
 ##### Options Object (Optional)
@@ -594,7 +594,7 @@ Spotify.getUserTopTracks(options);
 
 Example:
 ```js
-Spotify.getUserTopTracks({ limit: 50 }).then(function (data) {
+Spotify.getMyTopTracks({ limit: 50 }).then(function (data) {
   console.log(data);
 });
 ```
@@ -674,7 +674,7 @@ Spotify
 #### Add Tracks to a Playlist
 Add one or more tracks to a user’s playlist. Adding tracks to a public playlist requires the ```playlist-modify-public``` scope. Adding tracks to a private playlist requires the ```playlist-modify-private``` scope.
 ```js
-Spotify.addPlaylistTracks('user_id', 'playlist_id', 'comma separated string or array of spotify track uris');
+Spotify.addTracksToPlaylist('user_id', 'playlist_id', 'comma separated string or array of spotify track uris');
 ```
 ##### Options Object (Optional)
 - position - integer - Optional. The position to insert the tracks, a zero-based index. For example, to insert the tracks in the first position: position=0; to insert the tracks in the third position: position=2. If omitted, the tracks will be appended to the playlist. Tracks are added in the order they are listed in the query string or request body.
@@ -683,7 +683,7 @@ Spotify.addPlaylistTracks('user_id', 'playlist_id', 'comma separated string or a
 Example:
 ```js
 Spotify
-  .addPlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M')
+  .addTracksToPlaylist('1176458919', '2TkWjGCu8jurholsfdWtG4', 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M')
   .then(function (data) {
     console.log('tracks added to playlist');
   });
@@ -693,12 +693,12 @@ Spotify
 #### Remove Tracks from a Playlist
 Remove one or more tracks from a user’s playlist. Removing tracks from a public playlist requires the ```playlist-modify-public``` scope. Removing tracks from a private playlist requires the ```playlist-modify-private``` scope.
 ```js
-Spotify.removePlaylistTracks('user_id', 'playlist_id', 'comma separated string or array of spotify track ids or uris');
+Spotify.removeTracksFromPlaylist('user_id', 'playlist_id', 'comma separated string or array of spotify track ids or uris');
 ```
 Example:
 ```js
 Spotify
-  .removePlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M')
+  .removeTracksFromPlaylist('1176458919', '2TkWjGCu8jurholsfdWtG4', 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M')
   .then(function (data) {
     console.log('tracks removed from playlist');
   });
@@ -707,7 +707,7 @@ Spotify
 #### Reorder a Playlist's Tracks
 Reorder a track or a group of tracks in a playlist.
 ```js
-Spotify.reorderPlaylistTracks('user_id', 'playlist_id', options);
+Spotify.reorderTracksInPlaylist('user_id', 'playlist_id', options);
 ```
 ##### Options Object (Required)
 - range_start - integer - Required. The position of the first track to be reordered.
@@ -718,7 +718,7 @@ Spotify.reorderPlaylistTracks('user_id', 'playlist_id', options);
 
 Example:
 ```js
-Spotify.reorderPlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', {
+Spotify.reorderTracksInPlaylist('1176458919', '2TkWjGCu8jurholsfdWtG4', {
   range_start: 8,
   range_length: 5,
   insert_before: 0
@@ -731,12 +731,12 @@ Spotify.reorderPlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', {
 #### Replace a Playlist’s Tracks
 Replace all the tracks in a playlist, overwriting its existing tracks. This powerful request can be useful for replacing tracks, re-ordering existing tracks, or clearing the playlist. Replacing tracks in a public playlist requires the ```playlist-modify-public``` scope. Replacing tracks in a private playlist requires the ```playlist-modify-private``` scope.
 ```js
-Spotify.replacePlaylistTracks('user_id', 'playlist_id', 'comma separated string or array of spotify track ids or uris');
+Spotify.replaceTracksInPlaylist('user_id', 'playlist_id', 'comma separated string or array of spotify track ids or uris');
 ```
 Example:
 ```js
 Spotify
-  .replacePlaylistTracks('1176458919', '2TkWjGCu8jurholsfdWtG4', 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M')
+  .replaceTracksInPlaylist('1176458919', '2TkWjGCu8jurholsfdWtG4', 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M')
   .then(function (data) {
     console.log('tracks removed from playlist');
   });
@@ -746,7 +746,7 @@ Spotify
 #### Change a Playlist’s Details
 Change a playlist’s name and public/private state. (The user must, of course, own the playlist.) Changing a public playlist requires the ```playlist-modify-public``` scope. Changing a private playlist requires the ```playlist-modify-private``` scope.
 ```js
-Spotify.updatePlaylistDetails('user_id', 'playlist_id', options);
+Spotify.changePlaylistDetails('user_id', 'playlist_id', options);
 ```
 ##### Options Object (Optional)
 - name - string - Optional. The new name for the playlist, for example "My New Playlist Title".
@@ -756,7 +756,7 @@ Spotify.updatePlaylistDetails('user_id', 'playlist_id', options);
 Example:
 ```js
 Spotify
-  .updatePlaylistDetails('1176458919', '2TkWjGCu8jurholsfdWtG4', { name: 'Updated Playlist Title' })
+  .changePlaylistDetails('1176458919', '2TkWjGCu8jurholsfdWtG4', { name: 'Updated Playlist Title' })
   .then(function (data) {
     console.log('Updated playlist details');
   });
@@ -782,11 +782,11 @@ Spotify.getUser('wizzler').then(function (data) {
 #### Get Current User’s Profile
 Get detailed profile information about the current user (including the current user’s username).
 ```js
-Spotify.getCurrentUser();
+Spotify.getMe();
 ```
 Example:
 ```js
-Spotify.getCurrentUser().then(function (data) {
+Spotify.getMe().then(function (data) {
   console.log(data);
 });
 ```
@@ -842,11 +842,11 @@ Spotify.getTracks('0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G').then(function
 Get audio feature information for a single track identified by its unique Spotify ID.
 
 ```js
-Spotify.getTrackAudioFeatures('Track Id or Spotify Track URI');
+Spotify.getAudioFeaturesForTrack('Track Id or Spotify Track URI');
 ```
 Example:
 ```js
-Spotify.getTrackAudioFeatures('0eGsygTp906u18L0Oimnem').then(function (data) {
+Spotify.getAudioFeaturesForTrack('0eGsygTp906u18L0Oimnem').then(function (data) {
   console.log(data);
 });
 ```
@@ -855,11 +855,11 @@ Spotify.getTrackAudioFeatures('0eGsygTp906u18L0Oimnem').then(function (data) {
 Get audio features for multiple tracks based on their Spotify IDs.
 
 ```js
-Spotify.getTracksAudioFeatures('Comma separated list or array of Track Ids');
+Spotify.getAudioFeaturesForTracks('Comma separated list or array of Track Ids');
 ```
 Example:
 ```js
-Spotify.getTracksAudioFeatures('0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G').then(function (data) {
+Spotify.getAudioFeaturesForTracks('0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G').then(function (data) {
   console.log(data);
 });
 ```
