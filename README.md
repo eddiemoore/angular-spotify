@@ -28,8 +28,8 @@ app.config(function (SpotifyProvider) {
   SpotifyProvider.setClientId('<CLIENT_ID>');
   SpotifyProvider.setRedirectUri('<CALLBACK_URI>');
   SpotifyProvider.setScope('<SCOPE>');
-  // If you already have an auth token
-  SpotifyProvider.setAuthToken('<AUTH_TOKEN>');
+  // If you already have an access token
+  SpotifyProvider.setAccessToken('<AUTH_TOKEN>');
 });
 ```
 For example:
@@ -38,8 +38,8 @@ app.config(function (SpotifyProvider) {
   SpotifyProvider.setClientId('ABC123DEF456GHI789JKL');
   SpotifyProvider.setRedirectUri('http://www.example.com/callback.html');
   SpotifyProvider.setScope('user-read-private playlist-read-private playlist-modify-private playlist-modify-public');
-  // If you already have an auth token
-  SpotifyProvider.setAuthToken('zoasliu1248sdfuiknuha7882iu4rnuwehifskmkiuwhjg23');
+  // If you already have an access token
+  SpotifyProvider.setAccessToken('zoasliu1248sdfuiknuha7882iu4rnuwehifskmkiuwhjg23');
 });
 ```
 
@@ -798,7 +798,7 @@ Get Spotify catalog information about artists, albums, or tracks that match a ke
 ```js
 Spotify.search('Search Query', 'type', options);
 ```
-- type - Required. A comma-separated list of item types to search across. Valid types are: album, artist, playlist, and track.
+- type - Required. An array or comma-separated list of item types to search across. Valid types are: album, artist, playlist, and track.
 
 ##### Options Object (Optional)
 - limit - Optional. The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50.
@@ -812,6 +812,25 @@ Spotify.search('Nirvana', 'artist').then(function (data) {
 });
 ```
 
+#### Search for Albums
+```js
+Spotify.searchAlbums('Search Query', options);
+```
+
+#### Search for Artists
+```js
+Spotify.searchArtists('Search Query', options);
+```
+
+#### Search for Tracks
+```js
+Spotify.searchTracks('Search Query', options);
+```
+
+#### Search for Playlists
+```js
+Spotify.searchPlaylists('Search Query', options);
+```
 
 ### Tracks
 #### Get a Track

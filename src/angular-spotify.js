@@ -22,7 +22,7 @@
       settings.clientId = null;
       settings.redirectUri = null;
       settings.scope = null;
-      settings.authToken = null;
+      settings.accessToken = null;
 
       this.setClientId = function (clientId) {
         settings.clientId = clientId;
@@ -33,9 +33,9 @@
         return settings.clientId;
       };
 
-      this.setAuthToken = function (authToken) {
-        settings.authToken = authToken;
-        return settings.authToken;
+      this.setAccessToken = function (accessToken) {
+        settings.accessToken = accessToken;
+        return settings.accessToken;
       };
 
       this.setRedirectUri = function (redirectUri) {
@@ -73,7 +73,7 @@
           this.redirectUri = settings.redirectUri;
           this.apiBase = settings.apiBase;
           this.scope = settings.scope;
-          this.authToken = settings.authToken;
+          this.accessToken = settings.accessToken;
           this.toQueryString = utils.toQueryString;
         }
 
@@ -96,8 +96,8 @@
             options = options || {};
             options.method = options.method || 'GET';
             options.headers = options.headers || {};
-            if (this.authToken) {
-              options.headers.Authorization = 'Bearer ' + this.authToken;
+            if (this.accessToken) {
+              options.headers.Authorization = 'Bearer ' + this.accessToken;
             }
 
             $http({
@@ -533,6 +533,22 @@
             });
           },
 
+          searchAlbums: function (q, options) {
+            return this.search(q, 'album', options);
+          },
+
+          searchArtists: function (q, options) {
+            return this.search(q, 'artist', options);
+          },
+
+          searchTracks: function (q, options) {
+            return this.search(q, 'track', options);
+          },
+
+          searchPlaylists: function (q, options) {
+            return this.search(q, 'playlist', options);
+          },
+
 
           /**
             ====================== Tracks =====================
@@ -569,13 +585,13 @@
           /**
             ====================== Login =====================
            */
-          setAuthToken: function (authToken) {
-            this.authToken = authToken;
-            return this.authToken;
+          setAccessToken: function (accessToken) {
+            this.accessToken = accessToken;
+            return this.accessToken;
           },
 
-          getAuthToken: function () {
-            return this.authToken;
+          getAccessToken: function () {
+            return this.accessToken;
           },
 
           login: function () {
@@ -611,7 +627,7 @@
                 if (authWindow) { authWindow.close(); }
                 authCompleted = true;
 
-                that.setAuthToken(e.newValue);
+                that.setAccessToken(e.newValue);
                 $window.removeEventListener('storage', storageChanged, false);
 
                 deferred.resolve(e.newValue);
