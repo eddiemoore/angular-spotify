@@ -486,22 +486,37 @@
             });
           },
 
-          removeTracksFromPlaylist: function (userId, playlistId, tracks) {
-            var arr = angular.isArray(tracks) ? tracks : tracks.split(',');
-            var trks = arr.map(function (track) {
-              return {
-                uri: track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track
-              };
-            });
+          removeTracksFromPlaylist: function (userId, playlistId, tracks, options) {
+            var data = options || {};
+            if (tracks) {
+              var arr = angular.isArray(tracks) ? tracks : tracks.split(',');
+              var trks = arr.map(function (track) {
+                return {
+                  uri: track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track
+                };
+              });
+              data.tracks = trks;
+            }
             return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', {
               method: 'DELETE',
-              data: {
-                tracks: trks
-              },
+              data: data,
               headers: {
                 'Content-Type': 'application/json'
               }
             });
+          },
+
+          removeTracksFromPlaylistWithSnapshotId: function (userId, playlistId, tracks, snapshotId) {
+            return this.removeTracksFromPlaylist(userId, playlistId, tracks, {
+              snapshot_id: snapshotId
+            });
+          },
+
+          removeTracksFromPlaylistInPositions: function (userId, playlistId, positions, snapshotId) {
+            return this.removeTracksFromPlaylist(userId, playlistId, null, {
+              positions: positions,
+              snapshot_id: snapshotId
+            })
           },
 
           reorderTracksInPlaylist: function (userId, playlistId, options) {

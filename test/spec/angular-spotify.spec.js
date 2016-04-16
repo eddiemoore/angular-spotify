@@ -1260,6 +1260,36 @@ describe('angular-spotify', function () {
         });
       });
 
+      describe('Spotify.removeTracksFromPlaylistWithSnapshotId', function () {
+        it('should call with the correct params', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.removeTracksFromPlaylistWithSnapshotId('triple.j.abc', '73ppZmbaAS2aW9hmDTTDcb', [
+            '5LwukQO2fCx35GUUN6d6NW',
+            '4w8CsAnzn0lXJxYlAuCtCW',
+            '2Foc5Q5nqNiosCNqttzHof'
+          ], 'a1b2c3d4e5f6g7h8i9');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/triple.j.abc/playlists/73ppZmbaAS2aW9hmDTTDcb/tracks', {
+            method: 'DELETE',
+            data: {
+              tracks: [
+                {uri: 'spotify:track:5LwukQO2fCx35GUUN6d6NW'},
+                {uri: 'spotify:track:4w8CsAnzn0lXJxYlAuCtCW'},
+                {uri: 'spotify:track:2Foc5Q5nqNiosCNqttzHof'}
+              ],
+              snapshot_id: 'a1b2c3d4e5f6g7h8i9'
+            },
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+        });
+      });
+
       describe('Spotify.reorderTracksInPlaylist', function () {
         it('should call the correct url', function () {
           spyOn(Spotify, 'api');
