@@ -516,7 +516,7 @@
             return this.removeTracksFromPlaylist(userId, playlistId, null, {
               positions: positions,
               snapshot_id: snapshotId
-            })
+            });
           },
 
           reorderTracksInPlaylist: function (userId, playlistId, options) {
