@@ -403,6 +403,16 @@ Spotify.isFollowing('user', 'exampleuser01').then(function (data) {
 });
 ```
 
+#### Check if Current User Follows Users
+```js
+Spotify.isFollowingUsers(ids);
+```
+
+#### Check if Current User Follows Artists
+```js
+Spotify.isFollowingArtists(ids);
+```
+
 #### Follow a Playlist
 Add the current user as a follower of a playlist. Requires ```playlist-modify-public``` or ```playlist-modify-private``` scope to work.
 ```js

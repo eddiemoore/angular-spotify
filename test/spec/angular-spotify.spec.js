@@ -2035,6 +2035,78 @@ describe('angular-spotify', function () {
         });
       });
 
+      describe('Spotify.followUsers', function () {
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.followUsers('exampleuser01');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following', {
+            method: 'PUT',
+            params: {
+              type: 'user',
+              ids: 'exampleuser01'
+            }
+          });
+        });
+
+        it('should call with multiple ids', function() {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.followUsers(['74ASZWbe4lXaubB36ztrGX','08td7MxkoHQkXnWAYD8d6Q']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following', {
+            method: 'PUT',
+            params: {
+              type: 'user',
+              ids: '74ASZWbe4lXaubB36ztrGX,08td7MxkoHQkXnWAYD8d6Q'
+            }
+          });
+        });
+      });
+
+      describe('Spotify.followArtists', function () {
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.followArtists('exampleartist01');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following', {
+            method: 'PUT',
+            params: {
+              type: 'artist',
+              ids: 'exampleartist01'
+            }
+          });
+        });
+
+        it('should call with multiple ids', function() {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.followArtists('74ASZWbe4lXaubB36ztrGX,08td7MxkoHQkXnWAYD8d6Q');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following', {
+            method: 'PUT',
+            params: {
+              type: 'artist',
+              ids: '74ASZWbe4lXaubB36ztrGX,08td7MxkoHQkXnWAYD8d6Q'
+            }
+          });
+        });
+      });
+
       describe('Spotify.unfollow', function () {
         it('should call the correct URL', function () {
           spyOn(Spotify, 'api');
@@ -2071,6 +2143,78 @@ describe('angular-spotify', function () {
         });
       });
 
+      describe('Spotify.unfollowUsers', function () {
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.unfollowUsers('exampleuser01');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following', {
+            method: 'DELETE',
+            params: {
+              type: 'user',
+              ids: 'exampleuser01'
+            }
+          });
+        });
+
+        it('should call with multiple ids', function() {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.unfollowUsers('74ASZWbe4lXaubB36ztrGX,08td7MxkoHQkXnWAYD8d6Q');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following', {
+            method: 'DELETE',
+            params: {
+              type: 'user',
+              ids: '74ASZWbe4lXaubB36ztrGX,08td7MxkoHQkXnWAYD8d6Q'
+            }
+          });
+        });
+      });
+
+      describe('Spotify.unfollowArtists', function () {
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.unfollowArtists('exampleartist01');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following', {
+            method: 'DELETE',
+            params: {
+              type: 'artist',
+              ids: 'exampleartist01'
+            }
+          });
+        });
+
+        it('should call with multiple ids', function() {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.unfollowArtists('74ASZWbe4lXaubB36ztrGX,08td7MxkoHQkXnWAYD8d6Q');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following', {
+            method: 'DELETE',
+            params: {
+              type: 'artist',
+              ids: '74ASZWbe4lXaubB36ztrGX,08td7MxkoHQkXnWAYD8d6Q'
+            }
+          });
+        });
+      });
+
       describe('Spotify.isFollowing', function() {
         it('should call the correct URL', function () {
           spyOn(Spotify, 'api');
@@ -2084,6 +2228,58 @@ describe('angular-spotify', function () {
             params: {
               type: 'user',
               ids: 'exampleuser01'
+            }
+          });
+        });
+
+        it('should call with multiple ids', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.isFollowing('user', ['exampleuser01', 'exampleuser02']);
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following/contains', {
+            params: {
+              type: 'user',
+              ids: 'exampleuser01,exampleuser02'
+            }
+          });
+        });
+      });
+
+      describe('Spotify.isFollowingUsers', function() {
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.isFollowingUsers('exampleuser01');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following/contains', {
+            params: {
+              type: 'user',
+              ids: 'exampleuser01'
+            }
+          });
+        });
+      });
+
+      describe('Spotify.isFollowingArtists', function() {
+        it('should call the correct URL', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.isFollowingArtists('exampleartist01');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/me/following/contains', {
+            params: {
+              type: 'artist',
+              ids: 'exampleartist01'
             }
           });
         });

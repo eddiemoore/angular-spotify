@@ -259,13 +259,14 @@
             });
           },
 
-          follow: function (type, ids, options) {
-            var params = options || {};
-            params.type = type;
-            params.ids = ids;
+          follow: function (type, ids) {
+            var arr = angular.isArray(ids) ? ids : ids.split(',');
             return this.api('/me/following', {
               method: 'PUT',
-              params: params
+              params: {
+                type: type,
+                ids: arr.join(',')
+              }
             });
           },
 
@@ -278,9 +279,13 @@
           },
 
           unfollow: function (type, ids) {
+            var arr = angular.isArray(ids) ? ids : ids.split(',');
             return this.api('/me/following', {
               method: 'DELETE',
-              params: { type: type, ids: ids }
+              params: {
+                type: type,
+                ids: arr.join(',')
+              }
             });
           },
 
@@ -293,9 +298,21 @@
           },
 
           isFollowing: function (type, ids) {
+            var arr = angular.isArray(ids) ? ids : ids.split(',');
             return this.api('/me/following/contains', {
-              params: { type: type, ids: ids }
+              params: {
+                type: type,
+                ids: arr.join(',')
+              }
             });
+          },
+
+          isFollowingUsers: function (ids) {
+            return this.isFollowing('user', ids);
+          },
+
+          isFollowingArtists: function (ids) {
+            return this.isFollowing('artist', ids);
           },
 
           followPlaylist: function (userId, playlistId, isPublic) {
