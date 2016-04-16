@@ -354,6 +354,16 @@ Spotify.follow('user', 'exampleuser01').then(function () {
 });
 ```
 
+#### Follow Users
+```js
+Spotify.followUsers('ids');
+```
+
+#### Follow Artists
+```js
+Spotify.followArtists('ids');
+```
+
 #### Unfollow Artists or Users
 Remove the current user as a follower of one or more artists or other Spotify users.
 ```js
@@ -366,6 +376,16 @@ Example:
 Spotify.unfollow('user', 'exampleuser01').then(function () {
  // no response from Spotify
 });
+```
+
+#### Unfollow Users
+```js
+Spotify.unfollowUsers('ids');
+```
+
+#### Unfollow Artists
+```js
+Spotify.unfollowArtists('ids');
 ```
 
 #### Check if Current User Follows

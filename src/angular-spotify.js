@@ -259,11 +259,22 @@
             });
           },
 
-          follow: function (type, ids) {
+          follow: function (type, ids, options) {
+            var params = options || {};
+            params.type = type;
+            params.ids = ids;
             return this.api('/me/following', {
               method: 'PUT',
-              params: { type: type, ids: ids }
+              params: params
             });
+          },
+
+          followUsers: function (ids) {
+            return this.follow('user', ids);
+          },
+
+          followArtists: function (ids) {
+            return this.follow('artist', ids);
           },
 
           unfollow: function (type, ids) {
@@ -271,6 +282,14 @@
               method: 'DELETE',
               params: { type: type, ids: ids }
             });
+          },
+
+          unfollowUsers: function (ids) {
+            return this.unfollow('user', ids);
+          },
+
+          unfollowArtists: function (ids) {
+            return this.unfollow('artist', ids);
           },
 
           isFollowing: function (type, ids) {
