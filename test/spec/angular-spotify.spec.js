@@ -1290,6 +1290,28 @@ describe('angular-spotify', function () {
         });
       });
 
+      describe('Spotify.removeTracksFromPlaylistInPositions', function () {
+        it('should call with the correct params', function () {
+          spyOn(Spotify, 'api');
+
+          Spotify.setAccessToken('TESTING');
+
+          Spotify.removeTracksFromPlaylistInPositions('triple.j.abc', '73ppZmbaAS2aW9hmDTTDcb', [1,3,5,7,9], 'a1b2c3d4e5f6g7h8i9');
+
+          expect(Spotify.api).toHaveBeenCalled();
+          expect(Spotify.api).toHaveBeenCalledWith('/users/triple.j.abc/playlists/73ppZmbaAS2aW9hmDTTDcb/tracks', {
+            method: 'DELETE',
+            data: {
+              positions: [1,3,5,7,9],
+              snapshot_id: 'a1b2c3d4e5f6g7h8i9'
+            },
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+        });
+      });
+
       describe('Spotify.reorderTracksInPlaylist', function () {
         it('should call the correct url', function () {
           spyOn(Spotify, 'api');
