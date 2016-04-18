@@ -734,6 +734,34 @@ Spotify
   });
 ```
 
+##### Remove Tracks from a Playlist given snapshot ID
+```js
+Spotify.removeTracksFromPlaylistWithSnapshotId('user_id', 'playlist_id', 'comma separated string or array of spotify track ids or uris', 'snapshot_id');
+```
+
+Example:
+```js
+Spotify
+  .removeTracksFromPlaylistWithSnapshotId('1176458919', '2TkWjGCu8jurholsfdWtG4', ['spotify:track:4iV5W9uYEdYUVa79Axb7Rh', 'spotify:track:1301WleyT98MSxVHPZCA6M'], 'JbtmHBDBAYu3/bt8BOXKjzKx3i0b6LCa/wVjyl6qQ2Yf6nFXkbmzuEa+ZI/U1yF+')
+  .then(function (data) {
+    console.log('tracks removed from playlist');
+  });
+```
+
+##### Remove Tracks from a Playlist in positions
+```js
+Spotify.removeTracksFromPlaylistInPositions('user_id', 'playlist_id', 'array of positions', 'snapshot_id');
+```
+
+Example:
+```js
+Spotify
+  .removeTracksFromPlaylistInPositions('1176458919', '2TkWjGCu8jurholsfdWtG4', [1,3,5,7,9], 'JbtmHBDBAYu3/bt8BOXKjzKx3i0b6LCa/wVjyl6qQ2Yf6nFXkbmzuEa+ZI/U1yF+')
+  .then(function (data) {
+    console.log('tracks removed from playlist');
+  });
+```
+
 #### Reorder a Playlist's Tracks
 Reorder a track or a group of tracks in a playlist.
 ```js
