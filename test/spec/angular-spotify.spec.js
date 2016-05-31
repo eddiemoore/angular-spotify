@@ -999,11 +999,14 @@ describe('angular-spotify', function () {
 
         it('should convert spotify uri to just an id', function () {
           spyOn(Spotify, 'api');
+          Spotify.setAuthToken('TESTING');
 
           Spotify.getTrackAudioFeatures('spotify:artist:0eGsygTp906u18L0Oimnem');
 
           expect(Spotify.api).toHaveBeenCalled();
-          expect(Spotify.api).toHaveBeenCalledWith('/audio-features/0eGsygTp906u18L0Oimnem');
+          expect(Spotify.api).toHaveBeenCalledWith('/audio-features/0eGsygTp906u18L0Oimnem', 'GET', null, null, {
+            'Authorization': 'Bearer TESTING'
+          });
         });
 
         it('should resolve to an object of a track', function () {
@@ -1069,11 +1072,14 @@ describe('angular-spotify', function () {
         it('should convert spotify uris to Ids', function () {
           spyOn(Spotify, 'api');
 
+          Spotify.setAuthToken('TESTING');
           Spotify.getTracksAudioFeatures('spotify:track:0eGsygTp906u18L0Oimnem,spotify:track:1lDWb6b6ieDQ2xT7ewTC3G');
 
           expect(Spotify.api).toHaveBeenCalled();
           expect(Spotify.api).toHaveBeenCalledWith('/audio-features/', 'GET', {
             ids: '0eGsygTp906u18L0Oimnem,1lDWb6b6ieDQ2xT7ewTC3G'
+          }, null, {
+            'Authorization': 'Bearer TESTING'
           });
         });
 

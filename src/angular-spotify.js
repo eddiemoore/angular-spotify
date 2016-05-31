@@ -471,7 +471,7 @@
 
           getTrackAudioFeatures: function (track) {
             track = track.indexOf('spotify:') === -1 ? track : track.split(':')[2];
-            return this.api('/audio-features/' + track);
+            return this.api('/audio-features/' + track, 'GET', null, null, this._auth());
           },
 
           getTracksAudioFeatures: function (tracks) {
@@ -481,7 +481,7 @@
             });
             return this.api('/audio-features/', 'GET', {
               ids: tracks ? tracks.toString() : ''
-            });
+            }, null, this._auth());
           },
 
 
