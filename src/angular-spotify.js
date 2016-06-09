@@ -26,7 +26,7 @@
       };
 
       this.setClientId = function (clientId) {
-        return settings.clientId = clientId;
+        return settings.clientId = clientId; // jshint ignore:line
       };
 
       this.getClientId = function () {
@@ -34,11 +34,11 @@
       };
 
       this.setAccessToken = function (accessToken) {
-        return settings.accessToken = accessToken;
+        return settings.accessToken = accessToken; // jshint ignore:line
       };
 
       this.setRedirectUri = function (redirectUri) {
-        return settings.redirectUri = redirectUri;
+        return settings.redirectUri = redirectUri; // jshint ignore:line
       };
 
       this.getRedirectUri = function () {
@@ -46,12 +46,12 @@
       };
 
       this.setScope = function (scope) {
-        return settings.scope = scope;
+        return settings.scope = scope; // jshint ignore:line
       };
 
       var utils = {};
       utils.toQueryString = function (obj) {
-        var parts = []
+        var parts = [];
         angular.forEach(obj, function (value, key) {
           this.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
         }, parts);
