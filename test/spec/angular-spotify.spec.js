@@ -975,6 +975,7 @@ describe('angular-spotify', function () {
 
         it('should convert spotify uri to just an id', function () {
           spyOn(Spotify, 'api');
+          Spotify.setAccessToken('TESTING');
 
           Spotify.getAudioFeaturesForTrack('spotify:artist:0eGsygTp906u18L0Oimnem');
 
@@ -1045,6 +1046,7 @@ describe('angular-spotify', function () {
         it('should convert spotify uris to Ids', function () {
           spyOn(Spotify, 'api');
 
+          Spotify.setAccessToken('TESTING');
           Spotify.getAudioFeaturesForTracks('spotify:track:0eGsygTp906u18L0Oimnem,spotify:track:1lDWb6b6ieDQ2xT7ewTC3G');
 
           expect(Spotify.api).toHaveBeenCalled();
