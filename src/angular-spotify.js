@@ -1,4 +1,4 @@
-(function (window, angular, undefined) {
+(function (window, angular) {
   'use strict';
 
   function getSpotifyId (s) {
@@ -18,15 +18,15 @@
     .provider('Spotify', function () {
 
       // Module global settings.
-      var settings = {};
-      settings.clientId = null;
-      settings.redirectUri = null;
-      settings.scope = null;
-      settings.accessToken = null;
+      var settings = {
+        clientId: null,
+        redirectUri: null,
+        scope: null,
+        accessToken: null
+      };
 
       this.setClientId = function (clientId) {
-        settings.clientId = clientId;
-        return settings.clientId;
+        return settings.clientId = clientId;
       };
 
       this.getClientId = function () {
@@ -34,13 +34,11 @@
       };
 
       this.setAccessToken = function (accessToken) {
-        settings.accessToken = accessToken;
-        return settings.accessToken;
+        return settings.accessToken = accessToken;
       };
 
       this.setRedirectUri = function (redirectUri) {
-        settings.redirectUri = redirectUri;
-        return settings.redirectUri;
+        return settings.redirectUri = redirectUri;
       };
 
       this.getRedirectUri = function () {
@@ -48,13 +46,12 @@
       };
 
       this.setScope = function (scope) {
-        settings.scope = scope;
-        return settings.scope;
+        return settings.scope = scope;
       };
 
       var utils = {};
       utils.toQueryString = function (obj) {
-        var parts = [];
+        var parts = []
         angular.forEach(obj, function (value, key) {
           this.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
         }, parts);
@@ -83,9 +80,11 @@
             try {
               if (!win || win.closed) {
                 window.clearInterval(interval);
-                cb(win);
+                return cb(win);
               }
-            } catch (e) {}
+            } catch (e) {
+              console.error(e);
+            }
           }, 1000);
           return win;
         }
@@ -260,7 +259,7 @@
           },
 
           follow: function (type, ids) {
-            var arr = angular.isArray(ids) ? ids : ids.split(',');
+            var arr = stringToArray(ids);
             return this.api('/me/following', {
               method: 'PUT',
               params: {
@@ -279,7 +278,7 @@
           },
 
           unfollow: function (type, ids) {
-            var arr = angular.isArray(ids) ? ids : ids.split(',');
+            var arr = stringToArray(ids);
             return this.api('/me/following', {
               method: 'DELETE',
               params: {
@@ -298,7 +297,7 @@
           },
 
           isFollowing: function (type, ids) {
-            var arr = angular.isArray(ids) ? ids : ids.split(',');
+            var arr = stringToArray(ids);
             return this.api('/me/following/contains', {
               params: {
                 type: type,
@@ -470,7 +469,7 @@
           },
 
           addTracksToPlaylist: function (userId, playlistId, tracks, options) {
-            var arr = angular.isArray(tracks) ? tracks : tracks.split(',');
+            var arr = stringToArray(tracks);
             var trks = arr.map(function (value) {
               return value.indexOf('spotify:') === -1 ? 'spotify:track:' + value : value;
             });
@@ -489,7 +488,7 @@
           removeTracksFromPlaylist: function (userId, playlistId, tracks, options) {
             var data = options || {};
             if (tracks) {
-              var arr = angular.isArray(tracks) ? tracks : tracks.split(',');
+              var arr = stringToArray(tracks);
               var trks = arr.map(function (track) {
                 return {
                   uri: track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track
@@ -530,7 +529,7 @@
           },
 
           replaceTracksInPlaylist: function (userId, playlistId, tracks) {
-            var arr = tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
+            var arr = tracks = stringToArray(tracks);
             var trks = arr.map(function (track) {
               return track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track;
             });
