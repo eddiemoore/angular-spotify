@@ -1,34 +1,44 @@
-(function (window, angular, undefined) {
+(function (window, angular) {
   'use strict';
+
+  function getSpotifyId (s) {
+    return s.indexOf('spotify:') === -1 ? s : s.split(':')[2];
+  }
+
+  function stringToArray (s) {
+    if (!s) { return; }
+    var arr = angular.isString(s) ? s.split(',') : s;
+    return arr.map(function (value) {
+      return getSpotifyId(value);
+    });
+  }
 
   angular
     .module('spotify', [])
     .provider('Spotify', function () {
 
       // Module global settings.
-      var settings = {};
-      settings.clientId = null;
-      settings.redirectUri = null;
-      settings.scope = null;
-      settings.authToken = null;
+      var settings = {
+        clientId: null,
+        redirectUri: null,
+        scope: null,
+        accessToken: null
+      };
 
       this.setClientId = function (clientId) {
-        settings.clientId = clientId;
-        return settings.clientId;
+        return settings.clientId = clientId; // jshint ignore:line
       };
 
       this.getClientId = function () {
         return settings.clientId;
       };
 
-      this.setAuthToken = function (authToken) {
-        settings.authToken = authToken;
-        return settings.authToken;
+      this.setAccessToken = function (accessToken) {
+        return settings.accessToken = accessToken; // jshint ignore:line
       };
 
       this.setRedirectUri = function (redirectUri) {
-        settings.redirectUri = redirectUri;
-        return settings.redirectUri;
+        return settings.redirectUri = redirectUri; // jshint ignore:line
       };
 
       this.getRedirectUri = function () {
@@ -36,8 +46,7 @@
       };
 
       this.setScope = function (scope) {
-        settings.scope = scope;
-        return settings.scope;
+        return settings.scope = scope; // jshint ignore:line
       };
 
       var utils = {};
@@ -61,7 +70,7 @@
           this.redirectUri = settings.redirectUri;
           this.apiBase = settings.apiBase;
           this.scope = settings.scope;
-          this.authToken = settings.authToken;
+          this.accessToken = settings.accessToken;
           this.toQueryString = utils.toQueryString;
         }
 
@@ -71,23 +80,31 @@
             try {
               if (!win || win.closed) {
                 window.clearInterval(interval);
-                cb(win);
+                return cb(win);
               }
-            } catch (e) {}
+            } catch (e) {
+              console.error(e);
+            }
           }, 1000);
           return win;
         }
 
         NgSpotify.prototype = {
-          api: function (endpoint, method, params, data, headers) {
+          api: function (endpoint, options) {
             var deferred = $q.defer();
+            options = options || {};
+            options.method = options.method || 'GET';
+            options.headers = options.headers || {};
+            if (this.accessToken) {
+              options.headers.Authorization = 'Bearer ' + this.accessToken;
+            }
 
             $http({
               url: this.apiBase + endpoint,
-              method: method ? method : 'GET',
-              params: params,
-              data: data,
-              headers: headers,
+              method: options.method,
+              params: options.params,
+              data: options.data,
+              headers: options.headers,
               withCredentials: false
             })
             .success(function (data) {
@@ -99,16 +116,6 @@
             return deferred.promise;
           },
 
-          _auth: function (isJson) {
-            var auth = {
-              'Authorization': 'Bearer ' + this.authToken
-            };
-            if (isJson) {
-              auth['Content-Type'] = 'application/json';
-            }
-            return auth;
-          },
-
           /**
             ====================== Albums =====================
            */
@@ -118,9 +125,8 @@
            * Pass in album id or spotify uri
            */
           getAlbum: function (album) {
-            album = album.indexOf('spotify:') === -1 ? album : album.split(':')[2];
-
-            return this.api('/albums/' + album);
+            var a = getSpotifyId(album);
+            return this.api('/albums/' + a);
           },
 
           /**
@@ -128,12 +134,11 @@
            * Pass in comma separated string or array of album ids
            */
           getAlbums: function (albums) {
-            albums = angular.isString(albums) ? albums.split(',') : albums;
-            angular.forEach(albums, function (value, index) {
-              albums[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
-            });
-            return this.api('/albums', 'GET', {
-              ids: albums ? albums.toString() : ''
+            var a = stringToArray(albums);
+            return this.api('/albums', {
+              params: {
+                ids: a ? a.toString() : ''
+              }
             });
           },
 
@@ -142,9 +147,9 @@
            * Pass in album id or spotify uri
            */
           getAlbumTracks: function (album, options) {
-            album = album.indexOf('spotify:') === -1 ? album : album.split(':')[2];
-
-            return this.api('/albums/' + album + '/tracks', 'GET', options);
+            var a = getSpotifyId(album);
+            var o = options && { params: options };
+            return this.api('/albums/' + a + '/tracks', o);
           },
 
 
@@ -156,29 +161,27 @@
            * Get an Artist
            */
           getArtist: function (artist) {
-            artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
-
-            return this.api('/artists/' + artist);
+            var a = getSpotifyId(artist);
+            return this.api('/artists/' + a);
           },
 
           /**
            * Get multiple artists
            */
           getArtists: function (artists) {
-            artists = angular.isString(artists) ? artists.split(',') : artists;
-            angular.forEach(artists, function (value, index) {
-              artists[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
-            });
-            return this.api('/artists/', 'GET', {
-              ids: artists ? artists.toString() : ''
+            var a = stringToArray(artists);
+            return this.api('/artists/', {
+              params: {
+                ids: a ? a.toString() : ''
+              }
             });
           },
 
           //Artist Albums
           getArtistAlbums: function (artist, options) {
-            artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
-
-            return this.api('/artists/' + artist + '/albums', 'GET', options);
+            var a = getSpotifyId(artist);
+            var o = options && { params: options };
+            return this.api('/artists/' + a + '/albums', o);
           },
 
           /**
@@ -186,17 +189,17 @@
            * The country: an ISO 3166-1 alpha-2 country code.
            */
           getArtistTopTracks: function (artist, country) {
-            artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
-
-            return this.api('/artists/' + artist + '/top-tracks', 'GET', {
-              country: country
+            var a = getSpotifyId(artist);
+            return this.api('/artists/' + a + '/top-tracks', {
+              params: {
+                country: country
+              }
             });
           },
 
-          getRelatedArtists: function (artist) {
-            artist = artist.indexOf('spotify:') === -1 ? artist : artist.split(':')[2];
-
-            return this.api('/artists/' + artist + '/related-artists');
+          getArtistRelatedArtists: function (artist) {
+            var a = getSpotifyId(artist);
+            return this.api('/artists/' + a + '/related-artists');
           },
 
 
@@ -204,155 +207,233 @@
             ====================== Browse =====================
            */
           getFeaturedPlaylists: function (options) {
-            return this.api('/browse/featured-playlists', 'GET', options, null, this._auth());
+            return this.api('/browse/featured-playlists', {
+              params: options
+            });
           },
 
           getNewReleases: function (options) {
-            return this.api('/browse/new-releases', 'GET', options, null, this._auth());
+            return this.api('/browse/new-releases', {
+              params: options
+            });
           },
 
           getCategories: function (options) {
-            return this.api('/browse/categories', 'GET', options, null, this._auth());
+            var o = {};
+            if (options) { o.params = options; }
+            return this.api('/browse/categories', o);
           },
 
           getCategory: function (category_id, options) {
-            return this.api('/browse/categories/' + category_id, 'GET', options, null, this._auth());
+            var o = {};
+            if (options) { o.params = options; }
+            return this.api('/browse/categories/' + category_id, o);
           },
 
           getCategoryPlaylists: function (category_id, options) {
-            return this.api('/browse/categories/' + category_id + '/playlists', 'GET', options, null, this._auth());
+            var o = {};
+            if (options) { o.params = options; }
+            return this.api('/browse/categories/' + category_id + '/playlists', o);
           },
 
           getRecommendations: function (options) {
-            return this.api('/recommendations', 'GET', options, null, this._auth());
+            return this.api('/recommendations', {
+              params: options
+            });
           },
 
           getAvailableGenreSeeds: function () {
-            return this.api('/recommendations/available-genre-seeds', 'GET', null, null, this._auth());
+            return this.api('/recommendations/available-genre-seeds');
           },
 
 
           /**
             ====================== Following =====================
            */
-          following: function (type, options) {
-            options = options || {};
-            options.type = type;
-            return this.api('/me/following', 'GET', options, null, this._auth());
+          getFollowed: function (type, options) {
+            var params = options || {};
+            params.type = type;
+            return this.api('/me/following', {
+              params: params
+            });
           },
 
           follow: function (type, ids) {
-            return this.api('/me/following', 'PUT', { type: type, ids: ids }, null, this._auth());
+            var arr = stringToArray(ids);
+            return this.api('/me/following', {
+              method: 'PUT',
+              params: {
+                type: type,
+                ids: arr.join(',')
+              }
+            });
+          },
+
+          followUsers: function (ids) {
+            return this.follow('user', ids);
+          },
+
+          followArtists: function (ids) {
+            return this.follow('artist', ids);
           },
 
           unfollow: function (type, ids) {
-            return this.api('/me/following', 'DELETE', { type: type, ids: ids }, null, this._auth());
+            var arr = stringToArray(ids);
+            return this.api('/me/following', {
+              method: 'DELETE',
+              params: {
+                type: type,
+                ids: arr.join(',')
+              }
+            });
           },
 
-          userFollowingContains: function (type, ids) {
-            return this.api('/me/following/contains', 'GET', { type: type, ids: ids }, null, this._auth());
+          unfollowUsers: function (ids) {
+            return this.unfollow('user', ids);
+          },
+
+          unfollowArtists: function (ids) {
+            return this.unfollow('artist', ids);
+          },
+
+          isFollowing: function (type, ids) {
+            var arr = stringToArray(ids);
+            return this.api('/me/following/contains', {
+              params: {
+                type: type,
+                ids: arr.join(',')
+              }
+            });
+          },
+
+          isFollowingUsers: function (ids) {
+            return this.isFollowing('user', ids);
+          },
+
+          isFollowingArtists: function (ids) {
+            return this.isFollowing('artist', ids);
           },
 
           followPlaylist: function (userId, playlistId, isPublic) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers', 'PUT', null, {
-              public: isPublic || null
-            }, this._auth(true));
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers', {
+              method: 'PUT',
+              data: {
+                public: isPublic || null
+              },
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
           },
 
           unfollowPlaylist: function (userId, playlistId) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers', 'DELETE', null, null, this._auth());
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers', {
+              method: 'DELETE'
+            });
           },
 
-          playlistFollowingContains: function(userId, playlistId, ids) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers/contains', 'GET', {
-              ids: ids.toString()
-            }, null, this._auth());
+          areFollowingPlaylist: function(userId, playlistId, ids) {
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/followers/contains', {
+              params: {
+                ids: ids.toString()
+              }
+            });
           },
 
 
           /**
             ====================== Library =====================
            */
-          getSavedUserTracks: function (options) {
-            return this.api('/me/tracks', 'GET', options, null, this._auth());
+          getMySavedTracks: function (options) {
+            var o = {};
+            if (options) { o.params = options; }
+            return this.api('/me/tracks', o);
           },
 
-          userTracksContains: function (tracks) {
-            tracks = angular.isString(tracks) ? tracks.split(',') : tracks;
-            angular.forEach(tracks, function (value, index) {
-              tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+          containsMySavedTracks: function (tracks) {
+            var trks = stringToArray(tracks);
+            return this.api('/me/tracks/contains', {
+              params: {
+                ids: trks.toString()
+              }
             });
-            return this.api('/me/tracks/contains', 'GET', {
-              ids: tracks.toString()
-            }, null, this._auth());
           },
 
-          saveUserTracks: function (tracks) {
-            tracks = angular.isString(tracks) ? tracks.split(',') : tracks;
-            angular.forEach(tracks, function (value, index) {
-              tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+          addToMySavedTracks: function (tracks) {
+            var trks = stringToArray(tracks);
+            return this.api('/me/tracks', {
+              method: 'PUT',
+              params: {
+                ids: trks.toString()
+              }
             });
-            return this.api('/me/tracks', 'PUT', {
-              ids: tracks.toString()
-            }, null, this._auth());
           },
 
-          removeUserTracks: function (tracks) {
-            tracks = angular.isString(tracks) ? tracks.split(',') : tracks;
-            angular.forEach(tracks, function (value, index) {
-              tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+          removeFromMySavedTracks: function (tracks) {
+            var trks = stringToArray(tracks);
+            return this.api('/me/tracks', {
+              method: 'DELETE',
+              params: {
+                ids: trks.toString()
+              },
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
-            return this.api('/me/tracks', 'DELETE', {
-              ids: tracks.toString()
-            }, null, this._auth(true));
           },
 
-          saveUserAlbums: function (albums) {
-            albums = angular.isString(albums) ? albums.split(',') : albums;
-            angular.forEach(albums, function (value, index) {
-              albums[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+          addToMySavedAlbums: function (albums) {
+            var albs = stringToArray(albums);
+            return this.api('/me/albums', {
+              method: 'PUT',
+              params: {
+                ids: albs.toString()
+              }
             });
-            return this.api('/me/albums', 'PUT', {
-              ids: albums.toString()
-            }, null, this._auth());
           },
 
-          getSavedUserAlbums: function (options) {
-            return this.api('/me/albums', 'GET', options, null, this._auth());
+          getMySavedAlbums: function (options) {
+            var o = {};
+            if (options) { o.params = options; }
+            return this.api('/me/albums', o);
           },
 
-          removeUserAlbums: function (albums) {
-            albums = angular.isString(albums) ? albums.split(',') : albums;
-            angular.forEach(albums, function (value, index) {
-              albums[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+          removeFromMySavedAlbums: function (albums) {
+            var albs = stringToArray(albums);
+            return this.api('/me/albums', {
+              method: 'DELETE',
+              params: {
+                ids: albs.toString()
+              },
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
-            return this.api('/me/albums', 'DELETE', {
-              ids: albums.toString()
-            }, null, this._auth(true));
           },
 
-          userAlbumsContains: function (albums) {
-            albums = angular.isString(albums) ? albums.split(',') : albums;
-            angular.forEach(albums, function (value, index) {
-              albums[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+          containsMySavedAlbums: function (albums) {
+            var albs = stringToArray(albums);
+            return this.api('/me/albums/contains', {
+              params: {
+                ids: albs.toString()
+              }
             });
-            return this.api('/me/albums/contains', 'GET', {
-              ids: albums.toString()
-            }, null, this._auth());
           },
 
 
           /**
             ====================== Personalization =====================
            */
-           getUserTopArtists: function (options) {
-             options = options || {};
-             return this.api('/me/top/artists', 'GET', options, null, this._auth());
+           getMyTopArtists: function (options) {
+             var o = {};
+             if (options) { o.params = options; }
+             return this.api('/me/top/artists', o);
            },
 
-           getUserTopTracks: function (options) {
-             options = options || {};
-             return this.api('/me/top/tracks', 'GET', options, null, this._auth());
+           getMyTopTracks: function (options) {
+             var o = {};
+             if (options) { o.params = options; }
+             return this.api('/me/top/tracks', o);
            },
 
 
@@ -360,66 +441,117 @@
             ====================== Playlists =====================
            */
           getUserPlaylists: function (userId, options) {
-            return this.api('/users/' + userId + '/playlists', 'GET', options, null, {
-              'Authorization': 'Bearer ' + this.authToken
-            });
+            var o = {};
+            if (options) { o.params = options; }
+            return this.api('/users/' + userId + '/playlists', o);
           },
 
           getPlaylist: function (userId, playlistId, options) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId, 'GET', options, null, this._auth());
+            var o = {};
+            if (options) { o.params = options; }
+            return this.api('/users/' + userId + '/playlists/' + playlistId, o);
           },
 
           getPlaylistTracks: function (userId, playlistId, options) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'GET', options, null, this._auth());
+            var o = {};
+            if (options) { o.params = options; }
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', o);
           },
 
           createPlaylist: function (userId, options) {
-            return this.api('/users/' + userId + '/playlists', 'POST', null, options, this._auth(true));
-          },
-
-          addPlaylistTracks: function (userId, playlistId, tracks, options) {
-            tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
-            angular.forEach(tracks, function (value, index) {
-              tracks[index] = value.indexOf('spotify:') === -1 ? 'spotify:track:' + value : value;
+            return this.api('/users/' + userId + '/playlists', {
+              method: 'POST',
+              data: options,
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'POST', {
-              uris: tracks.toString(),
-              position: options ? options.position : null
-            }, null, this._auth(true));
           },
 
-          removePlaylistTracks: function (userId, playlistId, tracks) {
-            tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
-            var track;
-            angular.forEach(tracks, function (value, index) {
-              track = tracks[index];
-              tracks[index] = {
-                uri: track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track
-              };
+          addTracksToPlaylist: function (userId, playlistId, tracks, options) {
+            var arr = stringToArray(tracks);
+            var trks = arr.map(function (value) {
+              return value.indexOf('spotify:') === -1 ? 'spotify:track:' + value : value;
             });
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'DELETE', null, {
-              tracks: tracks
-            }, this._auth(true));
-          },
-
-          reorderPlaylistTracks: function (userId, playlistId, options) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'PUT', null, options, this._auth(true));
-          },
-
-          replacePlaylistTracks: function (userId, playlistId, tracks) {
-            tracks = angular.isArray(tracks) ? tracks : tracks.split(',');
-            var track;
-            angular.forEach(tracks, function (value, index) {
-              track = tracks[index];
-              tracks[index] = track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track;
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', {
+              method: 'POST',
+              params: {
+                uris: trks.toString(),
+                position: options ? options.position : null
+              },
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
-            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', 'PUT', {
-              uris: tracks.toString()
-            }, null, this._auth(true));
           },
 
-          updatePlaylistDetails: function (userId, playlistId, options) {
-            return this.api('/users/' + userId + '/playlists/' + playlistId, 'PUT', null, options, this._auth(true));
+          removeTracksFromPlaylist: function (userId, playlistId, tracks, options) {
+            var data = options || {};
+            if (tracks) {
+              var arr = stringToArray(tracks);
+              var trks = arr.map(function (track) {
+                return {
+                  uri: track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track
+                };
+              });
+              data.tracks = trks;
+            }
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', {
+              method: 'DELETE',
+              data: data,
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+          },
+
+          removeTracksFromPlaylistWithSnapshotId: function (userId, playlistId, tracks, snapshotId) {
+            return this.removeTracksFromPlaylist(userId, playlistId, tracks, {
+              snapshot_id: snapshotId
+            });
+          },
+
+          removeTracksFromPlaylistInPositions: function (userId, playlistId, positions, snapshotId) {
+            return this.removeTracksFromPlaylist(userId, playlistId, null, {
+              positions: positions,
+              snapshot_id: snapshotId
+            });
+          },
+
+          reorderTracksInPlaylist: function (userId, playlistId, options) {
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', {
+              method: 'PUT',
+              data: options,
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+          },
+
+          replaceTracksInPlaylist: function (userId, playlistId, tracks) {
+            var arr = tracks = stringToArray(tracks);
+            var trks = arr.map(function (track) {
+              return track.indexOf('spotify:') === -1 ? 'spotify:track:' + track : track;
+            });
+            return this.api('/users/' + userId + '/playlists/' + playlistId + '/tracks', {
+              method: 'PUT',
+              params: {
+                uris: trks.toString()
+              },
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+          },
+
+          changePlaylistDetails: function (userId, playlistId, options) {
+            return this.api('/users/' + userId + '/playlists/' + playlistId, {
+              method: 'PUT',
+              data: options,
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
           },
 
           /**
@@ -430,8 +562,8 @@
             return this.api('/users/' + userId);
           },
 
-          getCurrentUser: function () {
-            return this.api('/me', 'GET', null, null, this._auth());
+          getMe: function () {
+            return this.api('/me');
           },
 
 
@@ -441,12 +573,30 @@
            * q = search query
            * type = artist, album or track
            */
-          search: function (q, type, options) {
-            options = options || {};
-            options.q = q;
-            options.type = type;
+          search: function (q, types, options) {
+            var params = options || {};
+            params.q = q;
+            params.type = angular.isArray(types) ? types.join(',') : types;
 
-            return this.api('/search', 'GET', options);
+            return this.api('/search', {
+              params: params
+            });
+          },
+
+          searchAlbums: function (q, options) {
+            return this.search(q, 'album', options);
+          },
+
+          searchArtists: function (q, options) {
+            return this.search(q, 'artist', options);
+          },
+
+          searchTracks: function (q, options) {
+            return this.search(q, 'track', options);
+          },
+
+          searchPlaylists: function (q, options) {
+            return this.search(q, 'playlist', options);
           },
 
 
@@ -454,53 +604,54 @@
             ====================== Tracks =====================
            */
           getTrack: function (track) {
-            track = track.indexOf('spotify:') === -1 ? track : track.split(':')[2];
-
-            return this.api('/tracks/' + track);
+            var t = getSpotifyId(track);
+            return this.api('/tracks/' + t);
           },
 
           getTracks: function (tracks) {
-            tracks = angular.isString(tracks) ? tracks.split(',') : tracks;
-            angular.forEach(tracks, function (value, index) {
-              tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
-            });
-            return this.api('/tracks/', 'GET', {
-              ids: tracks ? tracks.toString() : ''
+            var trks = stringToArray(tracks);
+            return this.api('/tracks/', {
+              params: {
+                ids: trks ? trks.toString() : ''
+              }
             });
           },
 
-          getTrackAudioFeatures: function (track) {
-            track = track.indexOf('spotify:') === -1 ? track : track.split(':')[2];
-            return this.api('/audio-features/' + track, 'GET', null, null, this._auth());
+          getAudioFeaturesForTrack: function (track) {
+            var t = getSpotifyId(track);
+            return this.api('/audio-features/' + t);
           },
 
-          getTracksAudioFeatures: function (tracks) {
-            tracks = angular.isString(tracks) ? tracks.split(',') : tracks;
-            angular.forEach(tracks, function (value, index) {
-              tracks[index] = value.indexOf('spotify:') > -1 ? value.split(':')[2] : value;
+          getAudioFeaturesForTracks: function (tracks) {
+            var trks = stringToArray(tracks);
+            return this.api('/audio-features/', {
+              params: {
+                ids: trks ? trks.toString() : ''
+              }
             });
-            return this.api('/audio-features/', 'GET', {
-              ids: tracks ? tracks.toString() : ''
-            }, null, this._auth());
           },
 
 
           /**
             ====================== Login =====================
            */
-          setAuthToken: function (authToken) {
-            this.authToken = authToken;
-            return this.authToken;
+          setAccessToken: function (accessToken) {
+            this.accessToken = accessToken;
+            return this.accessToken;
+          },
+
+          getAccessToken: function () {
+            return this.accessToken;
           },
 
           login: function () {
             var deferred = $q.defer();
             var that = this;
 
-            var w = 400,
-                h = 500,
-                left = (screen.width / 2) - (w / 2),
-                top = (screen.height / 2) - (h / 2);
+            var w = 400;
+            var h = 500;
+            var left = (screen.width / 2) - (w / 2);
+            var top = (screen.height / 2) - (h / 2);
 
             var params = {
               client_id: this.clientId,
@@ -526,7 +677,7 @@
                 if (authWindow) { authWindow.close(); }
                 authCompleted = true;
 
-                that.setAuthToken(e.newValue);
+                that.setAccessToken(e.newValue);
                 $window.removeEventListener('storage', storageChanged, false);
 
                 deferred.resolve(e.newValue);
