@@ -90,10 +90,10 @@
               headers: headers,
               withCredentials: false
             })
-            .success(function (data) {
+            .then(function (data) {
               deferred.resolve(data);
             })
-            .error(function (data) {
+            .catch(function (data) {
               deferred.reject(data);
             });
             return deferred.promise;

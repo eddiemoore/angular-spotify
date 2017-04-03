@@ -376,7 +376,7 @@ describe('angular-spotify', function () {
 
         Spotify.search('Nirvana', 'artist').then(function (data) {
           expect(data).toBeDefined();
-          expect(data.artists.items.length).toBe(20);
+          expect(data.data.artists.items.length).toBe(20);
         });
 
         $httpBackend.flush();
@@ -394,7 +394,7 @@ describe('angular-spotify', function () {
         $httpBackend.flush();
         expect(result).toBeDefined();
         expect(result instanceof Object).toBeTruthy();
-        expect(result.error.status).toBe(400);
+        expect(result.data.error.status).toBe(400);
       });
 
     });
@@ -455,7 +455,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(404);
+          expect(result.data.error.status).toBe(404);
         });
       });
 
@@ -481,8 +481,8 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.albums instanceof Array).toBeTruthy();
-          expect(result.albums.length).toBe(3);
+          expect(result.data.albums instanceof Array).toBeTruthy();
+          expect(result.data.albums.length).toBe(3);
         });
 
         it('should convert spotify uris to ids', function () {
@@ -509,8 +509,8 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.albums instanceof Array).toBeTruthy();
-          expect(result.albums.length).toBe(3);
+          expect(result.data.albums instanceof Array).toBeTruthy();
+          expect(result.data.albums.length).toBe(3);
         });
 
         it('should reject the promise and respond with error', function () {
@@ -525,7 +525,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(400);
+          expect(result.data.error.status).toBe(400);
         });
       });
 
@@ -559,7 +559,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.items.length).toBe(13);
+          expect(result.data.items.length).toBe(13);
         });
 
         it('should reject the promise and respond with error', function () {
@@ -576,7 +576,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(404);
+          expect(result.data.error.status).toBe(404);
         });
       });
     });
@@ -636,7 +636,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(404);
+          expect(result.data.error.status).toBe(404);
         });
       });
 
@@ -691,7 +691,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(400);
+          expect(result.data.error.status).toBe(400);
         });
       });
 
@@ -740,7 +740,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(400);
+          expect(result.data.error.status).toBe(400);
         });
       });
 
@@ -795,7 +795,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(400);
+          expect(result.data.error.status).toBe(400);
         });
 
         it('should reject if the country is not defined', function () {
@@ -817,7 +817,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(400);
+          expect(result.data.error.status).toBe(400);
         });
       });
 
@@ -869,7 +869,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(400);
+          expect(result.data.error.status).toBe(400);
         });
       });
     });
@@ -934,7 +934,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(400);
+          expect(result.data.error.status).toBe(400);
         });
       });
 
@@ -988,7 +988,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(400);
+          expect(result.data.error.status).toBe(400);
         });
       });
 
@@ -1045,7 +1045,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(400);
+          expect(result.data.error.status).toBe(400);
         });
       });
 
@@ -1102,7 +1102,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(400);
+          expect(result.data.error.status).toBe(400);
         });
       });
 
@@ -1414,7 +1414,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.error.status).toBe(404);
+          expect(result.data.error.status).toBe(404);
         });
       });
 
@@ -1791,8 +1791,8 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.message).toBeDefined();
-          expect(result.playlists).toBeDefined();
+          expect(result.data.message).toBeDefined();
+          expect(result.data.playlists).toBeDefined();
         });
 
       });
@@ -1825,7 +1825,7 @@ describe('angular-spotify', function () {
           $httpBackend.flush();
           expect(result).toBeDefined();
           expect(result instanceof Object).toBeTruthy();
-          expect(result.albums).toBeDefined();
+          expect(result.data.albums).toBeDefined();
         });
 
       });
