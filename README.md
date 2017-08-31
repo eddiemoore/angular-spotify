@@ -1,7 +1,7 @@
-# angular-spotify [![Build Status](https://travis-ci.org/eddiemoore/angular-spotify.svg?branch=master)](https://travis-ci.org/eddiemoore/angular-spotify) [![codecov.io](http://codecov.io/github/eddiemoore/angular-spotify/coverage.svg?branch=master)](http://codecov.io/github/eddiemoore/angular-spotify?branch=master) [![Coverage Status](https://img.shields.io/coveralls/eddiemoore/angular-spotify.svg)](https://coveralls.io/r/eddiemoore/angular-spotify) [![devDependency Status](https://david-dm.org/eddiemoore/angular-spotify/dev-status.svg)](https://david-dm.org/eddiemoore/angular-spotify#info=devDependencies) [![Code Climate](https://codeclimate.com/github/eddiemoore/angular-spotify/badges/gpa.svg)](https://codeclimate.com/github/eddiemoore/angular-spotify)
+# angular-spotify 
 
+[![Build Status](https://travis-ci.org/eddiemoore/angular-spotify.svg?branch=master)](https://travis-ci.org/eddiemoore/angular-spotify) [![codecov.io](http://codecov.io/github/eddiemoore/angular-spotify/coverage.svg?branch=master)](http://codecov.io/github/eddiemoore/angular-spotify?branch=master) [![Coverage Status](https://img.shields.io/coveralls/eddiemoore/angular-spotify.svg)](https://coveralls.io/r/eddiemoore/angular-spotify) [![devDependency Status](https://david-dm.org/eddiemoore/angular-spotify/dev-status.svg)](https://david-dm.org/eddiemoore/angular-spotify#info=devDependencies) [![Code Climate](https://codeclimate.com/github/eddiemoore/angular-spotify/badges/gpa.svg)](https://codeclimate.com/github/eddiemoore/angular-spotify)
 [![Greenkeeper badge](https://badges.greenkeeper.io/eddiemoore/angular-spotify.svg)](https://greenkeeper.io/)
-
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/eddiemoore/angular-spotify?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 angular service to connect to the [Spotify Web API](https://developer.spotify.com/web-api/)
