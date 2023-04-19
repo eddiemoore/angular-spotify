@@ -19,7 +19,7 @@
     "jshint-stylish": "^2.1.0",
     "karma": "~1.7.1",
     "karma-coverage": "^1.1.1",
-    "karma-jasmine": "^1.1.0",
+    "karma-jasmine": "^4.0.2",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-spec-reporter": "0.0.36",
     "load-grunt-tasks": "^3.4.1",
